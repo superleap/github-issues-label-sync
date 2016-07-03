@@ -8,13 +8,11 @@
 
 > **add .issuesrc to version control**
 
-[![current version](https://img.shields.io/npm/v/github-asana-tag-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-asana-tag-sync) [![Dependency Status](https://david-dm.org/superleap/asana-github-tag-sync.svg)](https://david-dm.org/superleap/asana-github-tag-sync) [![devDependency Status](https://david-dm.org/superleap/asana-github-tag-sync/dev-status.svg)](https://david-dm.org/superleap/asana-github-tag-sync#info=devDependencies) ![](https://reposs.herokuapp.com/?path=superleap/asana-github-tag-sync&style=flat&color=lightgray) 
+[![current version](https://img.shields.io/npm/v/asana-github-tag-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-asana-tag-sync) [![current version](https://img.shields.io/node/v/asana-github-tag-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-asana-tag-sync) [![Dependency Status](https://david-dm.org/superleap/asana-github-tag-sync.svg)](https://david-dm.org/superleap/asana-github-tag-sync) [![devDependency Status](https://david-dm.org/superleap/asana-github-tag-sync/dev-status.svg)](https://david-dm.org/superleap/asana-github-tag-sync#info=devDependencies) 
 
 [![Build Status](http://img.shields.io/travis/superleap/asana-github-tag-sync.svg?style=flat-square)](https://travis-ci.org/superleap/asana-github-tag-sync) [![GitHub issues](https://img.shields.io/github/issues/superleap/asana-github-tag-sync.svg)](https://github.com/superleap/asana-github-tag-sync/issues)  
 
 [![License](http://img.shields.io/:license-BSD2-blue.svg?style=flat-square)](https://opensource.org/licenses/BSD-2-Clause) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release) [![Join the chat at https://gitter.im/superleap/asana-github-tag-sync](https://badges.gitter.im/superleap/asana-github-tag-sync.svg)](https://gitter.im/superleap/asana-github-tag-sync?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-Small tool used to create identical github issue labels and asana issue tags
 
 ## Installation
 
@@ -29,16 +27,6 @@ Before you can use this module you have to require it in your script:
 ```
 require('asana-github-tag-sync')
 ```
-
-## Contributing
-
-Contributions are welcome!
-
-Review the [Contributing Guidelines](https://github.com/donnemartin/gitsome/blob/master/CONTRIBUTING.md) for details on how to:
-
-* Submit issues
-* Submit pull requests
-
 
 ## License
 
