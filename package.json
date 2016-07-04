@@ -42,5 +42,9 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "github": "^2.1.0"
   }
 }
