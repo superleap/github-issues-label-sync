@@ -1,4 +1,4 @@
-# :electric_plug::package: github-label-sync
+# :electric_plug::package: github-issues-label-sync
 
 **open source project management setup**
 
@@ -8,16 +8,16 @@
 
 > **add .issuesrc to version control**
 
-[![current version](https://img.shields.io/npm/v/github-label-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-asana-tag-sync) [![current version](https://img.shields.io/node/v/github-label-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-asana-tag-sync) [![Dependency Status](https://david-dm.org/superleap/github-label-sync.svg)](https://david-dm.org/superleap/github-label-sync) [![devDependency Status](https://david-dm.org/superleap/github-label-sync/dev-status.svg)](https://david-dm.org/superleap/github-label-sync#info=devDependencies) 
+[![current version](https://img.shields.io/npm/v/github-issues-label-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-asana-tag-sync) [![current version](https://img.shields.io/node/v/github-issues-label-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-asana-tag-sync) [![Dependency Status](https://david-dm.org/superleap/github-issues-label-sync.svg)](https://david-dm.org/superleap/github-issues-label-sync) [![devDependency Status](https://david-dm.org/superleap/github-issues-label-sync/dev-status.svg)](https://david-dm.org/superleap/github-issues-label-sync#info=devDependencies) 
 
-[![Build Status](http://img.shields.io/travis/superleap/github-label-sync.svg?style=flat-square)](https://travis-ci.org/superleap/github-label-sync) [![GitHub issues](https://img.shields.io/github/issues/superleap/github-label-sync.svg)](https://github.com/superleap/github-label-sync/issues)  
+[![Build Status](http://img.shields.io/travis/superleap/github-issues-label-sync.svg?style=flat-square)](https://travis-ci.org/superleap/github-issues-label-sync) [![GitHub issues](https://img.shields.io/github/issues/superleap/github-issues-label-sync.svg)](https://github.com/superleap/github-issues-label-sync/issues)  
 
-[![License](http://img.shields.io/:license-BSD2-blue.svg?style=flat-square)](https://opensource.org/licenses/BSD-2-Clause) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release) [![Join the chat at https://gitter.im/superleap/github-label-sync](https://badges.gitter.im/superleap/github-label-sync.svg)](https://gitter.im/superleap/github-label-sync?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![License](http://img.shields.io/:license-BSD2-blue.svg?style=flat-square)](https://opensource.org/licenses/BSD-2-Clause) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release) [![Join the chat at https://gitter.im/superleap/github-issues-label-sync](https://badges.gitter.im/superleap/github-issues-label-sync.svg)](https://gitter.im/superleap/github-issues-label-sync?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Installation
 
 ```
-npm i -D github-label-sync
+npm i -D github-issues-label-sync
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ npm i -D github-label-sync
 Before you can use this module you have to require it in your script:
 
 ```
-require('github-label-sync');
+require('github-issues-label-sync');
 ```
 
 ## License
