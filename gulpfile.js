@@ -13,7 +13,7 @@ gulp.task('bithound', function () {
         return;
     }
 
-    exec('bithound check git@github.com:superleap/github-issues-label-sync.git', (error, stdout, stderr) => {
+    exec('bithound check git@github.com:superleap/github-issues-label-sync.git', function (error, stdout, stderr) {
         console.log(stdout);
         console.log(stderr);
     });
