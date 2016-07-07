@@ -1,9 +1,9 @@
 let config = require('./config');
 let {user, repo, token, options} = config.github;
 let labels = require('./config/labels');
-let githubSync = new (require('./../lib/GithubSync'))(options, user, repo, token);
+let githubLabelSync = new (require('./../lib/LabelSync'))(options, user, repo, token);
 
-githubSync.deleteLabels(labels).then((response) => {
+githubLabelSync.deleteLabels(labels).then((response) => {
     console.log(response);
-    console.log(githubSync.deletedLabels);
+    console.log(githubLabelSync.deletedLabels);
 });

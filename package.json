@@ -1,6 +1,6 @@
 {
-  "name": "asana-github-tag-sync",
-  "description": "Small tool used to create identical github issue labels and asana issue tags",
+  "name": "github-label-sync",
+  "description": "Small tool used to create identical github issue labels",
   "main": "",
   "engines": {
     "node": ">=0.12.0"
@@ -11,13 +11,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/superleap/asana-github-tag-sync.git"
+    "url": "https://github.com/superleap/github-label-sync.git"
   },
   "keywords": [
-    "asana",
-    "asana issues",
-    "asana issue tags",
-    "asana tags",
     "github",
     "github issues",
     "github issue labels",
@@ -30,9 +26,13 @@
   "author": "TED Vortex <ted.vortex@gmail.com>",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/superleap/asana-github-tag-sync/issues"
+    "url": "https://github.com/superleap/github-label-sync/issues"
   },
-  "homepage": "https://github.com/superleap/asana-github-tag-sync#readme",
+  "homepage": "https://github.com/superleap/github-label-sync#readme",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "github": "^2.1.0"
+  },
   "devDependencies": {
     "commitizen": "^2.8.2",
     "cz-conventional-changelog": "^1.1.6",
@@ -42,9 +42,5 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "dependencies": {
-    "bluebird": "^3.4.1",
-    "github": "^2.1.0"
   }
 }
