@@ -12,6 +12,8 @@ node_js:
   - '0.12'
 before_install:
   - npm i -g npm@^2.0.0
+  - npm i -g gulp
+  - npm i -g bithound
 before_script:
   - npm prune
 after_success:

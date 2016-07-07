@@ -6,7 +6,7 @@
     "node": ">=0.12.0"
   },
   "scripts": {
-    "test": "gulp",
+    "test": "",
     "prepublish": "gulp prepublish",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
