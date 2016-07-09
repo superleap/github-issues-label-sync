@@ -3,10 +3,11 @@
   "description": "Small tool used to create identical github issue labels",
   "main": "",
   "engines": {
-    "node": ">=0.12.0"
+    "node": ">=4"
   },
   "scripts": {
     "test": "",
+    "deploy": "gulp deploy",
     "prepublish": "gulp prepublish",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
@@ -41,6 +42,7 @@
     "esdoc": "^0.4.7",
     "gulp": "^3.9.1",
     "gulp-codecov": "^2.0.2",
+    "gulp-conventional-changelog": "^1.1.0",
     "gulp-esdoc": "^0.2.0",
     "gulp-eslint": "^3.0.1",
     "gulp-exclude-gitignore": "^1.0.0",
@@ -51,6 +53,7 @@
     "gulp-plumber": "^1.1.0",
     "mocha": "^2.5.3",
     "nsp": "^2.5.0",
+    "read-package-json": "^2.0.4",
     "semantic-release": "^6.3.0"
   },
   "config": {
