@@ -3,7 +3,7 @@
   "description": "Small tool used to create identical github issue labels",
   "main": "",
   "engines": {
-    "node": ">=0.12.0"
+    "node": ">=4"
   },
   "scripts": {
     "test": "",
