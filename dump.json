@@ -1,0 +1,1963 @@
+[
+  {
+    "__docId__": 0,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "lib/LabelSync.js",
+    "memberof": null,
+    "longname": "lib/LabelSync.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "let GitHubApi = require(\"github\");\nlet Promise = require('bluebird');\n\n/**\n * Simple wrapper around the github module issues function\n * @access public\n */\nexport default class GithubIssuesLabelSync {\n    /**\n     * The GitHub issue label model\n     * @typedef {Object} Label\n     * @property {String} Label.name - The name of the label\n     * @property {String} [Label.color] - The colour of the label\n     * @property {String} [Label.status] - Once a label operation is complete this field gets updated\n     */\n\n    /**\n     * In order to work as an NPM module this class has to be called with specific parameters\n     * @example\n     * let fs = require('fs');\n     * let Promise = require('bluebird');\n     * let config = {\n     *   \"github\": {\n     *     \"user\": \"superleap\",\n     *     \"repo\": \"github-issues-label-sync\",\n     *     \"token\": \"dab5ae868be49ec9179b34d2532d699a603f8be0\",\n     *     \"options\": {\n     *       // all other values in this array are defaults\n     *       \"debug\": true,\n     *       \"followRedirects\": false,\n     *       \"Promise\": Promise\n     *     }\n     *   }\n     * };\n     * let {user, repo, token, options} = config.github;\n     * let labels = [];\n     * array.from(JSON.parse(fs.readFileSync('./.issuesrc', 'utf8')).categories).forEach((category) => {\n     *   category.labels.forEach((label) => {\n     *     label.name = `${category.name}: ${label.name}`;\n     *     labels.push(label);\n     *   });\n     * });\n     * let githubSync = new (require('./lib/LabelSync'))(options, user, repo, token);\n     * @param {Object} [options={}] - GitHubApi connect options\n     * @param {String} user - GitHub repository user\n     * @param {String} repo - GitHub repository name\n     * @param {String} token - GitHub personal access token\n     */\n    constructor(options = {}, user, repo, token) {\n        this.options = options;\n        this.user = user;\n        this.repo = repo;\n        this.token = token;\n        this.github = new GitHubApi(this.options);\n        this._labels = [];\n        this._deletedLabels = [];\n        this._createdLabels = [];\n\n        this.authenticate();\n    }\n\n    /**\n     * Get GitHubApi module connect options\n     * @type {Object}\n     */\n    get options() {\n        return this._options;\n    }\n\n    /**\n     * Get GitHub repository username\n     * @type {String}\n     */\n    get user() {\n        return this._user;\n    }\n\n    /**\n     * Get GitHub repository name\n     * @type {String}\n     */\n    get repo() {\n        return this._repo;\n    }\n\n    /**\n     * Get GitHub repository token\n     * @type {String}\n     */\n    get token() {\n        return this._token;\n    }\n\n    /**\n     * Get GitHubApi module\n     * @link github/Client\n     * @type {github/Client|module.exports}\n     */\n    get github() {\n        return this._github;\n    }\n\n    /**\n     * Get GitHub repository labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    get labels() {\n        return this._labels;\n    }\n\n    /**\n     * Get GitHubApi repository deleted labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    get deletedLabels() {\n        return this._deletedLabels;\n    }\n\n    /**\n     * Get GitHubApi repository created labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    get createdLabels() {\n        return this._createdLabels;\n    }\n\n    /**\n     * Set GitHubApi module connect options\n     * @type {Object}\n     * @property {Boolean} [options.debug=false] - Get request information with each call\n     * @property {Boolean} [options.followRedirects=false] - We don't need this for issues\n     * @property {Promise} Promise - We are using bluebird promises peering with github api package\n     */\n    set options(object) {\n        this._options = object;\n    }\n\n    /**\n     * Set GitHubApi repository username\n     * @type {String}\n     */\n    set user(repoUrlUser) {\n        this._user = repoUrlUser;\n    }\n\n    /**\n     * Set GitHubApi repository name\n     * @type {String}\n     */\n    set repo(repoUrlName) {\n        this._repo = repoUrlName;\n    }\n\n    /**\n     * Set GitHubApi OAuth2 personal access token\n     * @type {String}\n     */\n    set token(personalAccessToken) {\n        this._token = personalAccessToken;\n    }\n\n    /**\n     * Set GitHubApi Client\n     * @type {github/Client|module.exports}\n     */\n    set github(Client) {\n        this._github = Client;\n    }\n\n    /**\n     * Set GitHubApi repository labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    set labels(labels) {\n        this._labels = labels;\n    }\n\n    /**\n     * Push GitHubApi repository deleted label\n     * @type {GithubIssuesLabelSync.Label}\n     */\n    set deletedLabel(label) {\n        this._deletedLabels.push(label);\n    }\n\n    /**\n     * Push GitHubApi repository created label\n     * @type {GithubIssuesLabelSync.Label}\n     */\n    set createdLabel(label) {\n        this._createdLabels.push(label);\n    }\n\n    /**\n     * We only do this once\n     * @access private\n     */\n    authenticate() {\n        this.github.authenticate({\n            type: \"oauth\",\n            token: this.token\n        });\n    }\n\n    /**\n     * Get GitHubApi repository labels from remote\n     * @example\n     * githubSync.getLabels().then((response) => {\n     *   // log labels\n     *   console.log(response);\n     * });\n     * @async\n     * @param {Boolean} [meta=false] - Get extended response information\n     * @returns {Promise}\n     */\n    getLabels(meta = false) {\n        return this.github.issues.getLabels({\n            user: this.user,\n            repo: this.repo\n        }).then((response) => {\n            if (true !== meta) {\n                delete response[\"meta\"];\n            }\n\n            this.labels = response;\n\n            return this.labels;\n        });\n    }\n\n    /**\n     * Delete GitHubApi repository label from remote\n     * @example\n     * githubSync.deleteLabel(labels).then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log deleted label\n     *   console.log(githubSync.createdLabels);\n     * });\n     * @async\n     * @param {GithubIssuesLabelSync.Label} label - The label we want to delete\n     * @param {String} label.name - The label's name\n     * @returns {Promise}\n     */\n    deleteLabel(label) {\n        return this.github.issues.deleteLabel({\n            user: this.user,\n            repo: this.repo,\n            name: label.name\n        }).then((response) => {\n            label.status = 'success';\n\n            return response;\n        }).catch((error) => {\n            label.status = 'error';\n\n            return error.message;\n        }).lastly(() => {\n            this.deletedLabel = label;\n\n            return label;\n        });\n    }\n\n    /**\n     * Delete GitHubApi repository labels from remote\n     * @example\n     * githubSync.deleteLabels(labels).then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log delete labels\n     *   console.log(githubSync.deletedLabels);\n     * });\n     * @async\n     * @param {Array<GithubIssuesLabelSync.Label>} labels - The labels we want to delete\n     * @returns {Promise}\n     */\n    deleteLabels(labels) {\n        return Promise.all(labels).map((label) => {\n            return this.deleteLabel(label);\n        });\n    }\n\n    /**\n     * Create GitHubApi repository label on remote\n     * @example\n     * githubSync.createLabel(label).then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log created label\n     *   console.log(githubSync.createdLabels);\n     * });\n     * @async\n     * @param {GithubIssuesLabelSync.Label} label - The label we want to create\n     * @param {String} label.name - The label's name\n     * @param {String} label.color - The label's colour\n     * @param {String} label.status - Promise status of operation\n     * @returns {Promise}\n     */\n    createLabel(label) {\n        return this.github.issues.createLabel({\n            user: this.user,\n            repo: this.repo,\n            name: label.name,\n            color: label.color\n        }).then((response) => {\n            label.status = 'success';\n\n            return response;\n        }).catch((response) => {\n            let error = JSON.parse(response);\n            let code = error[\"errors\"][0].code;\n\n            if (code === \"already_exists\") {\n                label.status = 'duplicate';\n            } else {\n                label.status = 'error';\n            }\n\n            return error;\n        }).lastly(() => {\n            this.createdLabel = label;\n        });\n    }\n\n    /**\n     * Create GitHubApi repository labels on remote\n     * @example\n     * githubSync.createLabels(labels).then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log created/updated labels\n     *   console.log(githubSync.createdLabels);\n     * });\n     * @async\n     * @param {Array<GithubIssuesLabelSync.Label>} labels - The labels we want to create\n     * @returns {Promise}\n     */\n    createLabels(labels) {\n        return Promise.all(labels).map((label) => {\n            return this.createLabel(label);\n        });\n    }\n\n    /**\n     * Delete all GitHubApi repository labels on remote\n     * @example\n     * githubSync.purgeLabels().then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log deleted labels\n     *   console.log(githubSync.deletedLabels);\n     * });\n     * @async\n     * @returns {Promise}\n     */\n    purgeLabels() {\n        return this.getLabels().then((labels) => {\n            return Promise.all(labels).map((label) => {\n                return this.deleteLabel(label);\n            });\n        });\n    }\n\n    /**\n     * Import all GitHubApi repository labels on remote while optionally removing all the others\n     * @example\n     * githubSync.importLabels(labels).then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log created/updated labels\n     *   console.log(githubSync.createdLabels);\n     * });\n     * @async\n     * @param {Array<GithubIssuesLabelSync.Label>} labels - The labels we want to import\n     * @param {Boolean} [purge=false] - Wether to delete all existing tags on remote or not\n     * @returns {Promise}\n     */\n    importLabels(labels, purge = true) {\n        return Promise.resolve(true === purge ? this.purgeLabels() : true).then(() => {\n            return this.createLabels(labels);\n        });\n    }\n}\n"
+  },
+  {
+    "__docId__": 1,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "GitHubApi",
+    "memberof": "lib/LabelSync.js",
+    "longname": "lib/LabelSync.js~GitHubApi",
+    "access": null,
+    "export": false,
+    "importPath": "github-issues-label-sync/lib/LabelSync.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 2,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "Promise",
+    "memberof": "lib/LabelSync.js",
+    "longname": "lib/LabelSync.js~Promise",
+    "access": null,
+    "export": false,
+    "importPath": "github-issues-label-sync/lib/LabelSync.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 2,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 3,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "GithubIssuesLabelSync",
+    "memberof": "lib/LabelSync.js",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "access": "public",
+    "export": true,
+    "importPath": "github-issues-label-sync/lib/LabelSync.js",
+    "importStyle": "GithubIssuesLabelSync",
+    "description": "Simple wrapper around the github module issues function",
+    "lineNumber": 8,
+    "interface": false
+  },
+  {
+    "__docId__": 4,
+    "kind": "typedef",
+    "static": true,
+    "variation": null,
+    "name": "Label",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync.Label",
+    "access": null,
+    "description": "The GitHub issue label model",
+    "properties": [
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "Label.name",
+        "description": "The name of the label"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "Label.color",
+        "description": "The colour of the label"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": true,
+        "name": "Label.status",
+        "description": "Once a label operation is complete this field gets updated"
+      }
+    ],
+    "type": {
+      "types": [
+        "Object"
+      ],
+      "optional": false,
+      "name": "Label"
+    }
+  },
+  {
+    "__docId__": 5,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#constructor",
+    "access": null,
+    "description": "In order to work as an NPM module this class has to be called with specific parameters",
+    "examples": [
+      "let fs = require('fs');\nlet Promise = require('bluebird');\nlet config = {\n  \"github\": {\n    \"user\": \"superleap\",\n    \"repo\": \"github-issues-label-sync\",\n    \"token\": \"dab5ae868be49ec9179b34d2532d699a603f8be0\",\n    \"options\": {\n      // all other values in this array are defaults\n      \"debug\": true,\n      \"followRedirects\": false,\n      \"Promise\": Promise\n    }\n  }\n};\nlet {user, repo, token, options} = config.github;\nlet labels = [];\narray.from(JSON.parse(fs.readFileSync('./.issuesrc', 'utf8')).categories).forEach((category) => {\n  category.labels.forEach((label) => {\n    label.name = `${category.name}: ${label.name}`;\n    labels.push(label);\n  });\n});\nlet githubSync = new (require('./lib/LabelSync'))(options, user, repo, token);"
+    ],
+    "lineNumber": 49,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Object"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "{}",
+        "defaultRaw": {},
+        "name": "options",
+        "description": "GitHubApi connect options"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "user",
+        "description": "GitHub repository user"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "repo",
+        "description": "GitHub repository name"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "token",
+        "description": "GitHub personal access token"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 6,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "options",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#options",
+    "access": null,
+    "description": null,
+    "lineNumber": 50,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 7,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "user",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#user",
+    "access": null,
+    "description": null,
+    "lineNumber": 51,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 8,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "repo",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#repo",
+    "access": null,
+    "description": null,
+    "lineNumber": 52,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 9,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "token",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#token",
+    "access": null,
+    "description": null,
+    "lineNumber": 53,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 10,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "github",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#github",
+    "access": null,
+    "description": null,
+    "lineNumber": 54,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 11,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_labels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_labels",
+    "access": null,
+    "description": null,
+    "lineNumber": 55,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 12,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_deletedLabels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_deletedLabels",
+    "access": null,
+    "description": null,
+    "lineNumber": 56,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 13,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_createdLabels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_createdLabels",
+    "access": null,
+    "description": null,
+    "lineNumber": 57,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 14,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "options",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#options",
+    "access": null,
+    "description": "Get GitHubApi module connect options",
+    "lineNumber": 66,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 15,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "user",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#user",
+    "access": null,
+    "description": "Get GitHub repository username",
+    "lineNumber": 74,
+    "type": {
+      "nullable": null,
+      "types": [
+        "String"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 16,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "repo",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#repo",
+    "access": null,
+    "description": "Get GitHub repository name",
+    "lineNumber": 82,
+    "type": {
+      "nullable": null,
+      "types": [
+        "String"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 17,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "token",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#token",
+    "access": null,
+    "description": "Get GitHub repository token",
+    "lineNumber": 90,
+    "type": {
+      "nullable": null,
+      "types": [
+        "String"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 18,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "github",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#github",
+    "access": null,
+    "description": "Get GitHubApi module",
+    "lineNumber": 99,
+    "unknown": [
+      {
+        "tagName": "@link",
+        "tagValue": "github/Client"
+      }
+    ],
+    "type": {
+      "nullable": null,
+      "types": [
+        "github/Client",
+        "module.exports"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 19,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "labels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#labels",
+    "access": null,
+    "description": "Get GitHub repository labels",
+    "lineNumber": 107,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Array<GithubIssuesLabelSync.Label>"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 20,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "deletedLabels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#deletedLabels",
+    "access": null,
+    "description": "Get GitHubApi repository deleted labels",
+    "lineNumber": 115,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Array<GithubIssuesLabelSync.Label>"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 21,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "createdLabels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#createdLabels",
+    "access": null,
+    "description": "Get GitHubApi repository created labels",
+    "lineNumber": 123,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Array<GithubIssuesLabelSync.Label>"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 22,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "options",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#options",
+    "access": null,
+    "description": "Set GitHubApi module connect options",
+    "lineNumber": 134,
+    "properties": [
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "options.debug",
+        "description": "Get request information with each call"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "options.followRedirects",
+        "description": "We don't need this for issues"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Promise"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "Promise",
+        "description": "We are using bluebird promises peering with github api package"
+      }
+    ],
+    "type": {
+      "nullable": null,
+      "types": [
+        "Object"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 23,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_options",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_options",
+    "access": null,
+    "description": null,
+    "lineNumber": 135,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 24,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "user",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#user",
+    "access": null,
+    "description": "Set GitHubApi repository username",
+    "lineNumber": 142,
+    "type": {
+      "nullable": null,
+      "types": [
+        "String"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 25,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_user",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_user",
+    "access": null,
+    "description": null,
+    "lineNumber": 143,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 26,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "repo",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#repo",
+    "access": null,
+    "description": "Set GitHubApi repository name",
+    "lineNumber": 150,
+    "type": {
+      "nullable": null,
+      "types": [
+        "String"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 27,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_repo",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_repo",
+    "access": null,
+    "description": null,
+    "lineNumber": 151,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 28,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "token",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#token",
+    "access": null,
+    "description": "Set GitHubApi OAuth2 personal access token",
+    "lineNumber": 158,
+    "type": {
+      "nullable": null,
+      "types": [
+        "String"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 29,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_token",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_token",
+    "access": null,
+    "description": null,
+    "lineNumber": 159,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 30,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "github",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#github",
+    "access": null,
+    "description": "Set GitHubApi Client",
+    "lineNumber": 166,
+    "type": {
+      "nullable": null,
+      "types": [
+        "github/Client",
+        "module.exports"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 31,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_github",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_github",
+    "access": null,
+    "description": null,
+    "lineNumber": 167,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 32,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "labels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#labels",
+    "access": null,
+    "description": "Set GitHubApi repository labels",
+    "lineNumber": 174,
+    "type": {
+      "nullable": null,
+      "types": [
+        "Array<GithubIssuesLabelSync.Label>"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 33,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_labels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_labels",
+    "access": null,
+    "description": null,
+    "lineNumber": 175,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 34,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "deletedLabel",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#deletedLabel",
+    "access": null,
+    "description": "Push GitHubApi repository deleted label",
+    "lineNumber": 182,
+    "type": {
+      "nullable": null,
+      "types": [
+        "GithubIssuesLabelSync.Label"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 35,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "createdLabel",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#createdLabel",
+    "access": null,
+    "description": "Push GitHubApi repository created label",
+    "lineNumber": 190,
+    "type": {
+      "nullable": null,
+      "types": [
+        "GithubIssuesLabelSync.Label"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 36,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "authenticate",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#authenticate",
+    "access": "private",
+    "description": "We only do this once",
+    "lineNumber": 198,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 37,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getLabels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#getLabels",
+    "access": null,
+    "description": "Get GitHubApi repository labels from remote",
+    "examples": [
+      "githubSync.getLabels().then((response) => {\n  // log labels\n  console.log(response);\n});"
+    ],
+    "lineNumber": 216,
+    "unknown": [
+      {
+        "tagName": "@async",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "meta",
+        "description": "Get extended response information"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 38,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "labels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#labels",
+    "access": null,
+    "description": null,
+    "lineNumber": 225,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 39,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "deleteLabel",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#deleteLabel",
+    "access": null,
+    "description": "Delete GitHubApi repository label from remote",
+    "examples": [
+      "githubSync.deleteLabel(labels).then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log deleted label\n  console.log(githubSync.createdLabels);\n});"
+    ],
+    "lineNumber": 245,
+    "unknown": [
+      {
+        "tagName": "@async",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "GithubIssuesLabelSync.Label"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "label",
+        "description": "The label we want to delete"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "label.name",
+        "description": "The label's name"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 40,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "deletedLabel",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#deletedLabel",
+    "access": null,
+    "description": null,
+    "lineNumber": 259,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 41,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "deleteLabels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#deleteLabels",
+    "access": null,
+    "description": "Delete GitHubApi repository labels from remote",
+    "examples": [
+      "githubSync.deleteLabels(labels).then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log delete labels\n  console.log(githubSync.deletedLabels);\n});"
+    ],
+    "lineNumber": 278,
+    "unknown": [
+      {
+        "tagName": "@async",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Array<GithubIssuesLabelSync.Label>"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "labels",
+        "description": "The labels we want to delete"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 42,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "createLabel",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#createLabel",
+    "access": null,
+    "description": "Create GitHubApi repository label on remote",
+    "examples": [
+      "githubSync.createLabel(label).then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log created label\n  console.log(githubSync.createdLabels);\n});"
+    ],
+    "lineNumber": 300,
+    "unknown": [
+      {
+        "tagName": "@async",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "GithubIssuesLabelSync.Label"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "label",
+        "description": "The label we want to create"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "label.name",
+        "description": "The label's name"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "label.color",
+        "description": "The label's colour"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "String"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "label.status",
+        "description": "Promise status of operation"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 43,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "createdLabel",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#createdLabel",
+    "access": null,
+    "description": null,
+    "lineNumber": 322,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 44,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "createLabels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#createLabels",
+    "access": null,
+    "description": "Create GitHubApi repository labels on remote",
+    "examples": [
+      "githubSync.createLabels(labels).then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log created/updated labels\n  console.log(githubSync.createdLabels);\n});"
+    ],
+    "lineNumber": 339,
+    "unknown": [
+      {
+        "tagName": "@async",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Array<GithubIssuesLabelSync.Label>"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "labels",
+        "description": "The labels we want to create"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 45,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "purgeLabels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#purgeLabels",
+    "access": null,
+    "description": "Delete all GitHubApi repository labels on remote",
+    "examples": [
+      "githubSync.purgeLabels().then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log deleted labels\n  console.log(githubSync.deletedLabels);\n});"
+    ],
+    "lineNumber": 357,
+    "unknown": [
+      {
+        "tagName": "@async",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 46,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "importLabels",
+    "memberof": "lib/LabelSync.js~GithubIssuesLabelSync",
+    "longname": "lib/LabelSync.js~GithubIssuesLabelSync#importLabels",
+    "access": null,
+    "description": "Import all GitHubApi repository labels on remote while optionally removing all the others",
+    "examples": [
+      "githubSync.importLabels(labels).then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log created/updated labels\n  console.log(githubSync.createdLabels);\n});"
+    ],
+    "lineNumber": 379,
+    "unknown": [
+      {
+        "tagName": "@async",
+        "tagValue": ""
+      },
+      {
+        "tagName": "@returns",
+        "tagValue": "{Promise}"
+      }
+    ],
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "Array<GithubIssuesLabelSync.Label>"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "labels",
+        "description": "The labels we want to import"
+      },
+      {
+        "nullable": null,
+        "types": [
+          "Boolean"
+        ],
+        "spread": false,
+        "optional": true,
+        "defaultValue": "false",
+        "defaultRaw": false,
+        "name": "purge",
+        "description": "Wether to delete all existing tags on remote or not"
+      }
+    ],
+    "return": {
+      "nullable": null,
+      "types": [
+        "Promise"
+      ],
+      "spread": false,
+      "description": ""
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 48,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Infinity",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 49,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~NaN",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 50,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~undefined",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 51,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~null",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 52,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Object",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 53,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~object",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 54,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Function",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 55,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~function",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 56,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Boolean",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 57,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~boolean",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 58,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Symbol",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 59,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Error",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 60,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~EvalError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 61,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~InternalError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 62,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RangeError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 63,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ReferenceError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 64,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~SyntaxError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 65,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~TypeError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 66,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~URIError",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 67,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Number",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 68,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~number",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 69,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Date",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 70,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~String",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 71,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~string",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 72,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RegExp",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 73,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 74,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int8Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 75,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 76,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8ClampedArray",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 77,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int16Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 78,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint16Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 79,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 80,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 81,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float32Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 82,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float64Array",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 83,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Map",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 84,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Set",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 85,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakMap",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 86,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakSet",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 87,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ArrayBuffer",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 88,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~DataView",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 89,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~JSON",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 90,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Promise",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 91,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Generator",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 92,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~GeneratorFunction",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 93,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Reflect",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 94,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Proxy",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 96,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "CanvasRenderingContext2D",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~CanvasRenderingContext2D",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 97,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DocumentFragment",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~DocumentFragment",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 98,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Element",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Element",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 99,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Event",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Event",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 100,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Node",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Node",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 101,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NodeList",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~NodeList",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 102,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "XMLHttpRequest",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~XMLHttpRequest",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 103,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "AudioContext",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/AudioContext",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~AudioContext",
+    "access": null,
+    "description": "",
+    "builtinExternal": true
+  }
+]

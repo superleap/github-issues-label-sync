@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">GitHub Issues Label Sync Module API Document</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/superleap/github-issues-label-sync.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/LabelSync.js~GithubIssuesLabelSync.html">GithubIssuesLabelSync</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Label">Label</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="-electric_plug-package-github-issues-label-sync">:electric_plug::package: github-issues-label-sync</h1>
+<p><strong>open source project management setup</strong></p>
+<blockquote>
+<p><strong>create .issuesrc json containing pairs of label/colour</strong></p>
+<p><strong>import repo labels from .issuesrc</strong></p>
+<p><strong>add .issuesrc to version control</strong></p>
+</blockquote>
+<p><a href="https://travis-ci.org/superleap/github-issues-label-sync"><img src="http://img.shields.io/travis/superleap/github-issues-label-sync.svg?style=flat-square" alt="Build Status"></a> <a href="http://commitizen.github.io/cz-cli/"><img src="https://img.shields.io/badge/commitizen-friendly-brightgreen.svg" alt="Commitizen friendly"></a> <a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square" alt="semantic-release"></a>  </p>
+<p><a href="https://www.npmjs.com/package/github-asana-tag-sync"><img src="https://img.shields.io/npm/v/github-issues-label-sync.svg?style=flat-square" alt="current version"></a> <a href="https://www.npmjs.com/package/github-asana-tag-sync"><img src="https://img.shields.io/node/v/github-issues-label-sync.svg?style=flat-square" alt="current version"></a> 
+<a href="https://david-dm.org/superleap/github-issues-label-sync"><img src="https://david-dm.org/superleap/github-issues-label-sync.svg" alt="Dependency Status"></a> <a href="https://david-dm.org/superleap/github-issues-label-sync#info=devDependencies"><img src="https://david-dm.org/superleap/github-issues-label-sync/dev-status.svg" alt="devDependency Status"></a> </p>
+<p><a href="https://www.bithound.io/github/superleap/github-issues-label-sync"><img src="https://www.bithound.io/github/superleap/github-issues-label-sync/badges/score.svg" alt="bitHound Overall Score"></a> <a href="https://www.bithound.io/github/superleap/github-issues-label-sync/master/dependencies/npm"><img src="https://www.bithound.io/github/superleap/github-issues-label-sync/badges/dependencies.svg" alt="bitHound Dependencies"></a> <a href="https://www.bithound.io/github/superleap/github-issues-label-sync/master/dependencies/npm"><img src="https://www.bithound.io/github/superleap/github-issues-label-sync/badges/devDependencies.svg" alt="bitHound Dev Dependencies"></a> <a href="https://www.bithound.io/github/superleap/github-issues-label-sync"><img src="https://www.bithound.io/github/superleap/github-issues-label-sync/badges/code.svg" alt="bitHound Code"></a></p>
+<p><a href="https://opensource.org/licenses/BSD-2-Clause"><img src="http://img.shields.io/:license-BSD2-blue.svg?style=flat-square" alt="License"></a> <a href="https://github.com/superleap/github-issues-label-sync/issues"><img src="https://img.shields.io/github/issues/superleap/github-issues-label-sync.svg" alt="GitHub issues"></a> <a href="https://gitter.im/superleap/github-issues-label-sync?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/superleap/github-issues-label-sync.svg" alt="Join the chat at https://gitter.im/superleap/github-issues-label-sync"></a></p>
+<h2 id="installation">Installation</h2>
+<pre><code><code class="source-code prettyprint">npm i -D github-issues-label-sync</code>
+</code></pre><h2 id="usage">Usage</h2>
+<p>Before you can use this module you have to require it in your script:</p>
+<pre><code><code class="source-code prettyprint">require(&apos;github-issues-label-sync&apos;);</code>
+</code></pre><h2 id="license">License</h2>
+<pre><code><code class="source-code prettyprint">Copyright (c) 2016, TED Vortex (Teodor Eugen Du&#x21B;ulescu)
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without 
+modification, are permitted provided that the following conditions 
+are met:
+
+1. Redistributions of source code must retain the above copyright 
+notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above 
+copyright notice, this list of conditions and the following 
+disclaimer in the documentation and/or other materials provided 
+with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS 
+&quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT 
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS 
+FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
+COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, 
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR 
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) 
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, 
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) 
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</code>
+</code></pre></div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
