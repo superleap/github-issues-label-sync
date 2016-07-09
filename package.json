@@ -7,6 +7,7 @@
   },
   "scripts": {
     "test": "",
+    "deploy": "gulp deploy",
     "prepublish": "gulp prepublish",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
@@ -38,16 +39,20 @@
     "bithound": "^1.3.0",
     "commitizen": "^2.8.2",
     "cz-conventional-changelog": "^1.1.6",
+    "esdoc": "^0.4.7",
     "gulp": "^3.9.1",
     "gulp-codecov": "^2.0.2",
+    "gulp-esdoc": "^0.2.0",
     "gulp-eslint": "^3.0.1",
     "gulp-exclude-gitignore": "^1.0.0",
+    "gulp-gh-pages": "^0.5.4",
     "gulp-istanbul": "^1.0.0",
     "gulp-mocha": "^2.2.0",
     "gulp-nsp": "^2.4.1",
     "gulp-plumber": "^1.1.0",
     "mocha": "^2.5.3",
     "nsp": "^2.5.0",
+    "read-package-json": "^2.0.4",
     "semantic-release": "^6.3.0"
   },
   "config": {
