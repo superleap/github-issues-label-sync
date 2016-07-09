@@ -14,7 +14,7 @@ before_install:
   - npm i -g gulp
   - npm i -g bithound
 before_script:
-  - if (( "${TRAVIS_NODE_VERSION}" >= 6 )) && [ "${TRAVIS_BRANCH}" = "master" ]; then export COVERAGE_REPORT=true; else echo $TRAVIS_NODE_VERSION fi;
+  - if (( "${TRAVIS_NODE_VERSION}" >= 6 )) && [ "$TRAVIS_BRANCH" = "master" ]; then export COVERAGE_REPORT=true; else echo $TRAVIS_NODE_VERSION; fi;
   - npm prune
 after_success:
   - npm run semantic-release
