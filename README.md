@@ -21,11 +21,19 @@
 
 ## Installation
 
+### NPM
+
 Install GitHub Issues Label Sync with [NPM](https://www.npmjs.com/) or add 
 to your package.json:
 
 ```
 npm i -D github-issues-label-sync
+```
+
+### GitHub
+
+```
+git clone https://github.com/superleap/github-issues-label-sync.git
 ```
 
 ## Usage
@@ -48,9 +56,12 @@ let config = {
 let {user, repo, token, options} = config.github;
 let githubSync = new (require('github-issues-label-sync'))
     (options, user, repo, token);
+    
 ```
 
 ## Configuration
+
+### `<Label>` typedef 
 
 This package doesn't come with a default configuration.
 
@@ -66,6 +77,8 @@ let Label = {
 
 The name property refers to the label name and the color property should 
 be set to the color of the label as a hex code without the leading hash tag.
+
+### example .labels.js
 
 Here is an example of a custom structure config - this will be default in 
 future versions:
@@ -207,7 +220,7 @@ module.exports = labels;
 
 ## Examples
 
-Create a label:
+### Create a label
 
 ```
 githubSync.createLabel(label).then((response) => {
@@ -218,7 +231,7 @@ githubSync.createLabel(label).then((response) => {
 });
 ```
 
-Create multiple labels:
+### Create multiple labels
 
 ```
 githubSync.createLabels(labels).then((response) => {
@@ -229,7 +242,7 @@ githubSync.createLabels(labels).then((response) => {
 });
 ```
 
-Delete a label:
+### Delete a label
 
 ```
 githubSync.deleteLabel(labels).then((response) => {
@@ -240,7 +253,7 @@ githubSync.deleteLabel(labels).then((response) => {
 });
 ```
 
-Delete multiple labels:
+### Delete multiple labels
 
 ```
 githubSync.deleteLabels(labels).then((response) => {
@@ -251,7 +264,7 @@ githubSync.deleteLabels(labels).then((response) => {
 });
 ```
 
-Fetch all labels:
+### Fetch all labels
 
 ```
 githubSync.getLabels().then((response) => {
@@ -260,7 +273,7 @@ githubSync.getLabels().then((response) => {
 });
 ```
 
-Purge all labels:
+### Purge all labels
 
 ```
 githubSync.purgeLabels().then((response) => {
@@ -271,7 +284,7 @@ githubSync.purgeLabels().then((response) => {
 });
 ```
 
-Import all labels:
+### Import all labels
 
 ```
 githubSync.importLabels(labels).then((response) => {
