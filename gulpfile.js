@@ -1,26 +1,27 @@
 "use strict";
+var Promise = require('bluebird');
+var fs = Promise.promisifyAll(require('fs'));
+var readFile = Promise.promisify(fs.readFile);
+var writeFile = Promise.promisify(fs.writeFile);
+var pkg = Promise.promisify(require('read-package-json'));
+var exec = require('child_process').exec;
+var path = require('path');
+var gulp = require('gulp');
+var nsp = require('gulp-nsp');
+var esdoc = require('gulp-esdoc');
+var ghPages = require('gulp-gh-pages');
 var paths = {
     "pkg": "./package.json",
     "docs": "./build/docs",
     "manual": "./build/manual"
 };
-var Promise = require('bluebird');
-var fs = Promise.promisifyAll(require('fs'));
-var readFile = Promise.promisify(require("fs").readFile);
-var exec = require('child_process').exec;
-var path = require('path');
-var gulp = require('gulp');
-var pkg = require('read-package-json');
-var nsp = require('gulp-nsp');
-var esdoc = require('gulp-esdoc');
-var ghPages = require('gulp-gh-pages');
 
 /**
  * Promisified child_process.exec
  * @param cmd
- * @param opts See child_process.exec node docs
- * @param {stream.Writable} [opts.stdout=process.stdout] - If defined, child process stdout will be piped to it.
- * @param {stream.Writable} [opts.stderr=process.stderr] - If defined, child process stderr will be piped to it.
+ * @param {Object} opts See child_process.exec node docs
+ * @property {stream.Writable} [opts.stdout=process.stdout] - If defined, child process stdout will be piped to it.
+ * @property {stream.Writable} [opts.stderr=process.stderr] - If defined, child process stderr will be piped to it.
  * @returns {Promise<{ stdout: string, stderr: stderr }>}
  */
 function execp(cmd, opts) {
@@ -60,7 +61,7 @@ gulp.task('manual', ['changelog'], function () {
             return versions.join('');
         }).then(function (response) {
             var bindings = {
-                "index": blocks[0] + blocks[1] + "\n\n## LICENSE\n" + blocks[6],
+                "index": blocks[0] + "\n\n" + blocks[1] + "\n\n## LICENSE\n" + blocks[6],
                 "installation": blocks[2],
                 "usage": blocks[3],
                 "configuration": blocks[4],
@@ -103,11 +104,11 @@ gulp.task('doc', ['manual'], function () {
 });
 
 gulp.task('predeploy', ['doc'], function () {
-    pkg(paths.pkg, console.log, true, function (error, data) {
+    return pkg(paths.pkg, console.log, true).then(function (data) {
         var pkgName = data.name;
         var pkgUser = data.repository.url.match(/github\.com\/([^\/]+)\//i)[1];
 
-        return fs.writeFile(`${paths.docs}/CNAME`, `${pkgName}-package.${pkgUser}.xyz`);
+        return writeFile(`${paths.docs}/CNAME`, `${pkgName}-package.${pkgUser}.xyz`);
     });
 });
 
