@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../">
+  <title data-ice="title">Configuration</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  
+  
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container manual-root" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  <a href="./manual/index.html" data-ice="manualHeaderLink">Manual</a>
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <a data-ice="repoURL" href="https://github.com/superleap/github-issues-label-sync.git" class="repo-url-github">Repository</a>
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div class="manual-toc-root">
+  
+<div data-ice="manual" data-toc-name="installation">
+    <h1 class="manual-toc-title"><a href="manual/installation.html" data-ice="title">Installation</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/installation.html#npm" data-ice="link">NPM</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/installation.html#github" data-ice="link">GitHub</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="usage">
+    <h1 class="manual-toc-title"><a href="manual/usage.html" data-ice="title">Usage</a></h1>
+    <ul class="manual-toc">
+      
+    </ul>
+  </div>
+<div data-ice="manual" data-toc-name="configuration">
+    <h1 class="manual-toc-title"><a href="manual/configuration.html" data-ice="title">Configuration</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/configuration.html#-label-typedef" data-ice="link">&lt;Label&gt; typedef</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/configuration.html#example-labels-js" data-ice="link">example .labels.js</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="example">
+    <h1 class="manual-toc-title"><a href="manual/example.html" data-ice="title">Example</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/example.html#create-a-label" data-ice="link">Create a label</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/example.html#create-multiple-labels" data-ice="link">Create multiple labels</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/example.html#delete-a-label" data-ice="link">Delete a label</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/example.html#delete-multiple-labels" data-ice="link">Delete multiple labels</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/example.html#fetch-all-labels" data-ice="link">Fetch all labels</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/example.html#purge-all-labels" data-ice="link">Purge all labels</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/example.html#import-all-labels" data-ice="link">Import all labels</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="reference">
+    <h1 class="manual-toc-title"><a href="identifiers.html" data-ice="title">Reference</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="identifiers.html#class" data-ice="link">Class</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="identifiers.html#typedef" data-ice="link">Typedef</a></li>
+</ul>
+  </div>
+<div data-ice="manual" data-toc-name="changelog">
+    <h1 class="manual-toc-title"><a href="manual/changelog.html" data-ice="title">Changelog</a></h1>
+    <ul class="manual-toc">
+      
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-8-0-https-github-com-superleap-github-issues-label-sync-compare-v1-7-0-v1-8-0-2016-07-09-" data-ice="link">1.8.0 (2016-07-09)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-7-0-https-github-com-superleap-github-issues-label-sync-compare-v1-6-0-v1-7-0-2016-07-09-" data-ice="link">1.7.0 (2016-07-09)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#bug-fixes" data-ice="link">Bug Fixes</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-6-0-https-github-com-superleap-github-issues-label-sync-compare-v1-5-1-v1-6-0-2016-07-07-" data-ice="link">1.6.0 (2016-07-07)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#bug-fixes" data-ice="link">Bug Fixes</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/changelog.html#-1-5-1-https-github-com-superleap-github-issues-label-sync-compare-v1-5-0-v1-5-1-2016-07-07-" data-ice="link">1.5.1 (2016-07-07)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#bug-fixes" data-ice="link">Bug Fixes</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-5-0-https-github-com-superleap-github-issues-label-sync-compare-v1-4-0-v1-5-0-2016-07-06-" data-ice="link">1.5.0 (2016-07-06)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-4-0-https-github-com-superleap-github-issues-label-sync-compare-v1-3-0-v1-4-0-2016-07-06-" data-ice="link">1.4.0 (2016-07-06)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-3-0-https-github-com-superleap-github-issues-label-sync-compare-v1-2-0-v1-3-0-2016-07-05-" data-ice="link">1.3.0 (2016-07-05)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-2-0-https-github-com-superleap-github-issues-label-sync-compare-v1-1-0-v1-2-0-2016-07-04-" data-ice="link">1.2.0 (2016-07-04)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-1-0-https-github-com-superleap-github-issues-label-sync-compare-v1-0-1-v1-1-0-2016-07-04-" data-ice="link">1.1.0 (2016-07-04)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
+<li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/changelog.html#-1-0-1-https-github-com-superleap-github-issues-label-sync-compare-v1-0-0-v1-0-1-2016-07-03-" data-ice="link">1.0.1 (2016-07-03)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#bug-fixes" data-ice="link">Bug Fixes</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-0-0-https-github-com-superleap-github-issues-label-sync-compare-62d4145-v1-0-0-2016-07-03-" data-ice="link">1.0.0 (2016-07-03)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
+</ul>
+  </div>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div class="github-markdown">
+  <div class="manual-breadcrumb-list">
+    <a href="./manual/./index.html">Manual</a>
+    <span>&#xBB;</span>
+    <span data-ice="title">Configuration</span>
+  </div>
+  <div data-ice="content"><h3 id="-label-typedef"><code>&lt;Label&gt;</code> typedef</h3>
+<p>This package doesn&apos;t come with a default configuration.</p>
+<p>As long as you can export your data structure to GithubIssuesLabelSync.Label 
+you should be set to go.</p>
+<pre><code><code class="source-code prettyprint">let Label = {
+    &quot;name&quot;: &quot;GH Review: accepted&quot;, 
+    &quot;color&quot;: &quot;009800&quot; 
+};</code>
+</code></pre><p>The name property refers to the label name and the color property should 
+be set to the color of the label as a hex code without the leading hash tag.</p>
+<h3 id="example-labels-js">example .labels.js</h3>
+<p>Here is an example of a custom structure config - this will be default in 
+future versions:</p>
+<pre><code><code class="source-code prettyprint">let labels = {
+  &quot;categories&quot;: [
+    {
+      &quot;name&quot;: &quot;GH Review&quot;,
+      &quot;labels&quot;: [
+        {
+          &quot;name&quot;: &quot;accepted&quot;,
+          &quot;color&quot;: &quot;009800&quot;
+        },
+        {
+          &quot;name&quot;: &quot;breaking changes&quot;,
+          &quot;color&quot;: &quot;a33cd6&quot;
+        },
+        {
+          &quot;name&quot;: &quot;needs-revision&quot;,
+          &quot;color&quot;: &quot;e11d21&quot;
+        },
+        {
+          &quot;name&quot;: &quot;on hold&quot;,
+          &quot;color&quot;: &quot;bfdadc&quot;
+        },
+        {
+          &quot;name&quot;: &quot;review-needed&quot;,
+          &quot;color&quot;: &quot;fbca04&quot;
+        },
+        {
+          &quot;name&quot;: &quot;shipped&quot;,
+          &quot;color&quot;: &quot;d4c5f9&quot;
+        }
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;Resolution&quot;,
+      &quot;labels&quot;: [
+        {
+          &quot;name&quot;: &quot;duplicate&quot;,
+          &quot;color&quot;: &quot;ccc&quot;
+        },
+        {
+          &quot;name&quot;: &quot;invalid&quot;,
+          &quot;color&quot;: &quot;e6e6e6&quot;
+        },
+        {
+          &quot;name&quot;: &quot;unresolved&quot;,
+          &quot;color&quot;: &quot;fef2c0&quot;
+        },
+        {
+          &quot;name&quot;: &quot;wontfix&quot;,
+          &quot;color&quot;: &quot;fff&quot;
+        }
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;Semver&quot;,
+      &quot;labels&quot;: [
+        {
+          &quot;name&quot;: &quot;exempt&quot;,
+          &quot;color&quot;: &quot;1d76db&quot;
+        },
+        {
+          &quot;name&quot;: &quot;major&quot;,
+          &quot;color&quot;: &quot;b60205&quot;
+        },
+        {
+          &quot;name&quot;: &quot;minor&quot;,
+          &quot;color&quot;: &quot;fbca04&quot;
+        },
+        {
+          &quot;name&quot;: &quot;patch&quot;,
+          &quot;color&quot;: &quot;0e8a16&quot;
+        },
+        {
+          &quot;name&quot;: &quot;premajor&quot;,
+          &quot;color&quot;: &quot;e99695&quot;
+        }
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;Status&quot;,
+      &quot;labels&quot;: [
+        {
+          &quot;name&quot;: &quot;new&quot;,
+          &quot;color&quot;: &quot;006b75&quot;
+        },
+        {
+          &quot;name&quot;: &quot;reverted&quot;,
+          &quot;color&quot;: &quot;d93f0b&quot;
+        },
+        {
+          &quot;name&quot;: &quot;unconfirmed&quot;,
+          &quot;color&quot;: &quot;d4c5f9&quot;
+        }
+      ]
+    },
+    {
+      &quot;name&quot;: &quot;Type&quot;,
+      &quot;labels&quot;: [
+        {
+          &quot;name&quot;: &quot;bug&quot;,
+          &quot;color&quot;: &quot;fc2929&quot;
+        },
+        {
+          &quot;name&quot;: &quot;enhancement&quot;,
+          &quot;color&quot;: &quot;84b6eb&quot;
+        },
+        {
+          &quot;name&quot;: &quot;feature-request&quot;,
+          &quot;color&quot;: &quot;c7def8&quot;
+        },
+        {
+          &quot;name&quot;: &quot;question&quot;,
+          &quot;color&quot;: &quot;cc317c&quot;
+        },
+        {
+          &quot;name&quot;: &quot;regression&quot;,
+          &quot;color&quot;: &quot;e11d21&quot;
+        }
+      ]
+    }
+  ]
+};
+let labels = [];
+
+Array.from(config).categories).forEach((category) =&gt; {
+    category.labels.forEach((label) =&gt; {
+        label.name = `${category.name}: ${label.name}`;
+        labels.push(label);
+    });
+});
+
+module.exports = labels;</code>
+</code></pre></div>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(0.4.7)</span></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>
