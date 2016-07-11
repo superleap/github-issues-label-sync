@@ -1,18 +1,20 @@
-"use strict";
-let Promise = require('bluebird');
-let fs = Promise.promisifyAll(require('fs'));
+'use strict';
+
+import Promise from 'bluebird';
+import childProcess from 'child_process';
+import fs from 'fs';
+import gulp from 'gulp';
+import gulpLoadPlugins from 'gulp-load-plugins';
+import path from 'path';
+import readPackage from 'read-package-json';
+
+let exec = childProcess.exec;
+let pkg = Promise.promisify(readPackage);
 let readFile = Promise.promisify(fs.readFile);
 let writeFile = Promise.promisify(fs.writeFile);
-let pkg = Promise.promisify(require('read-package-json'));
-let exec = require('child_process').exec;
-let path = require('path');
-let gulp = require('gulp');
-let nsp = require('gulp-nsp');
-let esdoc = require('gulp-esdoc');
-let ghPages = require('gulp-gh-pages');
-let eslint = require('gulp-eslint');
-let excludeGitignore = require('gulp-exclude-gitignore');
-let paths = {
+
+const gp = gulpLoadPlugins();
+const paths = {
     "pkg": "./package.json",
     "docs": "./build/docs",
     "manual": "./build/manual"
@@ -105,7 +107,7 @@ gulp.task('doc', ['manual'], () => {
     };
 
     return gulp.src('./lib')
-        .pipe(esdoc(config));
+        .pipe(gp.esdoc(config));
 });
 
 gulp.task('predeploy', ['doc'], () => {
@@ -123,19 +125,19 @@ gulp.task('deploy', ['predeploy'], () => {
     }
 
     return gulp.src(`${paths.docs}/**/*`)
-        .pipe(ghPages());
+        .pipe(gp.ghPages());
 });
 
 gulp.task('lint', () => {
     return gulp.src(['**/*.js', '!node_modules/**'])
-        .pipe(excludeGitignore())
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError());
+        .pipe(gp.excludeGitignore())
+        .pipe(gp.eslint())
+        .pipe(gp.eslint.format())
+        .pipe(gp.eslint.failAfterError());
 });
 
 gulp.task('nsp', (cb) => {
-    nsp({"package": path.resolve('package.json')}, cb);
+    return gp.nsp({"package": path.resolve('package.json')}, cb);
 });
 
 gulp.task('bithound', () => {
@@ -143,10 +145,7 @@ gulp.task('bithound', () => {
         return false;
     }
 
-    return exec('bithound check git@github.com:superleap/github-issues-label-sync.git', (error, stdout, stderr) =>{
-        console.log(stdout);
-        console.log(stderr);
-    });
+    return execp('bithound check git@github.com:superleap/github-issues-label-sync.git');
 });
 
 gulp.task('prepublish', ['nsp', 'bithound']);
