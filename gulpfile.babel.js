@@ -120,7 +120,7 @@ gulp.task('predeploy', ['doc'], () => {
 });
 
 gulp.task('deploy', ['predeploy'], () => {
-    if (!process.env.COVERAGE_REPORT) {
+    if (!process.env.CI_DEPLOY) {
         return false;
     }
 
@@ -141,7 +141,7 @@ gulp.task('nsp', (cb) => {
 });
 
 gulp.task('bithound', () => {
-    if (!process.env.CI) {
+    if (!process.env.CI_MASTER) {
         return false;
     }
 
