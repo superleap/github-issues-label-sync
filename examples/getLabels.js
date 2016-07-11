@@ -1,7 +1,9 @@
 let config = require('./config');
+let GILS = require('./../lib/LabelSync');
 let {user, repo, token, options} = config.github;
-let githubLabelSync = new (require('./../lib/LabelSync'))(options, user, repo, token);
+let githubIssuesLabelSync = new GILS(options, user, repo, token);
 
-githubLabelSync.getLabels().then((response) => {
+githubIssuesLabelSync.getLabels().then((response) => {
+    // log labels
     console.log(response);
 });

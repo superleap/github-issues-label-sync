@@ -10,6 +10,8 @@ var gulp = require('gulp');
 var nsp = require('gulp-nsp');
 var esdoc = require('gulp-esdoc');
 var ghPages = require('gulp-gh-pages');
+let eslint = require('gulp-eslint');
+let excludeGitignore = require('gulp-exclude-gitignore');
 var paths = {
     "pkg": "./package.json",
     "docs": "./build/docs",
@@ -19,18 +21,17 @@ var paths = {
 /**
  * Promisified child_process.exec
  * @param cmd
- * @param {Object} opts See child_process.exec node docs
+ * @param {Object} [opts={}] See child_process.exec node docs
  * @property {stream.Writable} [opts.stdout=process.stdout] - If defined, child process stdout will be piped to it.
  * @property {stream.Writable} [opts.stderr=process.stderr] - If defined, child process stderr will be piped to it.
  * @returns {Promise<{ stdout: string, stderr: stderr }>}
  */
-function execp(cmd, opts) {
-    opts || (opts = {});
+function execp(cmd, opts = {}) {
     return new Promise((resolve, reject) => {
         const child = exec(cmd, opts,
             (err, stdout, stderr) => err ? reject(err) : resolve({
-                stdout: stdout,
-                stderr: stderr
+                "stdout": stdout,
+                "stderr": stderr
             }));
 
         if (opts.stdout) {
@@ -72,10 +73,12 @@ gulp.task('manual', ['changelog'], function () {
             var log = [];
 
             // create async file write array
-            for (var key in bindings) {
-                var path = paths.manual + '/' + key + '.md';
-                var data = bindings[key];
-                log.push(fs.writeFileSync(path, data));
+            for (let key in bindings) {
+                if (Object.prototype.hasOwnProperty.call(bindings, key)) {
+                    let path = paths.manual + '/' + key + '.md';
+                    let data = bindings[key];
+                    log.push(fs.writeFileSync(path, data));
+                }
             }
 
             return Promise.all(log).then(function (response) {
@@ -114,15 +117,23 @@ gulp.task('predeploy', ['doc'], function () {
 
 gulp.task('deploy', ['predeploy'], function () {
     if (!process.env.COVERAGE_REPORT) {
-        return;
+        return false;
     }
 
     return gulp.src(`${paths.docs}/**/*`)
         .pipe(ghPages());
 });
 
+gulp.task('lint', function () {
+    return gulp.src(['**/*.js', '!node_modules/**'])
+        .pipe(excludeGitignore())
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError());
+});
+
 gulp.task('nsp', function (cb) {
-    nsp({package: path.resolve('package.json')}, cb);
+    nsp({"package": path.resolve('package.json')}, cb);
 });
 
 gulp.task('bithound', function () {

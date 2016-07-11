@@ -1,8 +1,11 @@
 let config = require('./config');
+let GILS = require('./../lib/LabelSync');
 let {user, repo, token, options} = config.github;
-let githubLabelSync = new (require('./../lib/LabelSync'))(options, user, repo, token);
+let githubIssuesLabelSync = new GILS(options, user, repo, token);
 
-githubLabelSync.purgeLabels().then((response) => {
+githubIssuesLabelSync.purgeLabels().then((response) => {
+    // log raw response body
     console.log(response);
-    console.log(githubLabelSync.deletedLabels);
+    // log deleted labels
+    console.log(githubIssuesLabelSync.deletedLabels);
 });
