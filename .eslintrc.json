@@ -130,14 +130,19 @@
     "wrap-regex": 2,
     "semi": 2,
     // es6
-//    "semi": 2,
-//    "semi": 2,
-//    "semi": 2,
-//    "semi": 2,
-//    "semi": 2,
-//    "semi": 2,
-//    "semi": 2,
-//    "semi": 2,
+    "arrow-body-style": [2, "always"],
+    "no-confusing-arrow": 2,
+    "no-duplicate-imports": [2, {"includeExports": true}],
+    "no-useless-computed-key": 2,
+    "no-useless-constructor": 2,
+    "no-var": 2,
+    "prefer-arrow-callback": 2,
+    "prefer-reflect": 2,
+    "prefer-rest-params": 2,
+    "prefer-spread": 2,
+    "prefer-template": 2,
+    "sort-imports": 2,
+    // default overrides
     "no-console": [2, {"allow": ["log"]}]
   }
 }

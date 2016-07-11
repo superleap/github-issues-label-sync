@@ -1,18 +1,18 @@
 "use strict";
-var Promise = require('bluebird');
-var fs = Promise.promisifyAll(require('fs'));
-var readFile = Promise.promisify(fs.readFile);
-var writeFile = Promise.promisify(fs.writeFile);
-var pkg = Promise.promisify(require('read-package-json'));
-var exec = require('child_process').exec;
-var path = require('path');
-var gulp = require('gulp');
-var nsp = require('gulp-nsp');
-var esdoc = require('gulp-esdoc');
-var ghPages = require('gulp-gh-pages');
+let Promise = require('bluebird');
+let fs = Promise.promisifyAll(require('fs'));
+let readFile = Promise.promisify(fs.readFile);
+let writeFile = Promise.promisify(fs.writeFile);
+let pkg = Promise.promisify(require('read-package-json'));
+let exec = require('child_process').exec;
+let path = require('path');
+let gulp = require('gulp');
+let nsp = require('gulp-nsp');
+let esdoc = require('gulp-esdoc');
+let ghPages = require('gulp-gh-pages');
 let eslint = require('gulp-eslint');
 let excludeGitignore = require('gulp-exclude-gitignore');
-var paths = {
+let paths = {
     "pkg": "./package.json",
     "docs": "./build/docs",
     "manual": "./build/manual"
@@ -29,10 +29,12 @@ var paths = {
 function execp(cmd, opts = {}) {
     return new Promise((resolve, reject) => {
         const child = exec(cmd, opts,
-            (err, stdout, stderr) => err ? reject(err) : resolve({
-                "stdout": stdout,
-                "stderr": stderr
-            }));
+            (err, stdout, stderr) => {
+                return err ? reject(err) : resolve({
+                    "stdout": stdout,
+                    "stderr": stderr
+                });
+            });
 
         if (opts.stdout) {
             child.stdout.pipe(opts.stdout);
@@ -43,26 +45,26 @@ function execp(cmd, opts = {}) {
     });
 }
 
-gulp.task('changelog', function () {
+gulp.task('changelog', () => {
     return execp('mkdir -p ./build/manual && conventional-changelog -p angular -i ./build/manual/changelog.md -s -r 0');
 });
 
-gulp.task('manual', ['changelog'], function () {
+gulp.task('manual', ['changelog'], () => {
     // parse github readme for available sections
-    return readFile('./README.md', 'utf8').then(function (response) {
+    return readFile('./README.md', 'utf8').then((response) => {
         // split file based on headers (##) and generate mapping
-        var blocks = response.split(/\n##\s[^\n]+\n\n/i).map(function (element) {
+        let blocks = response.split(/\n##\s[^\n]+\n\n/i).map((element) => {
             return element;
         });
 
-        return readFile(paths.manual + '/changelog.md', 'utf8').then(function (response) {
-            var versions = response.split(/<a name="(?:(?:0|[1-9]\d*)\.){2}(?:0|[1-9]\d*)"><\/a>/i);
+        return readFile(`${paths.manual}/changelog.md`, 'utf8').then((response) => {
+            let versions = response.split(/<a name="(?:(?:0|[1-9]\d*)\.){2}(?:0|[1-9]\d*)"><\/a>/i);
             versions.splice(0, 1);
 
             return versions.join('');
-        }).then(function (response) {
-            var bindings = {
-                "index": blocks[0] + "\n\n" + blocks[1] + "\n\n## LICENSE\n" + blocks[6],
+        }).then((response) => {
+            let bindings = {
+                "index": `${blocks[0]}\n\n${blocks[1]}\n\n## LICENSE\n${blocks[6]}`,
                 "installation": blocks[2],
                 "usage": blocks[3],
                 "configuration": blocks[4],
@@ -70,35 +72,35 @@ gulp.task('manual', ['changelog'], function () {
                 "changelog": response
             };
 
-            var log = [];
+            let log = [];
 
             // create async file write array
             for (let key in bindings) {
-                if (Object.prototype.hasOwnProperty.call(bindings, key)) {
-                    let path = paths.manual + '/' + key + '.md';
+                if (Reflect.getOwnPropertyDescriptor(bindings, key)) {
+                    let path = `${paths.manual}/${key}.md`;
                     let data = bindings[key];
                     log.push(fs.writeFileSync(path, data));
                 }
             }
 
-            return Promise.all(log).then(function (response) {
+            return Promise.all(log).then((response) => {
                 return response;
             });
         });
     });
 });
 
-gulp.task('doc', ['manual'], function () {
-    var config = {
+gulp.task('doc', ['manual'], () => {
+    let config = {
         "destination": paths.docs,
         "title": "GitHub Issues Label Sync Module",
-        "index": paths.manual + "/index.md",
+        "index": `${paths.manual}/index.md`,
         "manual": {
-            "installation": [paths.manual + "/installation.md"],
-            "configuration": [paths.manual + "/configuration.md"],
-            "usage": [paths.manual + "/usage.md"],
-            "example": [paths.manual + "/examples.md"],
-            "changelog": [paths.manual + "/changelog.md"]
+            "installation": [`${paths.manual}/installation.md`],
+            "configuration": [`${paths.manual}/configuration.md`],
+            "usage": [`${paths.manual}/usage.md`],
+            "example": [`${paths.manual}/examples.md`],
+            "changelog": [`${paths.manual}/changelog.md`]
         }
     };
 
@@ -106,16 +108,16 @@ gulp.task('doc', ['manual'], function () {
         .pipe(esdoc(config));
 });
 
-gulp.task('predeploy', ['doc'], function () {
-    return pkg(paths.pkg, console.log, true).then(function (data) {
-        var pkgName = data.name;
-        var pkgUser = data.repository.url.match(/github\.com\/([^\/]+)\//i)[1];
+gulp.task('predeploy', ['doc'], () => {
+    return pkg(paths.pkg, console.log, true).then((data) => {
+        let pkgName = data.name;
+        let pkgUser = data.repository.url.match(/github\.com\/([^\/]+)\//i)[1];
 
         return writeFile(`${paths.docs}/CNAME`, `${pkgName}-package.${pkgUser}.xyz`);
     });
 });
 
-gulp.task('deploy', ['predeploy'], function () {
+gulp.task('deploy', ['predeploy'], () => {
     if (!process.env.COVERAGE_REPORT) {
         return false;
     }
@@ -124,7 +126,7 @@ gulp.task('deploy', ['predeploy'], function () {
         .pipe(ghPages());
 });
 
-gulp.task('lint', function () {
+gulp.task('lint', () => {
     return gulp.src(['**/*.js', '!node_modules/**'])
         .pipe(excludeGitignore())
         .pipe(eslint())
@@ -132,19 +134,20 @@ gulp.task('lint', function () {
         .pipe(eslint.failAfterError());
 });
 
-gulp.task('nsp', function (cb) {
+gulp.task('nsp', (cb) => {
     nsp({"package": path.resolve('package.json')}, cb);
 });
 
-gulp.task('bithound', function () {
+gulp.task('bithound', () => {
     if (!process.env.CI) {
-        return;
+        return false;
     }
 
-    exec('bithound check git@github.com:superleap/github-issues-label-sync.git', function (error, stdout, stderr) {
+    return exec('bithound check git@github.com:superleap/github-issues-label-sync.git', (error, stdout, stderr) =>{
         console.log(stdout);
         console.log(stderr);
     });
 });
 
 gulp.task('prepublish', ['nsp', 'bithound']);
+gulp.task('default', ['prepublish', 'lint']);
