@@ -1,8 +1,8 @@
 window.esdocSearchIndex = [
   [
-    "github-issues-label-sync/lib/labelsync.js~githubissueslabelsync",
+    "github-issues-label-sync~githubissueslabelsync",
     "class/lib/LabelSync.js~GithubIssuesLabelSync.html",
-    "<span>GithubIssuesLabelSync</span> <span class=\"search-result-import-path\">github-issues-label-sync/lib/LabelSync.js</span>",
+    "<span>GithubIssuesLabelSync</span> <span class=\"search-result-import-path\">github-issues-label-sync</span>",
     "class"
   ],
   [

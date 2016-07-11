@@ -10,7 +10,7 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "let GitHubApi = require(\"github\");\nlet Promise = require('bluebird');\n\n/**\n * Simple wrapper around the github module issues function\n * @access public\n */\nexport default class GithubIssuesLabelSync {\n    /**\n     * The GitHub issue label model\n     * @typedef {Object} Label\n     * @property {String} Label.name - The name of the label\n     * @property {String} [Label.color] - The colour of the label\n     * @property {String} [Label.status] - Once a label operation is complete this field gets updated\n     */\n\n    /**\n     * In order to work as an NPM module this class has to be called with specific parameters\n     * @example\n     * let fs = require('fs');\n     * let Promise = require('bluebird');\n     * let config = {\n     *   \"github\": {\n     *     \"user\": \"superleap\",\n     *     \"repo\": \"github-issues-label-sync\",\n     *     \"token\": \"dab5ae868be49ec9179b34d2532d699a603f8be0\",\n     *     \"options\": {\n     *       // all other values in this array are defaults\n     *       \"debug\": true,\n     *       \"followRedirects\": false,\n     *       \"Promise\": Promise\n     *     }\n     *   }\n     * };\n     * let {user, repo, token, options} = config.github;\n     * let labels = [];\n     * array.from(JSON.parse(fs.readFileSync('./.issuesrc', 'utf8')).categories).forEach((category) => {\n     *   category.labels.forEach((label) => {\n     *     label.name = `${category.name}: ${label.name}`;\n     *     labels.push(label);\n     *   });\n     * });\n     * let githubSync = new (require('./lib/LabelSync'))(options, user, repo, token);\n     * @param {Object} [options={}] - GitHubApi connect options\n     * @param {String} user - GitHub repository user\n     * @param {String} repo - GitHub repository name\n     * @param {String} token - GitHub personal access token\n     */\n    constructor(options = {}, user, repo, token) {\n        this.options = options;\n        this.user = user;\n        this.repo = repo;\n        this.token = token;\n        this.github = new GitHubApi(this.options);\n        this._labels = [];\n        this._deletedLabels = [];\n        this._createdLabels = [];\n\n        this.authenticate();\n    }\n\n    /**\n     * Get GitHubApi module connect options\n     * @type {Object}\n     */\n    get options() {\n        return this._options;\n    }\n\n    /**\n     * Get GitHub repository username\n     * @type {String}\n     */\n    get user() {\n        return this._user;\n    }\n\n    /**\n     * Get GitHub repository name\n     * @type {String}\n     */\n    get repo() {\n        return this._repo;\n    }\n\n    /**\n     * Get GitHub repository token\n     * @type {String}\n     */\n    get token() {\n        return this._token;\n    }\n\n    /**\n     * Get GitHubApi module\n     * @link github/Client\n     * @type {github/Client|module.exports}\n     */\n    get github() {\n        return this._github;\n    }\n\n    /**\n     * Get GitHub repository labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    get labels() {\n        return this._labels;\n    }\n\n    /**\n     * Get GitHubApi repository deleted labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    get deletedLabels() {\n        return this._deletedLabels;\n    }\n\n    /**\n     * Get GitHubApi repository created labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    get createdLabels() {\n        return this._createdLabels;\n    }\n\n    /**\n     * Set GitHubApi module connect options\n     * @type {Object}\n     * @property {Boolean} [options.debug=false] - Get request information with each call\n     * @property {Boolean} [options.followRedirects=false] - We don't need this for issues\n     * @property {Promise} Promise - We are using bluebird promises peering with github api package\n     */\n    set options(object) {\n        this._options = object;\n    }\n\n    /**\n     * Set GitHubApi repository username\n     * @type {String}\n     */\n    set user(repoUrlUser) {\n        this._user = repoUrlUser;\n    }\n\n    /**\n     * Set GitHubApi repository name\n     * @type {String}\n     */\n    set repo(repoUrlName) {\n        this._repo = repoUrlName;\n    }\n\n    /**\n     * Set GitHubApi OAuth2 personal access token\n     * @type {String}\n     */\n    set token(personalAccessToken) {\n        this._token = personalAccessToken;\n    }\n\n    /**\n     * Set GitHubApi Client\n     * @type {github/Client|module.exports}\n     */\n    set github(Client) {\n        this._github = Client;\n    }\n\n    /**\n     * Set GitHubApi repository labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    set labels(labels) {\n        this._labels = labels;\n    }\n\n    /**\n     * Push GitHubApi repository deleted label\n     * @type {GithubIssuesLabelSync.Label}\n     */\n    set deletedLabel(label) {\n        this._deletedLabels.push(label);\n    }\n\n    /**\n     * Push GitHubApi repository created label\n     * @type {GithubIssuesLabelSync.Label}\n     */\n    set createdLabel(label) {\n        this._createdLabels.push(label);\n    }\n\n    /**\n     * We only do this once\n     * @access private\n     */\n    authenticate() {\n        this.github.authenticate({\n            type: \"oauth\",\n            token: this.token\n        });\n    }\n\n    /**\n     * Get GitHubApi repository labels from remote\n     * @example\n     * githubSync.getLabels().then((response) => {\n     *   // log labels\n     *   console.log(response);\n     * });\n     * @async\n     * @param {Boolean} [meta=false] - Get extended response information\n     * @returns {Promise}\n     */\n    getLabels(meta = false) {\n        return this.github.issues.getLabels({\n            user: this.user,\n            repo: this.repo\n        }).then((response) => {\n            if (true !== meta) {\n                delete response[\"meta\"];\n            }\n\n            this.labels = response;\n\n            return this.labels;\n        });\n    }\n\n    /**\n     * Delete GitHubApi repository label from remote\n     * @example\n     * githubSync.deleteLabel(labels).then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log deleted label\n     *   console.log(githubSync.createdLabels);\n     * });\n     * @async\n     * @param {GithubIssuesLabelSync.Label} label - The label we want to delete\n     * @param {String} label.name - The label's name\n     * @returns {Promise}\n     */\n    deleteLabel(label) {\n        return this.github.issues.deleteLabel({\n            user: this.user,\n            repo: this.repo,\n            name: label.name\n        }).then((response) => {\n            label.status = 'success';\n\n            return response;\n        }).catch((error) => {\n            label.status = 'error';\n\n            return error.message;\n        }).lastly(() => {\n            this.deletedLabel = label;\n\n            return label;\n        });\n    }\n\n    /**\n     * Delete GitHubApi repository labels from remote\n     * @example\n     * githubSync.deleteLabels(labels).then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log delete labels\n     *   console.log(githubSync.deletedLabels);\n     * });\n     * @async\n     * @param {Array<GithubIssuesLabelSync.Label>} labels - The labels we want to delete\n     * @returns {Promise}\n     */\n    deleteLabels(labels) {\n        return Promise.all(labels).map((label) => {\n            return this.deleteLabel(label);\n        });\n    }\n\n    /**\n     * Create GitHubApi repository label on remote\n     * @example\n     * githubSync.createLabel(label).then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log created label\n     *   console.log(githubSync.createdLabels);\n     * });\n     * @async\n     * @param {GithubIssuesLabelSync.Label} label - The label we want to create\n     * @param {String} label.name - The label's name\n     * @param {String} label.color - The label's colour\n     * @param {String} label.status - Promise status of operation\n     * @returns {Promise}\n     */\n    createLabel(label) {\n        return this.github.issues.createLabel({\n            user: this.user,\n            repo: this.repo,\n            name: label.name,\n            color: label.color\n        }).then((response) => {\n            label.status = 'success';\n\n            return response;\n        }).catch((response) => {\n            let error = JSON.parse(response);\n            let code = error[\"errors\"][0].code;\n\n            if (code === \"already_exists\") {\n                label.status = 'duplicate';\n            } else {\n                label.status = 'error';\n            }\n\n            return error;\n        }).lastly(() => {\n            this.createdLabel = label;\n        });\n    }\n\n    /**\n     * Create GitHubApi repository labels on remote\n     * @example\n     * githubSync.createLabels(labels).then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log created/updated labels\n     *   console.log(githubSync.createdLabels);\n     * });\n     * @async\n     * @param {Array<GithubIssuesLabelSync.Label>} labels - The labels we want to create\n     * @returns {Promise}\n     */\n    createLabels(labels) {\n        return Promise.all(labels).map((label) => {\n            return this.createLabel(label);\n        });\n    }\n\n    /**\n     * Delete all GitHubApi repository labels on remote\n     * @example\n     * githubSync.purgeLabels().then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log deleted labels\n     *   console.log(githubSync.deletedLabels);\n     * });\n     * @async\n     * @returns {Promise}\n     */\n    purgeLabels() {\n        return this.getLabels().then((labels) => {\n            return Promise.all(labels).map((label) => {\n                return this.deleteLabel(label);\n            });\n        });\n    }\n\n    /**\n     * Import all GitHubApi repository labels on remote while optionally removing all the others\n     * @example\n     * githubSync.importLabels(labels).then((response) => {\n     *   // log raw response bodies\n     *   console.log(response);\n     *   // log created/updated labels\n     *   console.log(githubSync.createdLabels);\n     * });\n     * @async\n     * @param {Array<GithubIssuesLabelSync.Label>} labels - The labels we want to import\n     * @param {Boolean} [purge=false] - Wether to delete all existing tags on remote or not\n     * @returns {Promise}\n     */\n    importLabels(labels, purge = true) {\n        return Promise.resolve(true === purge ? this.purgeLabels() : true).then(() => {\n            return this.createLabels(labels);\n        });\n    }\n}\n"
+    "content": "let GitHubApi = require(\"github\");\nlet Promise = require('bluebird');\n\n/**\n * Simple wrapper around the github module issues function\n * @access public\n */\nexport default class GithubIssuesLabelSync {\n\n    /**\n     * The GitHub issue label model\n     * @typedef {Object} Label\n     * @property {String} Label.name The name of the label\n     * @property {String} [Label.color] The colour of the label\n     * @property {String} [Label.status] Once a label operation is complete this field gets updated\n     */\n\n    /**\n     * In order to work as an NPM module this class has to be called with specific parameters\n     * @example\n     * let fs = require('fs');\n     * let Promise = require('bluebird');\n     * let config = {\n     *   \"github\": {\n     *     \"user\": \"superleap\",\n     *     \"repo\": \"github-issues-label-sync\",\n     *     \"token\": \"dab5ae868be49ec9179b34d2532d699a603f8be0\",\n     *     \"options\": {\n     *       // all other values in this array are defaults\n     *       \"debug\": true,\n     *       \"followRedirects\": false,\n     *       \"Promise\": Promise\n     *     }\n     *   }\n     * };\n     * let {user, repo, token, options} = config.github;\n     * let labels = [];\n     * array.from(JSON.parse(fs.readFileSync('./.issuesrc', 'utf8')).categories).forEach((category) => {\n     *   category.labels.forEach((label) => {\n     *     label.name = `${category.name}: ${label.name}`;\n     *     labels.push(label);\n     *   });\n     * });\n     * let githubSync = new (require('./lib/LabelSync'))(options, user, repo, token);\n     * @param {Object} [options={}] - GitHubApi connect options\n     * @param {String} user - GitHub repository user\n     * @param {String} repo - GitHub repository name\n     * @param {String} token - GitHub personal access token\n     */\n    constructor(options = {}, user, repo, token) {\n        this.options = options;\n        this.user = user;\n        this.repo = repo;\n        this.token = token;\n        this.github = new GitHubApi(this.options);\n        this._labels = [];\n        this._deletedLabels = [];\n        this._createdLabels = [];\n\n        this.authenticate();\n    }\n\n    /**\n     * Get GitHubApi module connect options\n     * @type {Object}\n     */\n    get options() {\n        return this._options;\n    }\n\n    /**\n     * Get GitHub repository username\n     * @type {String}\n     */\n    get user() {\n        return this._user;\n    }\n\n    /**\n     * Get GitHub repository name\n     * @type {String}\n     */\n    get repo() {\n        return this._repo;\n    }\n\n    /**\n     * Get GitHub repository token\n     * @type {String}\n     */\n    get token() {\n        return this._token;\n    }\n\n    /**\n     * Get GitHubApi module\n     * @link github/Client\n     * @type {github/Client|module.exports}\n     */\n    get github() {\n        return this._github;\n    }\n\n    /**\n     * Get GitHub repository labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    get labels() {\n        return this._labels;\n    }\n\n    /**\n     * Get GitHubApi repository deleted labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    get deletedLabels() {\n        return this._deletedLabels;\n    }\n\n    /**\n     * Get GitHubApi repository created labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    get createdLabels() {\n        return this._createdLabels;\n    }\n\n    /**\n     * Set GitHubApi module connect options\n     * @type {Object} Options we instantiate the github api package with\n     * @property {Boolean} [options.debug=false] Get request information with each call\n     * @property {Boolean} [options.followRedirects=false] We don't need this for issues\n     * @property {Promise} Promise We are using bluebird promises peering with github api package\n     */\n    set options(object) {\n        this._options = object;\n    }\n\n    /**\n     * Set GitHubApi repository username\n     * @type {String}\n     */\n    set user(repoUrlUser) {\n        this._user = repoUrlUser;\n    }\n\n    /**\n     * Set GitHubApi repository name\n     * @type {String}\n     */\n    set repo(repoUrlName) {\n        this._repo = repoUrlName;\n    }\n\n    /**\n     * Set GitHubApi OAuth2 personal access token\n     * @type {String}\n     */\n    set token(personalAccessToken) {\n        this._token = personalAccessToken;\n    }\n\n    /**\n     * Set GitHubApi Client\n     * @type {github/Client|module.exports}\n     */\n    set github(Client) {\n        this._github = Client;\n    }\n\n    /**\n     * Set GitHubApi repository labels\n     * @type {Array<GithubIssuesLabelSync.Label>}\n     */\n    set labels(labels) {\n        this._labels = labels;\n    }\n\n    /**\n     * Push GitHubApi repository deleted label\n     * @type {GithubIssuesLabelSync.Label}\n     */\n    set deletedLabel(label) {\n        this._deletedLabels.push(label);\n    }\n\n    /**\n     * Push GitHubApi repository created label\n     * @type {GithubIssuesLabelSync.Label}\n     */\n    set createdLabel(label) {\n        this._createdLabels.push(label);\n    }\n\n    /**\n     * We only do this once\n     * @access private\n     */\n    authenticate() {\n        this.github.authenticate({\n            \"type\": \"oauth\",\n            \"token\": this.token\n        });\n    }\n\n    /**\n     * Get GitHubApi repository labels from remote\n     * @example\n     * githubIssuesLabelSync.getLabels().then((response) => {\n     *   // log labels\n     *   console.log(response);\n     * });\n     * @async\n     * @param {Boolean} [meta=false] - Get extended response information\n     * @return {Promise<GithubIssuesLabelSync.labels, error>} Array of existing labels\n     */\n    getLabels(meta = false) {\n        return this.github.issues.getLabels({\n            \"user\": this.user,\n            \"repo\": this.repo\n        }).then((response) => {\n            if (true !== meta) {\n                Reflect.deleteProperty(response, 'meta');\n            }\n\n            this.labels = response;\n\n            return this.labels;\n        });\n    }\n\n    /**\n     * Delete GitHubApi repository label from remote\n     * @example\n     * githubIssuesLabelSync.deleteLabel(label).then((response) => {\n     *   // log raw response body\n     *   console.log(response);\n     *   // log deleted label\n     *   console.log(githubIssuesLabelSync.createdLabels);\n     * });\n     * @async\n     * @param {GithubIssuesLabelSync.Label} label - The label we want to delete\n     * @param {String} label.name - The label's name\n     * @return {Promise<GithubIssuesLabelSync.deletedLabels, Error>} Deleted label\n     */\n    deleteLabel(label) {\n        return this.github.issues.deleteLabel({\n            \"user\": this.user,\n            \"repo\": this.repo,\n            \"name\": label.name\n        }).then((response) => {\n            label.status = 'success';\n\n            return response;\n        }).catch((error) => {\n            label.status = 'error';\n\n            return error.message;\n        }).lastly(() => {\n            this.deletedLabel = label;\n\n            return label;\n        });\n    }\n\n    /**\n     * Delete GitHubApi repository labels from remote\n     * @example\n     * githubIssuesLabelSync.deleteLabels(labels).then((response) => {\n     *   // log raw response body\n     *   console.log(response);\n     *   // log delete labels\n     *   console.log(githubIssuesLabelSync.deletedLabels);\n     * });\n     * @async\n     * @param {Array<GithubIssuesLabelSync.Label>} labels - The labels we want to delete\n     * @return {Promise<GithubIssuesLabelSync.deletedLabels, Error>} Array of deleted labels\n     */\n    deleteLabels(labels) {\n        return Promise.all(labels).map((label) => {\n            return this.deleteLabel(label);\n        });\n    }\n\n    /**\n     * Create GitHubApi repository label on remote\n     * @example\n     * githubIssuesLabelSync.createLabel(label).then((response) => {\n     *   // log raw response body\n     *   console.log(response);\n     *   // log created/updated label\n     *   console.log(githubIssuesLabelSync.createdLabels);\n     * });\n     * @async\n     * @param {GithubIssuesLabelSync.Label} label - The label we want to create\n     * @param {String} label.name - The label's name\n     * @param {String} label.color - The label's colour\n     * @param {String} label.status - Promise status of operation\n     * @return {Promise<GithubIssuesLabelSync.createdLabels, Error>} Created label\n     */\n    createLabel(label) {\n        return this.github.issues.createLabel({\n            \"user\": this.user,\n            \"repo\": this.repo,\n            \"name\": label.name,\n            \"color\": label.color\n        }).then((response) => {\n            label.status = 'success';\n\n            return response;\n        }).catch((response) => {\n            let error = JSON.parse(response);\n            let code = error.errors[0].code;\n\n            if (code === \"already_exists\") {\n                label.status = 'duplicate';\n            } else {\n                label.status = 'error';\n            }\n\n            return error;\n        }).lastly(() => {\n            this.createdLabel = label;\n        });\n    }\n\n    /**\n     * Create GitHubApi repository labels on remote\n     * @example\n     * githubIssuesLabelSync.createLabels(labels).then((response) => {\n     *   // log raw response body\n     *   console.log(response);\n     *   // log created/updated labels\n     *   console.log(githubIssuesLabelSync.createdLabels);\n     * });\n     * @async\n     * @param {Array<GithubIssuesLabelSync.Label>} labels - The labels we want to create\n     * @return {Promise<GithubIssuesLabelSync.createdLabels, Error>} Array of created labels\n     */\n    createLabels(labels) {\n        return Promise.all(labels).map((label) => {\n            return this.createLabel(label);\n        });\n    }\n\n    /**\n     * Delete all GitHubApi repository labels on remote\n     * @example\n     * githubIssuesLabelSync.purgeLabels().then((response) => {\n     *   // log raw response body\n     *   console.log(response);\n     *   // log deleted labels\n     *   console.log(githubIssuesLabelSync.deletedLabels);\n     * });\n     * @async\n     * @return {Promise<GithubIssuesLabelSync.deletedLabels, Error>} Array of deleted labels\n     */\n    purgeLabels() {\n        return this.getLabels().then((labels) => {\n            return Promise.all(labels).map((label) => {\n                return this.deleteLabel(label);\n            });\n        });\n    }\n\n    /**\n     * Import all GitHubApi repository labels on remote while optionally removing all the others\n     * @example\n     * githubIssuesLabelSync.importLabels(labels).then((response) => {\n     *   // log raw response body\n     *   console.log(response);\n     *   // log created/updated labels\n     *   console.log(githubIssuesLabelSync.createdLabels);\n     * });\n     * @async\n     * @param {Array<GithubIssuesLabelSync.Label>} labels - The labels we want to import\n     * @param {Boolean} [purge=false] - Wether to delete all existing tags on remote or not\n     * @return {Promise<GithubIssuesLabelSync.createdLabels, Error>} Array of created labels\n     */\n    importLabels(labels, purge = true) {\n        return Promise.resolve(true === purge ? this.purgeLabels() : true).then(() => {\n            return this.createLabels(labels);\n        });\n    }\n}\n"
   },
   {
     "__docId__": 1,
@@ -22,7 +22,7 @@
     "longname": "lib/LabelSync.js~GitHubApi",
     "access": null,
     "export": false,
-    "importPath": "github-issues-label-sync/lib/LabelSync.js",
+    "importPath": "github-issues-label-sync",
     "importStyle": null,
     "description": null,
     "lineNumber": 1,
@@ -43,7 +43,7 @@
     "longname": "lib/LabelSync.js~Promise",
     "access": null,
     "export": false,
-    "importPath": "github-issues-label-sync/lib/LabelSync.js",
+    "importPath": "github-issues-label-sync",
     "importStyle": null,
     "description": null,
     "lineNumber": 2,
@@ -64,7 +64,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync",
     "access": "public",
     "export": true,
-    "importPath": "github-issues-label-sync/lib/LabelSync.js",
+    "importPath": "github-issues-label-sync",
     "importStyle": "GithubIssuesLabelSync",
     "description": "Simple wrapper around the github module issues function",
     "lineNumber": 8,
@@ -133,7 +133,7 @@
     "examples": [
       "let fs = require('fs');\nlet Promise = require('bluebird');\nlet config = {\n  \"github\": {\n    \"user\": \"superleap\",\n    \"repo\": \"github-issues-label-sync\",\n    \"token\": \"dab5ae868be49ec9179b34d2532d699a603f8be0\",\n    \"options\": {\n      // all other values in this array are defaults\n      \"debug\": true,\n      \"followRedirects\": false,\n      \"Promise\": Promise\n    }\n  }\n};\nlet {user, repo, token, options} = config.github;\nlet labels = [];\narray.from(JSON.parse(fs.readFileSync('./.issuesrc', 'utf8')).categories).forEach((category) => {\n  category.labels.forEach((label) => {\n    label.name = `${category.name}: ${label.name}`;\n    labels.push(label);\n  });\n});\nlet githubSync = new (require('./lib/LabelSync'))(options, user, repo, token);"
     ],
-    "lineNumber": 49,
+    "lineNumber": 50,
     "params": [
       {
         "nullable": null,
@@ -190,7 +190,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#options",
     "access": null,
     "description": null,
-    "lineNumber": 50,
+    "lineNumber": 51,
     "undocument": true,
     "type": {
       "types": [
@@ -208,7 +208,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#user",
     "access": null,
     "description": null,
-    "lineNumber": 51,
+    "lineNumber": 52,
     "undocument": true,
     "type": {
       "types": [
@@ -226,7 +226,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#repo",
     "access": null,
     "description": null,
-    "lineNumber": 52,
+    "lineNumber": 53,
     "undocument": true,
     "type": {
       "types": [
@@ -244,7 +244,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#token",
     "access": null,
     "description": null,
-    "lineNumber": 53,
+    "lineNumber": 54,
     "undocument": true,
     "type": {
       "types": [
@@ -262,7 +262,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#github",
     "access": null,
     "description": null,
-    "lineNumber": 54,
+    "lineNumber": 55,
     "undocument": true,
     "type": {
       "types": [
@@ -280,7 +280,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_labels",
     "access": null,
     "description": null,
-    "lineNumber": 55,
+    "lineNumber": 56,
     "undocument": true,
     "type": {
       "types": [
@@ -298,7 +298,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_deletedLabels",
     "access": null,
     "description": null,
-    "lineNumber": 56,
+    "lineNumber": 57,
     "undocument": true,
     "type": {
       "types": [
@@ -316,7 +316,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_createdLabels",
     "access": null,
     "description": null,
-    "lineNumber": 57,
+    "lineNumber": 58,
     "undocument": true,
     "type": {
       "types": [
@@ -334,7 +334,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#options",
     "access": null,
     "description": "Get GitHubApi module connect options",
-    "lineNumber": 66,
+    "lineNumber": 67,
     "type": {
       "nullable": null,
       "types": [
@@ -355,7 +355,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#user",
     "access": null,
     "description": "Get GitHub repository username",
-    "lineNumber": 74,
+    "lineNumber": 75,
     "type": {
       "nullable": null,
       "types": [
@@ -376,7 +376,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#repo",
     "access": null,
     "description": "Get GitHub repository name",
-    "lineNumber": 82,
+    "lineNumber": 83,
     "type": {
       "nullable": null,
       "types": [
@@ -397,7 +397,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#token",
     "access": null,
     "description": "Get GitHub repository token",
-    "lineNumber": 90,
+    "lineNumber": 91,
     "type": {
       "nullable": null,
       "types": [
@@ -418,7 +418,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#github",
     "access": null,
     "description": "Get GitHubApi module",
-    "lineNumber": 99,
+    "lineNumber": 100,
     "unknown": [
       {
         "tagName": "@link",
@@ -446,7 +446,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#labels",
     "access": null,
     "description": "Get GitHub repository labels",
-    "lineNumber": 107,
+    "lineNumber": 108,
     "type": {
       "nullable": null,
       "types": [
@@ -467,7 +467,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#deletedLabels",
     "access": null,
     "description": "Get GitHubApi repository deleted labels",
-    "lineNumber": 115,
+    "lineNumber": 116,
     "type": {
       "nullable": null,
       "types": [
@@ -488,7 +488,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#createdLabels",
     "access": null,
     "description": "Get GitHubApi repository created labels",
-    "lineNumber": 123,
+    "lineNumber": 124,
     "type": {
       "nullable": null,
       "types": [
@@ -509,7 +509,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#options",
     "access": null,
     "description": "Set GitHubApi module connect options",
-    "lineNumber": 134,
+    "lineNumber": 135,
     "properties": [
       {
         "nullable": null,
@@ -566,7 +566,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_options",
     "access": null,
     "description": null,
-    "lineNumber": 135,
+    "lineNumber": 136,
     "undocument": true,
     "type": {
       "types": [
@@ -584,7 +584,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#user",
     "access": null,
     "description": "Set GitHubApi repository username",
-    "lineNumber": 142,
+    "lineNumber": 143,
     "type": {
       "nullable": null,
       "types": [
@@ -605,7 +605,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_user",
     "access": null,
     "description": null,
-    "lineNumber": 143,
+    "lineNumber": 144,
     "undocument": true,
     "type": {
       "types": [
@@ -623,7 +623,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#repo",
     "access": null,
     "description": "Set GitHubApi repository name",
-    "lineNumber": 150,
+    "lineNumber": 151,
     "type": {
       "nullable": null,
       "types": [
@@ -644,7 +644,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_repo",
     "access": null,
     "description": null,
-    "lineNumber": 151,
+    "lineNumber": 152,
     "undocument": true,
     "type": {
       "types": [
@@ -662,7 +662,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#token",
     "access": null,
     "description": "Set GitHubApi OAuth2 personal access token",
-    "lineNumber": 158,
+    "lineNumber": 159,
     "type": {
       "nullable": null,
       "types": [
@@ -683,7 +683,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_token",
     "access": null,
     "description": null,
-    "lineNumber": 159,
+    "lineNumber": 160,
     "undocument": true,
     "type": {
       "types": [
@@ -701,7 +701,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#github",
     "access": null,
     "description": "Set GitHubApi Client",
-    "lineNumber": 166,
+    "lineNumber": 167,
     "type": {
       "nullable": null,
       "types": [
@@ -723,7 +723,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_github",
     "access": null,
     "description": null,
-    "lineNumber": 167,
+    "lineNumber": 168,
     "undocument": true,
     "type": {
       "types": [
@@ -741,7 +741,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#labels",
     "access": null,
     "description": "Set GitHubApi repository labels",
-    "lineNumber": 174,
+    "lineNumber": 175,
     "type": {
       "nullable": null,
       "types": [
@@ -762,7 +762,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#_labels",
     "access": null,
     "description": null,
-    "lineNumber": 175,
+    "lineNumber": 176,
     "undocument": true,
     "type": {
       "types": [
@@ -780,7 +780,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#deletedLabel",
     "access": null,
     "description": "Push GitHubApi repository deleted label",
-    "lineNumber": 182,
+    "lineNumber": 183,
     "type": {
       "nullable": null,
       "types": [
@@ -801,7 +801,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#createdLabel",
     "access": null,
     "description": "Push GitHubApi repository created label",
-    "lineNumber": 190,
+    "lineNumber": 191,
     "type": {
       "nullable": null,
       "types": [
@@ -822,7 +822,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#authenticate",
     "access": "private",
     "description": "We only do this once",
-    "lineNumber": 198,
+    "lineNumber": 199,
     "params": [],
     "generator": false
   },
@@ -837,17 +837,13 @@
     "access": null,
     "description": "Get GitHubApi repository labels from remote",
     "examples": [
-      "githubSync.getLabels().then((response) => {\n  // log labels\n  console.log(response);\n});"
+      "githubIssuesLabelSync.getLabels().then((response) => {\n  // log labels\n  console.log(response);\n});"
     ],
-    "lineNumber": 216,
+    "lineNumber": 217,
     "unknown": [
       {
         "tagName": "@async",
         "tagValue": ""
-      },
-      {
-        "tagName": "@returns",
-        "tagValue": "{Promise}"
       }
     ],
     "params": [
@@ -867,10 +863,10 @@
     "return": {
       "nullable": null,
       "types": [
-        "Promise"
+        "Promise<GithubIssuesLabelSync.labels, error>"
       ],
       "spread": false,
-      "description": ""
+      "description": "Array of existing labels"
     },
     "generator": false
   },
@@ -884,7 +880,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#labels",
     "access": null,
     "description": null,
-    "lineNumber": 225,
+    "lineNumber": 226,
     "undocument": true,
     "type": {
       "types": [
@@ -903,17 +899,13 @@
     "access": null,
     "description": "Delete GitHubApi repository label from remote",
     "examples": [
-      "githubSync.deleteLabel(labels).then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log deleted label\n  console.log(githubSync.createdLabels);\n});"
+      "githubIssuesLabelSync.deleteLabel(label).then((response) => {\n  // log raw response body\n  console.log(response);\n  // log deleted label\n  console.log(githubIssuesLabelSync.createdLabels);\n});"
     ],
-    "lineNumber": 245,
+    "lineNumber": 246,
     "unknown": [
       {
         "tagName": "@async",
         "tagValue": ""
-      },
-      {
-        "tagName": "@returns",
-        "tagValue": "{Promise}"
       }
     ],
     "params": [
@@ -941,10 +933,10 @@
     "return": {
       "nullable": null,
       "types": [
-        "Promise"
+        "Promise<GithubIssuesLabelSync.deletedLabels, Error>"
       ],
       "spread": false,
-      "description": ""
+      "description": "Deleted label"
     },
     "generator": false
   },
@@ -958,7 +950,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#deletedLabel",
     "access": null,
     "description": null,
-    "lineNumber": 259,
+    "lineNumber": 260,
     "undocument": true,
     "type": {
       "types": [
@@ -977,17 +969,13 @@
     "access": null,
     "description": "Delete GitHubApi repository labels from remote",
     "examples": [
-      "githubSync.deleteLabels(labels).then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log delete labels\n  console.log(githubSync.deletedLabels);\n});"
+      "githubIssuesLabelSync.deleteLabels(labels).then((response) => {\n  // log raw response body\n  console.log(response);\n  // log delete labels\n  console.log(githubIssuesLabelSync.deletedLabels);\n});"
     ],
-    "lineNumber": 278,
+    "lineNumber": 279,
     "unknown": [
       {
         "tagName": "@async",
         "tagValue": ""
-      },
-      {
-        "tagName": "@returns",
-        "tagValue": "{Promise}"
       }
     ],
     "params": [
@@ -1005,10 +993,10 @@
     "return": {
       "nullable": null,
       "types": [
-        "Promise"
+        "Promise<GithubIssuesLabelSync.deletedLabels, Error>"
       ],
       "spread": false,
-      "description": ""
+      "description": "Array of deleted labels"
     },
     "generator": false
   },
@@ -1023,17 +1011,13 @@
     "access": null,
     "description": "Create GitHubApi repository label on remote",
     "examples": [
-      "githubSync.createLabel(label).then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log created label\n  console.log(githubSync.createdLabels);\n});"
+      "githubIssuesLabelSync.createLabel(label).then((response) => {\n  // log raw response body\n  console.log(response);\n  // log created/updated label\n  console.log(githubIssuesLabelSync.createdLabels);\n});"
     ],
-    "lineNumber": 300,
+    "lineNumber": 301,
     "unknown": [
       {
         "tagName": "@async",
         "tagValue": ""
-      },
-      {
-        "tagName": "@returns",
-        "tagValue": "{Promise}"
       }
     ],
     "params": [
@@ -1081,10 +1065,10 @@
     "return": {
       "nullable": null,
       "types": [
-        "Promise"
+        "Promise<GithubIssuesLabelSync.createdLabels, Error>"
       ],
       "spread": false,
-      "description": ""
+      "description": "Created label"
     },
     "generator": false
   },
@@ -1098,7 +1082,7 @@
     "longname": "lib/LabelSync.js~GithubIssuesLabelSync#createdLabel",
     "access": null,
     "description": null,
-    "lineNumber": 322,
+    "lineNumber": 323,
     "undocument": true,
     "type": {
       "types": [
@@ -1117,17 +1101,13 @@
     "access": null,
     "description": "Create GitHubApi repository labels on remote",
     "examples": [
-      "githubSync.createLabels(labels).then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log created/updated labels\n  console.log(githubSync.createdLabels);\n});"
+      "githubIssuesLabelSync.createLabels(labels).then((response) => {\n  // log raw response body\n  console.log(response);\n  // log created/updated labels\n  console.log(githubIssuesLabelSync.createdLabels);\n});"
     ],
-    "lineNumber": 339,
+    "lineNumber": 340,
     "unknown": [
       {
         "tagName": "@async",
         "tagValue": ""
-      },
-      {
-        "tagName": "@returns",
-        "tagValue": "{Promise}"
       }
     ],
     "params": [
@@ -1145,10 +1125,10 @@
     "return": {
       "nullable": null,
       "types": [
-        "Promise"
+        "Promise<GithubIssuesLabelSync.createdLabels, Error>"
       ],
       "spread": false,
-      "description": ""
+      "description": "Array of created labels"
     },
     "generator": false
   },
@@ -1163,27 +1143,23 @@
     "access": null,
     "description": "Delete all GitHubApi repository labels on remote",
     "examples": [
-      "githubSync.purgeLabels().then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log deleted labels\n  console.log(githubSync.deletedLabels);\n});"
+      "githubIssuesLabelSync.purgeLabels().then((response) => {\n  // log raw response body\n  console.log(response);\n  // log deleted labels\n  console.log(githubIssuesLabelSync.deletedLabels);\n});"
     ],
-    "lineNumber": 357,
+    "lineNumber": 358,
     "unknown": [
       {
         "tagName": "@async",
         "tagValue": ""
-      },
-      {
-        "tagName": "@returns",
-        "tagValue": "{Promise}"
       }
     ],
     "params": [],
     "return": {
       "nullable": null,
       "types": [
-        "Promise"
+        "Promise<GithubIssuesLabelSync.deletedLabels, Error>"
       ],
       "spread": false,
-      "description": ""
+      "description": "Array of deleted labels"
     },
     "generator": false
   },
@@ -1198,17 +1174,13 @@
     "access": null,
     "description": "Import all GitHubApi repository labels on remote while optionally removing all the others",
     "examples": [
-      "githubSync.importLabels(labels).then((response) => {\n  // log raw response bodies\n  console.log(response);\n  // log created/updated labels\n  console.log(githubSync.createdLabels);\n});"
+      "githubIssuesLabelSync.importLabels(labels).then((response) => {\n  // log raw response body\n  console.log(response);\n  // log created/updated labels\n  console.log(githubIssuesLabelSync.createdLabels);\n});"
     ],
-    "lineNumber": 379,
+    "lineNumber": 380,
     "unknown": [
       {
         "tagName": "@async",
         "tagValue": ""
-      },
-      {
-        "tagName": "@returns",
-        "tagValue": "{Promise}"
       }
     ],
     "params": [
@@ -1238,10 +1210,10 @@
     "return": {
       "nullable": null,
       "types": [
-        "Promise"
+        "Promise<GithubIssuesLabelSync.createdLabels, Error>"
       ],
       "spread": false,
-      "description": ""
+      "description": "Array of created labels"
     },
     "generator": false
   },
