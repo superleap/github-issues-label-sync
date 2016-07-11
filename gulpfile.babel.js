@@ -1,5 +1,3 @@
-'use strict';
-
 import Promise from 'bluebird';
 import childProcess from 'child_process';
 import fs from 'fs';
@@ -17,7 +15,9 @@ const gp = gulpLoadPlugins();
 const paths = {
     "pkg": "./package.json",
     "docs": "./build/docs",
-    "manual": "./build/manual"
+    "manual": "./build/manual",
+    "src": "./src",
+    "compile": "./lib"
 };
 
 /**
@@ -106,7 +106,7 @@ gulp.task('doc', ['manual'], () => {
         }
     };
 
-    return gulp.src('./lib')
+    return gulp.src(paths.lib)
         .pipe(gp.esdoc(config));
 });
 
@@ -148,5 +148,9 @@ gulp.task('bithound', () => {
     return execp('bithound check git@github.com:superleap/github-issues-label-sync.git');
 });
 
-gulp.task('prepublish', ['nsp', 'bithound']);
+gulp.task('package', () => {
+    return execp(`node_modules/babel-cli/bin/babel.js ${paths.src} --out-dir ${paths.compile}`);
+});
+
+gulp.task('prepublish', ['nsp', 'bithound', 'package']);
 gulp.task('default', ['prepublish', 'lint']);
