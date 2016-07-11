@@ -10,7 +10,7 @@
     ],
     "critics": {
         "lint": {
-            "engine": "eslint"
+            "engine": "none"
         },
         "wc": {
             "limit": 1000
