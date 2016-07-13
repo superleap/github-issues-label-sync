@@ -1,8 +1,8 @@
 window.esdocSearchIndex = [
   [
-    "github-issues-label-sync~githubissueslabelsync",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html",
-    "<span>GithubIssuesLabelSync</span> <span class=\"search-result-import-path\">github-issues-label-sync</span>",
+    "github-issues-label-sync/src/labelsync.js~githubissueslabelsync",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html",
+    "<span>GithubIssuesLabelSync</span> <span class=\"search-result-import-path\">github-issues-label-sync/src/LabelSync.js</span>",
     "class"
   ],
   [
@@ -336,159 +336,159 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
-    "lib/labelsync.js",
-    "file/lib/LabelSync.js.html",
-    "lib/LabelSync.js",
+    "src/labelsync.js",
+    "file/src/LabelSync.js.html",
+    "src/LabelSync.js",
     "file"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#constructor",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-constructor-constructor",
-    "lib/LabelSync.js~GithubIssuesLabelSync#constructor",
+    "src/labelsync.js~githubissueslabelsync#constructor",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-constructor-constructor",
+    "src/LabelSync.js~GithubIssuesLabelSync#constructor",
     "method"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#createlabel",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-method-createLabel",
-    "lib/LabelSync.js~GithubIssuesLabelSync#createLabel",
+    "src/labelsync.js~githubissueslabelsync#createlabel",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-method-createLabel",
+    "src/LabelSync.js~GithubIssuesLabelSync#createLabel",
     "method"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#createlabels",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-method-createLabels",
-    "lib/LabelSync.js~GithubIssuesLabelSync#createLabels",
+    "src/labelsync.js~githubissueslabelsync#createlabels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-method-createLabels",
+    "src/LabelSync.js~GithubIssuesLabelSync#createLabels",
     "method"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#createdlabel",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-set-createdLabel",
-    "lib/LabelSync.js~GithubIssuesLabelSync#createdLabel",
+    "src/labelsync.js~githubissueslabelsync#createdlabel",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-createdLabel",
+    "src/LabelSync.js~GithubIssuesLabelSync#createdLabel",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#createdlabels",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-get-createdLabels",
-    "lib/LabelSync.js~GithubIssuesLabelSync#createdLabels",
+    "src/labelsync.js~githubissueslabelsync#createdlabels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-createdLabels",
+    "src/LabelSync.js~GithubIssuesLabelSync#createdLabels",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#deletelabel",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-method-deleteLabel",
-    "lib/LabelSync.js~GithubIssuesLabelSync#deleteLabel",
+    "src/labelsync.js~githubissueslabelsync#deletelabel",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-method-deleteLabel",
+    "src/LabelSync.js~GithubIssuesLabelSync#deleteLabel",
     "method"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#deletelabels",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-method-deleteLabels",
-    "lib/LabelSync.js~GithubIssuesLabelSync#deleteLabels",
+    "src/labelsync.js~githubissueslabelsync#deletelabels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-method-deleteLabels",
+    "src/LabelSync.js~GithubIssuesLabelSync#deleteLabels",
     "method"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#deletedlabel",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-set-deletedLabel",
-    "lib/LabelSync.js~GithubIssuesLabelSync#deletedLabel",
+    "src/labelsync.js~githubissueslabelsync#deletedlabel",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-deletedLabel",
+    "src/LabelSync.js~GithubIssuesLabelSync#deletedLabel",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#deletedlabels",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-get-deletedLabels",
-    "lib/LabelSync.js~GithubIssuesLabelSync#deletedLabels",
+    "src/labelsync.js~githubissueslabelsync#deletedlabels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-deletedLabels",
+    "src/LabelSync.js~GithubIssuesLabelSync#deletedLabels",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#getlabels",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-method-getLabels",
-    "lib/LabelSync.js~GithubIssuesLabelSync#getLabels",
+    "src/labelsync.js~githubissueslabelsync#getlabels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-method-getLabels",
+    "src/LabelSync.js~GithubIssuesLabelSync#getLabels",
     "method"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#github",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-set-github",
-    "lib/LabelSync.js~GithubIssuesLabelSync#github",
+    "src/labelsync.js~githubissueslabelsync#github",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-github",
+    "src/LabelSync.js~GithubIssuesLabelSync#github",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#github",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-get-github",
-    "lib/LabelSync.js~GithubIssuesLabelSync#github",
+    "src/labelsync.js~githubissueslabelsync#github",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-github",
+    "src/LabelSync.js~GithubIssuesLabelSync#github",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#importlabels",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-method-importLabels",
-    "lib/LabelSync.js~GithubIssuesLabelSync#importLabels",
+    "src/labelsync.js~githubissueslabelsync#importlabels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-method-importLabels",
+    "src/LabelSync.js~GithubIssuesLabelSync#importLabels",
     "method"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#labels",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-set-labels",
-    "lib/LabelSync.js~GithubIssuesLabelSync#labels",
+    "src/labelsync.js~githubissueslabelsync#labels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-labels",
+    "src/LabelSync.js~GithubIssuesLabelSync#labels",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#labels",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-get-labels",
-    "lib/LabelSync.js~GithubIssuesLabelSync#labels",
+    "src/labelsync.js~githubissueslabelsync#labels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-labels",
+    "src/LabelSync.js~GithubIssuesLabelSync#labels",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#options",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-set-options",
-    "lib/LabelSync.js~GithubIssuesLabelSync#options",
+    "src/labelsync.js~githubissueslabelsync#options",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-options",
+    "src/LabelSync.js~GithubIssuesLabelSync#options",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#options",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-get-options",
-    "lib/LabelSync.js~GithubIssuesLabelSync#options",
+    "src/labelsync.js~githubissueslabelsync#options",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-options",
+    "src/LabelSync.js~GithubIssuesLabelSync#options",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#purgelabels",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-method-purgeLabels",
-    "lib/LabelSync.js~GithubIssuesLabelSync#purgeLabels",
+    "src/labelsync.js~githubissueslabelsync#purgelabels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-method-purgeLabels",
+    "src/LabelSync.js~GithubIssuesLabelSync#purgeLabels",
     "method"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#repo",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-get-repo",
-    "lib/LabelSync.js~GithubIssuesLabelSync#repo",
+    "src/labelsync.js~githubissueslabelsync#repo",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-repo",
+    "src/LabelSync.js~GithubIssuesLabelSync#repo",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#repo",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-set-repo",
-    "lib/LabelSync.js~GithubIssuesLabelSync#repo",
+    "src/labelsync.js~githubissueslabelsync#repo",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-repo",
+    "src/LabelSync.js~GithubIssuesLabelSync#repo",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#token",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-get-token",
-    "lib/LabelSync.js~GithubIssuesLabelSync#token",
+    "src/labelsync.js~githubissueslabelsync#token",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-token",
+    "src/LabelSync.js~GithubIssuesLabelSync#token",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#token",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-set-token",
-    "lib/LabelSync.js~GithubIssuesLabelSync#token",
+    "src/labelsync.js~githubissueslabelsync#token",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-token",
+    "src/LabelSync.js~GithubIssuesLabelSync#token",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#user",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-get-user",
-    "lib/LabelSync.js~GithubIssuesLabelSync#user",
+    "src/labelsync.js~githubissueslabelsync#user",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-user",
+    "src/LabelSync.js~GithubIssuesLabelSync#user",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync#user",
-    "class/lib/LabelSync.js~GithubIssuesLabelSync.html#instance-set-user",
-    "lib/LabelSync.js~GithubIssuesLabelSync#user",
+    "src/labelsync.js~githubissueslabelsync#user",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-user",
+    "src/LabelSync.js~GithubIssuesLabelSync#user",
     "member"
   ],
   [
-    "lib/labelsync.js~githubissueslabelsync.label",
+    "src/labelsync.js~githubissueslabelsync.label",
     "typedef/index.html#static-typedef-Label",
-    "lib/LabelSync.js~GithubIssuesLabelSync.Label",
+    "src/LabelSync.js~GithubIssuesLabelSync.Label",
     "typedef"
   ]
 ]

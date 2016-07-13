@@ -3,7 +3,7 @@
   "expectCount": 25,
   "actualCount": 25,
   "files": {
-    "lib/LabelSync.js": {
+    "src/LabelSync.js": {
       "expectCount": 25,
       "actualCount": 25,
       "undocumentLines": []
