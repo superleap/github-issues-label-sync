@@ -86,7 +86,7 @@ gulp.task(`manual`, [`changelog`], () => {
                 if (Reflect.getOwnPropertyDescriptor(bindings, key)) {
                     let path = `${paths.manual}/${key}.md`;
                     let data = bindings[key];
-                    log.push(fs.writeFileSync(path, data));
+                    log.push(writeFile(path, data));
                 }
             }
 
