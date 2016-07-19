@@ -1,5 +1,6 @@
 import Promise from 'bluebird';
 import childProcess from 'child_process';
+import conventionalChangelog from 'conventional-changelog';
 import fs from 'fs';
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
@@ -48,7 +49,11 @@ function execp(cmd, opts = {}) {
 }
 
 gulp.task(`changelog`, () => {
-    return execp(`mkdir -p ./build/manual && conventional-changelog -p angular -i ./build/manual/changelog.md -s -r 0`);
+    return conventionalChangelog({
+        "preset": `angular`,
+        "releaseCount": 0
+    })
+        .pipe(fs.createWriteStream(`${paths.manual}/changelog.md`));
 });
 
 gulp.task(`manual`, [`changelog`], () => {
@@ -141,7 +146,7 @@ gulp.task(`nsp`, (cb) => {
 });
 
 gulp.task(`bithound`, () => {
-    if (`true` !== process.env.CI_RELEASE) {
+    if (`true` !== process.env.CI_LATEST || `false` !== process.env.TRAVIS_PULL_REQUEST) {
         return false;
     }
 
@@ -154,7 +159,11 @@ gulp.task(`bithound`, () => {
 });
 
 gulp.task(`package`, () => {
-    return execp(`node_modules/.bin/babel ${paths.src} --out-dir ${paths.compile}`);
+    return pkg(paths.pkg, console.log, true).then((data) => {
+        return gulp.src(paths.src)
+            .pipe(gp.babel(data.babel))
+            .pipe(gulp.dest(paths.compile));
+    });
 });
 
 gulp.task(`prepublish`, [`nsp`, `bithound`, `package`]);
