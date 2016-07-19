@@ -65,7 +65,7 @@ gulp.task(`manual`, [`changelog`], () => {
         });
 
         return readFile(`${paths.manual}/changelog.md`, `utf8`).then((response) => {
-            let versions = response.split(/<a name=`(?:(?:0|[1-9]\d*)\.){2}(?:0|[1-9]\d*)`><\/a>/i);
+            let versions = response.split(/<a name="(?:(?:0|[1-9]\d*)\.){2}(?:0|[1-9]\d*)"><\/a>/i);
             versions.splice(0, 1);
 
             return versions.join(``);
@@ -111,7 +111,7 @@ gulp.task(`doc`, [`manual`], () => {
         }
     };
 
-    return gulp.src(paths.lib)
+    return gulp.src(paths.src)
         .pipe(gp.esdoc(config));
 });
 
