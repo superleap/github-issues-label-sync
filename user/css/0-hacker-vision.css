@@ -1,0 +1,16 @@
+html {
+    transition: -webkit-filter 0.5s ease;
+    background-color:#FFF !important;
+    -webkit-filter: invert() contrast(87%);
+    -webkit-transform: translateZ(0);
+}
+html img,
+html a img {
+    -webkit-filter: invert() brightness(100%);
+}
+html a:not([data-ice*="repoURL"]):hover {
+    -webkit-filter: invert() contrast(87%);
+}
+html a:hover img {
+    -webkit-filter: none;
+}
