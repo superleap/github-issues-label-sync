@@ -152,7 +152,7 @@ gulp.task(`nsp`, (cb) => {
 });
 
 gulp.task(`bithound`, () => {
-    if (`true` !== process.env.CI_LATEST || `false` !== process.env.TRAVIS_PULL_REQUEST) {
+    if (`true` !== process.env.CI_LATEST) {
         return false;
     }
 
