@@ -17,7 +17,8 @@ const paths = {
     "pkg": "./package.json",
     "docs": "./build/docs",
     "manual": "./build/manual",
-    "src": "./src",
+    "src": "./src/*",
+    "srcEsdoc": "./src",
     "compile": "./lib"
 };
 
@@ -102,16 +103,21 @@ gulp.task(`doc`, [`manual`], () => {
         "destination": paths.docs,
         "title": `GitHub Issues Label Sync Module`,
         "index": `${paths.manual}/index.md`,
+        "plugins": [
+            {"name": "esdoc-node"},
+            {"name": "esdoc-hacker-vision"}
+        ],
         "manual": {
             "installation": [`${paths.manual}/installation.md`],
             "configuration": [`${paths.manual}/configuration.md`],
             "usage": [`${paths.manual}/usage.md`],
             "example": [`${paths.manual}/examples.md`],
             "changelog": [`${paths.manual}/changelog.md`]
-        }
+        },
+        "lint": true
     };
 
-    return gulp.src(paths.src)
+    return gulp.src(paths.srcEsdoc)
         .pipe(gp.esdoc(config));
 });
 
@@ -146,7 +152,7 @@ gulp.task(`nsp`, (cb) => {
 });
 
 gulp.task(`bithound`, () => {
-    if (`true` !== process.env.CI_LATEST || `false` !== process.env.TRAVIS_PULL_REQUEST) {
+    if (`true` !== process.env.CI_LATEST) {
         return false;
     }
 
