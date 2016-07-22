@@ -19,12 +19,8 @@ node_js:
 before_install:
   - npm i -g gulp
 before_script:
-  - if (( "${TRAVIS_NODE_VERSION}" >= 6 )); then export CI_LATEST=true; fi;
-  - if [ "$TRAVIS_BRANCH" = "master" ] && [ "$TRAVIS_PULL_REQUEST" == false ]; then export CI_RELEASE=true; fi;
-  - curl -Lo travis_after_all.py https://git.io/vLSON
   - npm prune
 after_success:
-  - python travis_after_all.py
   - npm run semantic-release
 branches:
   except:

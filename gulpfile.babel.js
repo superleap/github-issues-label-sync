@@ -131,10 +131,6 @@ gulp.task(`predeploy`, [`doc`], () => {
 });
 
 gulp.task(`deploy`, [`predeploy`], () => {
-    if (`true` !== process.env.CI_RELEASE) {
-        return false;
-    }
-
     return gulp.src(`${paths.docs}/**/*`)
         .pipe(gp.ghPages());
 });
@@ -152,10 +148,6 @@ gulp.task(`nsp`, (cb) => {
 });
 
 gulp.task(`bithound`, () => {
-    if (`true` !== process.env.CI_LATEST) {
-        return false;
-    }
-
     return pkg(paths.pkg, console.log, true).then((data) => {
         let pkgName = data.name;
         let pkgUser = data.repository.url.match(/github\.com\/([^\/]+)\//i)[1];
