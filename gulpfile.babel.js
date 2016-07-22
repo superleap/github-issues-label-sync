@@ -147,6 +147,10 @@ gulp.task(`nsp`, (cb) => {
     return gp.nsp({"package": path.resolve(`package.json`)}, cb);
 });
 
+gulp.task(`snyk`, () => {
+    return execp(`node_modules/.bin/snyk test`);
+});
+
 gulp.task(`bithound`, () => {
     return pkg(paths.pkg, console.log, true).then((data) => {
         let pkgName = data.name;
@@ -164,5 +168,8 @@ gulp.task(`package`, () => {
     });
 });
 
-gulp.task(`prepublish`, [`nsp`, `bithound`, `package`]);
-gulp.task(`default`, [`prepublish`, `lint`]);
+gulp.task(`test:install`, [`nsp`, `snyk`, `bithound`]);
+gulp.task(`test:publish`, [`test:install`, `package`]);
+gulp.task(`prepublish`, [`test:publish`]);
+gulp.task(`test`, [`test:install`, `lint`]);
+gulp.task(`default`, [`test`]);

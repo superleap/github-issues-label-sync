@@ -65,7 +65,8 @@
     "mocha": "^2.5.3",
     "nsp": "^2.6.0",
     "read-package-json": "^2.0.4",
-    "semantic-release": "^6.3.0"
+    "semantic-release": "^6.3.0",
+    "snyk": "^1.17.1"
   },
   "config": {
     "commitizen": {
