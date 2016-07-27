@@ -1,9 +1,11 @@
 import Promise from 'bluebird';
 import childProcess from 'child_process';
 import conventionalChangelog from 'conventional-changelog';
+import del from 'del';
 import fs from 'fs';
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
+import mkdirp from 'mkdirp';
 import path from 'path';
 import readPackage from 'read-package-json';
 
@@ -168,8 +170,29 @@ gulp.task(`package`, () => {
     });
 });
 
+gulp.task(`clean:docs`, () => {
+    return del([`${paths.docs}/*`]);
+});
+
+gulp.task(`clean:manual`, () => {
+    return del([`${paths.manual}/*`]);
+});
+
+gulp.task(`setup`, [`clean`], () => {
+    let log = [
+        mkdirp(paths.docs),
+        mkdirp(paths.manual)
+    ];
+
+    return Promise.all(log).then((response) => {
+        return response;
+    });
+});
+
+gulp.task(`clean`, [`clean:docs`, `clean:manual`]);
 gulp.task(`test:install`, [`nsp`, `snyk`, `bithound`]);
 gulp.task(`test:publish`, [`test:install`, `package`]);
 gulp.task(`prepublish`, [`test:publish`]);
+gulp.task(`pretest`, [`setup`]);
 gulp.task(`test`, [`test:install`, `lint`]);
 gulp.task(`default`, [`test`]);

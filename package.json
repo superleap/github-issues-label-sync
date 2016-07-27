@@ -62,11 +62,13 @@
     "gulp-mocha": "^2.2.0",
     "gulp-nsp": "^2.4.1",
     "gulp-plumber": "^1.1.0",
+    "mkdirp": "^0.5.1",
     "mocha": "^2.5.3",
     "nsp": "^2.6.0",
     "read-package-json": "^2.0.4",
     "semantic-release": "^6.3.0",
-    "snyk": "^1.17.1"
+    "snyk": "^1.17.1",
+    "del": "^2.2.1"
   },
   "config": {
     "commitizen": {
