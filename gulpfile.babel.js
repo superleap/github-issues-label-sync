@@ -33,7 +33,7 @@ const paths = {
  * @param {String} [opts.stdio=`inherit`] - spawn environment inherits parent
  * @return {Promise<Error>}
  */
-function spawnp(proc, args = [], opts = { stdio: `inherit` }) {
+function spawnp(proc, args = [], opts = { "stdio": `inherit` }) {
     return new Promise((resolve, reject) => {
         const child = spawn(proc, args, opts);
 
