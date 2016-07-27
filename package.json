@@ -46,6 +46,7 @@
     "commitizen": "^2.8.2",
     "conventional-changelog": "^1.1.0",
     "cz-conventional-changelog": "^1.1.6",
+    "del": "^2.2.1",
     "esdoc": "^0.4.7",
     "esdoc-hacker-vision": "^1.1.0",
     "esdoc-node": "^1.0.0",
@@ -67,8 +68,7 @@
     "nsp": "^2.6.1",
     "read-package-json": "^2.0.4",
     "semantic-release": "^6.3.0",
-    "snyk": "^1.17.4",
-    "del": "^2.2.1"
+    "snyk": "^1.17.4"
   },
   "config": {
     "commitizen": {
