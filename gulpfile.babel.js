@@ -49,7 +49,7 @@ function spawnp(proc, args = [], opts = { "stdio": `inherit` }) {
     });
 }
 
-gulp.task(`changelog`, () => {
+gulp.task(`changelog`, [`setup`], () => {
     return standardChangelog({
         "preset": `angular`,
         "releaseCount": 0
@@ -191,6 +191,5 @@ gulp.task(`clean`, [`clean:docs`, `clean:manual`]);
 gulp.task(`test:install`, [`nsp`, `snyk`, `bithound`]);
 gulp.task(`test:publish`, [`test:install`, `package`]);
 gulp.task(`prepublish`, [`test:publish`]);
-gulp.task(`pretest`, [`setup`]);
 gulp.task(`test`, [`test:install`, `lint`]);
 gulp.task(`default`, [`test`]);
