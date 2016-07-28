@@ -1,15 +1,17 @@
 import Promise from 'bluebird';
 import childProcess from 'child_process';
 import conventionalChangelog from 'conventional-changelog';
+import del from 'del';
 import fs from 'fs';
 import gulp from 'gulp';
 import gulpLoadPlugins from 'gulp-load-plugins';
+import mkdirp from 'mkdirp';
 import path from 'path';
 import readPackage from 'read-package-json';
 
-let exec = childProcess.exec;
 let pkg = Promise.promisify(readPackage);
 let readFile = Promise.promisify(fs.readFile);
+let spawn = childProcess.spawn;
 let writeFile = Promise.promisify(fs.writeFile);
 
 const gp = gulpLoadPlugins();
@@ -23,29 +25,27 @@ const paths = {
 };
 
 /**
- * Promisified child_process.exec
- * @param cmd
- * @param {Object} [opts={}] See child_process.exec node docs
- * @property {stream.Writable} [opts.stdout=process.stdout] - If defined, child process stdout will be piped to it.
- * @property {stream.Writable} [opts.stderr=process.stderr] - If defined, child process stderr will be piped to it.
- * @returns {Promise<{ stdout: string, stderr: stderr }>}
+ * Promisified child_process.spawn
+ * @async
+ * @param {String} proc - The process we want to spawn
+ * @param {Array} args - The arguments we want to spawn the process with
+ * @param {Object} opts - See child_process.exec node docs
+ * @param {String} [opts.stdio=`inherit`] - spawn environment inherits parent
+ * @return {Promise<Error>}
  */
-function execp(cmd, opts = {}) {
+function spawnp(proc, args = [], opts = { "stdio": `inherit` }) {
     return new Promise((resolve, reject) => {
-        const child = exec(cmd, opts,
-            (err, stdout, stderr) => {
-                return err ? reject(err) : resolve({
-                    "stdout": stdout,
-                    "stderr": stderr
-                });
-            });
+        const child = spawn(proc, args, opts);
 
-        if (opts.stdout) {
-            child.stdout.pipe(opts.stdout);
-        }
-        if (opts.stderr) {
-            child.stderr.pipe(opts.stderr);
-        }
+        child.on(`error`, (err) => {
+            reject(err);
+        });
+
+        child.on(`close`, (code) => {
+            if (code === 0) {
+                resolve();
+            }
+        });
     });
 }
 
@@ -148,7 +148,7 @@ gulp.task(`nsp`, (cb) => {
 });
 
 gulp.task(`snyk`, () => {
-    return execp(`node_modules/.bin/snyk test`);
+    return spawnp(`node_modules/.bin/snyk`, ["test", "--debug"]);
 });
 
 gulp.task(`bithound`, () => {
@@ -156,7 +156,7 @@ gulp.task(`bithound`, () => {
         let pkgName = data.name;
         let pkgUser = data.repository.url.match(/github\.com\/([^\/]+)\//i)[1];
 
-        return execp(`node_modules/.bin/bithound check git@github.com:${pkgUser}/${pkgName}.git`);
+        return spawnp(`node_modules/.bin/bithound`, [`check`, `git@github.com:${pkgUser}/${pkgName}.git`]);
     });
 });
 
@@ -168,8 +168,29 @@ gulp.task(`package`, () => {
     });
 });
 
+gulp.task(`clean:docs`, () => {
+    return del([`${paths.docs}/*`]);
+});
+
+gulp.task(`clean:manual`, () => {
+    return del([`${paths.manual}/*`]);
+});
+
+gulp.task(`setup`, [`clean`], () => {
+    let log = [
+        mkdirp(paths.docs),
+        mkdirp(paths.manual)
+    ];
+
+    return Promise.all(log).then((response) => {
+        return response;
+    });
+});
+
+gulp.task(`clean`, [`clean:docs`, `clean:manual`]);
 gulp.task(`test:install`, [`nsp`, `snyk`, `bithound`]);
 gulp.task(`test:publish`, [`test:install`, `package`]);
 gulp.task(`prepublish`, [`test:publish`]);
+gulp.task(`pretest`, [`setup`]);
 gulp.task(`test`, [`test:install`, `lint`]);
 gulp.task(`default`, [`test`]);
