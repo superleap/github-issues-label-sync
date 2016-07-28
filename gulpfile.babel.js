@@ -1,6 +1,5 @@
 import Promise from 'bluebird';
 import childProcess from 'child_process';
-import conventionalChangelog from 'conventional-changelog';
 import del from 'del';
 import fs from 'fs';
 import gulp from 'gulp';
@@ -8,6 +7,7 @@ import gulpLoadPlugins from 'gulp-load-plugins';
 import mkdirp from 'mkdirp';
 import path from 'path';
 import readPackage from 'read-package-json';
+import standardChangelog from 'standard-changelog';
 
 let pkg = Promise.promisify(readPackage);
 let readFile = Promise.promisify(fs.readFile);
@@ -50,7 +50,7 @@ function spawnp(proc, args = [], opts = { "stdio": `inherit` }) {
 }
 
 gulp.task(`changelog`, () => {
-    return conventionalChangelog({
+    return standardChangelog({
         "preset": `angular`,
         "releaseCount": 0
     })

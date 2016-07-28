@@ -44,7 +44,6 @@
     "babel-register": "^6.11.6",
     "bithound": "https://github.com/vrtxf/cli.bithound.io/tarball/161a72d925c33876780bfebbfe2e4611cb99e7f0",
     "commitizen": "^2.8.2",
-    "conventional-changelog": "^1.1.0",
     "cz-conventional-changelog": "^1.1.6",
     "del": "^2.2.1",
     "esdoc": "^0.4.7",
@@ -68,7 +67,8 @@
     "nsp": "^2.6.1",
     "read-package-json": "^2.0.4",
     "semantic-release": "^6.3.0",
-    "snyk": "^1.17.4"
+    "snyk": "^1.17.4",
+    "standard-changelog": "0.0.1"
   },
   "config": {
     "commitizen": {
