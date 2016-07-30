@@ -187,9 +187,11 @@ gulp.task(`setup`, [`clean`], () => {
     });
 });
 
-gulp.task(`postinstall`, [`test:publish`]);
-gulp.task(`clean`, [`clean:docs`, `clean:manual`]);
+
 gulp.task(`test:install`, [`nsp`, `snyk`, `bithound`]);
-gulp.task(`test:publish`, [`test:install`, `package`]);
+gulp.task(`test:publish`, [`package`]);
 gulp.task(`test`, [`lint`]);
+gulp.task(`clean`, [`clean:docs`, `clean:manual`]);
+gulp.task(`postinstall`, [`test:install`]);
+gulp.task(`prepublish`, [`test:publish`]);
 gulp.task(`default`, [`test`]);
