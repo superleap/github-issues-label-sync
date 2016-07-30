@@ -46,7 +46,7 @@
     "commitizen": "^2.8.2",
     "cz-conventional-changelog": "^1.1.6",
     "del": "^2.2.1",
-    "esdoc": "^0.4.7",
+    "esdoc": "^0.5.7",
     "esdoc-hacker-vision": "^1.1.0",
     "esdoc-node": "^1.0.0",
     "eslint": "^3.1.1",
