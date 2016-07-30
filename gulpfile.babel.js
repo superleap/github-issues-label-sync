@@ -187,7 +187,7 @@ gulp.task(`setup`, [`clean`], () => {
     });
 });
 
-gulp.task(`prepublish`, [`test:publish`]);
+gulp.task(`postinstall`, [`test:publish`]);
 gulp.task(`clean`, [`clean:docs`, `clean:manual`]);
 gulp.task(`test:install`, [`nsp`, `snyk`, `bithound`]);
 gulp.task(`test:publish`, [`test:install`, `package`]);

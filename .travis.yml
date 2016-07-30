@@ -21,7 +21,7 @@ before_install:
 before_script:
   - npm prune
 after_success:
-  - npm run semantic-release
+  - npm run release
 branches:
   except:
     - /^(v\d+\.\d+\.\d+)|gh-pages$/

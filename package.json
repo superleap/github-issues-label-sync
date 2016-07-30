@@ -9,8 +9,7 @@
     "test": "gulp",
     "build": "gulp package",
     "deploy": "gulp deploy",
-    "prepublish": "gulp prepublish",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
