@@ -4,7 +4,7 @@ let config = {
         "repo": "github-issues-label-sync",
         "token": process.env.GH_TOKEN,
         "options": {
-            // "debug": true
+            "debug": true
         }
     },
     "categories": [
