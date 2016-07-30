@@ -11,13 +11,13 @@
 
 ## Overview
 
-**part of the superleap.xyz open source project management suite**
+> **part of the superleap.xyz open source project management suite**
 
-> **create .issuesrc json containing pairs of label/colour**
+> **create a config json containing pairs of label/colour**
 
-> **import repo labels from .issuesrc**
+> **import repo labels and add to version control**
 
-> **add .issuesrc to version control**
+> **CLI version in progress**
 
 ## Installation
 
@@ -27,7 +27,7 @@ Install GitHub Issues Label Sync with [NPM](https://www.npmjs.com/) or add
 to your package.json:
 
 ```
-npm i -D github-issues-label-sync
+npm i github-issues-label-sync
 ```
 
 ### GitHub
@@ -48,8 +48,7 @@ let config = {
     "repo": "github-issues-label-sync",
     "token": "dab5ae868be49ec9179b34d2532d699a603f8be0",
     "options": {
-      "debug": true,
-      "followRedirects": false
+      "debug": true
     }
   }
 };
@@ -58,6 +57,16 @@ let githubSync = new (require('github-issues-label-sync'))
     (options, user, repo, token);
     
 ```
+
+All methods have been `promisified` using bluebird. They will generically 
+return an array of affected results on success and a http error on failure.
+
+The class currently handles generic errors such as duplicate records as 
+warning messages and only raises exceptions when it is impossible to finish 
+the requested action. 
+
+If you encounter such errors don't hesitate to open an issue as the class 
+was tested with most common scenarios in mind. 
 
 ## Configuration
 
@@ -220,78 +229,75 @@ module.exports = labels;
 
 ## Examples
 
+These are snippets of working demos found in `./examples` folder.
+
 ### Create a label
 
 ```
-githubSync.createLabel(label).then((response) => {
-  // log raw response bodies
+githubIssuesLabelSync.createLabel(labels[0]).then((response) => {
   console.log(response);
-  // log created label
-  console.log(githubSync.createdLabels);
+}).catch((error) => {
+  console.log(error.toJSON());
 });
 ```
 
 ### Create multiple labels
 
 ```
-githubSync.createLabels(labels).then((response) => {
-  // log raw response bodies
+githubIssuesLabelSync.createLabels(labels).then((response) => {
   console.log(response);
-  // log created/updated labels
-  console.log(githubSync.createdLabels);
+}).catch((error) => {
+  console.log(error.toJSON());
 });
 ```
 
 ### Delete a label
 
 ```
-githubSync.deleteLabel(labels).then((response) => {
-  // log raw response bodies
+githubIssuesLabelSync.deleteLabel(label).then((response) => {
   console.log(response);
-  // log deleted label
-  console.log(githubSync.createdLabels);
+}).catch((error) => {
+  console.log(error.toJSON());
 });
 ```
 
 ### Delete multiple labels
 
 ```
-githubSync.deleteLabels(labels).then((response) => {
-  // log raw response bodies
+githubIssuesLabelSync.deleteLabels(labels).then((response) => {
   console.log(response);
-  // log delete labels
-  console.log(githubSync.deletedLabels);
+}).catch((error) => {
+  console.log(error.toJSON());
 });
 ```
 
 ### Fetch all labels
 
 ```
-githubSync.getLabels().then((response) => {
-  // log labels
+githubIssuesLabelSync.getLabels().then((response) => {
   console.log(response);
+}).catch((error) => {
+  console.log(error.toJSON());
 });
 ```
 
 ### Purge all labels
 
 ```
-githubSync.purgeLabels().then((response) => {
-  // log raw response bodies
+githubIssuesLabelSync.purgeLabels().then((response) => {
   console.log(response);
-  // log deleted labels
-  console.log(githubSync.deletedLabels);
+}).catch((error) => {
+  console.log(error.toJSON());
 });
 ```
 
 ### Import all labels
 
 ```
-githubSync.importLabels(labels).then((response) => {
-  // log raw response bodies
+githubIssuesLabelSync.importLabels(labels, false).then((response) => {
   console.log(response);
-  // log created/updated labels
-  console.log(githubSync.createdLabels);
+}).catch((error) => {
+  console.log(error.toJSON());
 });
 ```
 

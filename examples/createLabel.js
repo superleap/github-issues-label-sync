@@ -1,12 +1,22 @@
-let config = require('./config');
+let config = require('./config/config');
 let labels = require('./config/labels');
-let GILS = require('./../lib/LabelSync');
 let {user, repo, token, options} = config.github;
-let githubIssuesLabelSync = new GILS(options, user, repo, token);
+let githubIssuesLabelSync = new (require('./../lib/LabelSync'))(options, user, repo, token);
 
 githubIssuesLabelSync.createLabel(labels[0]).then((response) => {
-    // log raw response body
+    /**
+     * @example
+     * [ { name: 'TEST GH Review: accepted',
+     *     color: '009800',
+     *     status: 'duplicate' } ]
+     */
     console.log(response);
-    // log created/updated label
-    console.log(githubIssuesLabelSync.createdLabels);
+}).catch((error) => {
+    /**
+     * @example
+     * { code: 401,
+     *   status: 'Unauthorized',
+     *   message: '{"message":"Bad credentials","documentation_url":"https://developer.github.com/v3"}' }
+     */
+    console.log(error.toJSON());
 });
