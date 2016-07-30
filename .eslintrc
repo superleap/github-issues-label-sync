@@ -129,6 +129,7 @@
     "quote-props": 2,
     "wrap-regex": 2,
     "semi": 2,
+    "no-tabs": 2,
     // es6
     "arrow-body-style": [2, "always"],
     "no-confusing-arrow": 2,
