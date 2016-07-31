@@ -433,13 +433,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/labelsync.js~githubissueslabelsync#options",
-    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-options",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-options",
     "src/LabelSync.js~GithubIssuesLabelSync#options",
     "member"
   ],
   [
     "src/labelsync.js~githubissueslabelsync#options",
-    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-options",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-options",
     "src/LabelSync.js~GithubIssuesLabelSync#options",
     "member"
   ],
@@ -451,13 +451,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/labelsync.js~githubissueslabelsync#repo",
-    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-repo",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-repo",
     "src/LabelSync.js~GithubIssuesLabelSync#repo",
     "member"
   ],
   [
     "src/labelsync.js~githubissueslabelsync#repo",
-    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-repo",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-repo",
     "src/LabelSync.js~GithubIssuesLabelSync#repo",
     "member"
   ],
@@ -486,9 +486,21 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "src/labelsync.js~githubissueslabelsync.githubapiclient",
+    "typedef/index.html#static-typedef-GithubApiClient",
+    "src/LabelSync.js~GithubIssuesLabelSync.GithubApiClient",
+    "typedef"
+  ],
+  [
     "src/labelsync.js~githubissueslabelsync.label",
     "typedef/index.html#static-typedef-Label",
     "src/LabelSync.js~GithubIssuesLabelSync.Label",
+    "typedef"
+  ],
+  [
+    "src/labelsync.js~githubissueslabelsync.promise",
+    "typedef/index.html#static-typedef-Promise",
+    "src/LabelSync.js~GithubIssuesLabelSync.Promise",
     "typedef"
   ]
 ]

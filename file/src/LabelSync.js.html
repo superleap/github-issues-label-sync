@@ -34,14 +34,16 @@
   <ul>
     
   <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/src/LabelSync.js~GithubIssuesLabelSync.html">GithubIssuesLabelSync</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-GithubApiClient">GithubApiClient</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Label">Label</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-Promise">Promise</a></span></span></li>
 </ul>
 </div>
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">src/LabelSync.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">let GitHubApi = require(&quot;github&quot;);
-let Promise = require(&apos;bluebird&apos;);
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import GithubApiClient from &apos;github&apos;;
+import Promise from &apos;bluebird&apos;;
 
 /**
  * Simple wrapper around the github module issues function
@@ -50,7 +52,19 @@ let Promise = require(&apos;bluebird&apos;);
 export default class GithubIssuesLabelSync {
 
     /**
-     * The GitHub issue label model
+     * The node-github npmjs.com package
+     * @typedef {Object} GithubApiClient
+     * @see https://github.com/mikedeboer/node-github
+     */
+
+    /**
+     * The bluebird npmjs.com package
+     * @typedef {Object} Promise
+     * @see https://github.com/petkaantonov/bluebird
+     */
+
+    /**
+     * The github issue label model
      * @typedef {Object} Label
      * @property {String} Label.name The name of the label
      * @property {String} [Label.color] The colour of the label
@@ -60,41 +74,68 @@ export default class GithubIssuesLabelSync {
     /**
      * In order to work as an NPM module this class has to be called with specific parameters
      * @example
-     * let fs = require(&apos;fs&apos;);
-     * let Promise = require(&apos;bluebird&apos;);
      * let config = {
      *   &quot;github&quot;: {
      *     &quot;user&quot;: &quot;superleap&quot;,
      *     &quot;repo&quot;: &quot;github-issues-label-sync&quot;,
-     *     &quot;token&quot;: &quot;dab5ae868be49ec9179b34d2532d699a603f8be0&quot;,
+     *     &quot;token&quot;: process.env.GH_TOKEN,
      *     &quot;options&quot;: {
-     *       // all other values in this array are defaults
-     *       &quot;debug&quot;: true,
-     *       &quot;followRedirects&quot;: false,
-     *       &quot;Promise&quot;: Promise
+     *       &quot;debug&quot;: true
      *     }
-     *   }
-     * };
-     * let {user, repo, token, options} = config.github;
+     *   },
+     *   &quot;categories&quot;: [
+     *     {
+     *       &quot;name&quot;: &quot;GH Review&quot;,
+     *       &quot;labels&quot;: [
+     *         {
+     *           &quot;name&quot;: &quot;accepted&quot;,
+     *           &quot;color&quot;: &quot;009800&quot;
+     *         },
+     *         {
+     *           &quot;name&quot;: &quot;on hold&quot;,
+     *           &quot;color&quot;: &quot;bfdadc&quot;
+     *         },
+     *         {
+     *           &quot;name&quot;: &quot;review-needed&quot;,
+     *           &quot;color&quot;: &quot;fbca04&quot;
+     *         }
+     *       ]
+     *     },
+     *     {
+     *       &quot;name&quot;: &quot;Status&quot;,
+     *       &quot;labels&quot;: [
+     *         {
+     *           &quot;name&quot;: &quot;new&quot;,
+     *           &quot;color&quot;: &quot;006b75&quot;
+     *         },
+     *         {
+     *           &quot;name&quot;: &quot;reverted&quot;,
+     *           &quot;color&quot;: &quot;d93f0b&quot;
+     *         }
+     *       ]
+     *     }
+     *   ];
+     * }
      * let labels = [];
-     * array.from(JSON.parse(fs.readFileSync(&apos;./.issuesrc&apos;, &apos;utf8&apos;)).categories).forEach((category) =&gt; {
+     * let {user, repo, token, options} = config.github;
+     * let githubIssuesLabelSync = new (require(&apos;./lib/LabelSync&apos;))(options, user, repo, token);
+     * Array.from(config.categories).forEach((category) =&gt; {
      *   category.labels.forEach((label) =&gt; {
      *     label.name = `${category.name}: ${label.name}`;
      *     labels.push(label);
      *   });
      * });
-     * let githubSync = new (require(&apos;./lib/LabelSync&apos;))(options, user, repo, token);
-     * @param {Object} [options={}] - GitHubApi connect options
-     * @param {String} user - GitHub repository user
-     * @param {String} repo - GitHub repository name
-     * @param {String} token - GitHub personal access token
+     * @param {Object} [options={}] - github API Client options
+     * @param {String} user - github repository user
+     * @param {String} repo - github repository name
+     * @param {String} token - github personal access token
      */
     constructor(options = {}, user, repo, token) {
         this.options = options;
         this.user = user;
         this.repo = repo;
         this.token = token;
-        this.github = new GitHubApi(this.options);
+        this.github = new GithubApiClient(this.options);
         this._labels = [];
         this._deletedLabels = [];
         this._createdLabels = [];
@@ -103,7 +144,7 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Get GitHubApi module connect options
+     * Get github API Client options
      * @type {Object}
      */
     get options() {
@@ -111,7 +152,7 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Get GitHub repository username
+     * Get github repository username
      * @type {String}
      */
     get user() {
@@ -119,7 +160,7 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Get GitHub repository name
+     * Get github repository name
      * @type {String}
      */
     get repo() {
@@ -127,7 +168,7 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Get GitHub repository token
+     * Get github repository token
      * @type {String}
      */
     get token() {
@@ -135,16 +176,15 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Get GitHubApi module
-     * @link github/Client
-     * @type {github/Client|module.exports}
+     * Get github API Client
+     * @type {GithubApiClient}
      */
     get github() {
         return this._github;
     }
 
     /**
-     * Get GitHub repository labels
+     * Get github repository labels
      * @type {Array&lt;GithubIssuesLabelSync.Label&gt;}
      */
     get labels() {
@@ -152,7 +192,7 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Get GitHubApi repository deleted labels
+     * Get github API repository deleted labels
      * @type {Array&lt;GithubIssuesLabelSync.Label&gt;}
      */
     get deletedLabels() {
@@ -160,7 +200,7 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Get GitHubApi repository created labels
+     * Get github API repository created labels
      * @type {Array&lt;GithubIssuesLabelSync.Label&gt;}
      */
     get createdLabels() {
@@ -168,7 +208,7 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Set GitHubApi module connect options
+     * Set github API Client options
      * @type {Object} Options we instantiate the github api package with
      * @property {Boolean} [options.debug=false] Get request information with each call
      * @property {Boolean} [options.followRedirects=false] We don&apos;t need this for issues
@@ -176,10 +216,12 @@ export default class GithubIssuesLabelSync {
      */
     set options(object) {
         this._options = object;
+        this._options.followRedirects = false;
+        this._options.Promise = Promise;
     }
 
     /**
-     * Set GitHubApi repository username
+     * Set github API repository username
      * @type {String}
      */
     set user(repoUrlUser) {
@@ -187,7 +229,7 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Set GitHubApi repository name
+     * Set github API repository name
      * @type {String}
      */
     set repo(repoUrlName) {
@@ -195,7 +237,7 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Set GitHubApi OAuth2 personal access token
+     * Set github API OAuth2 personal access token
      * @type {String}
      */
     set token(personalAccessToken) {
@@ -203,15 +245,15 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Set GitHubApi Client
-     * @type {github/Client|module.exports}
+     * Set github API Client
+     * @type {GithubApiClient}
      */
-    set github(Client) {
-        this._github = Client;
+    set github(GithubApiClient) {
+        this._github = GithubApiClient;
     }
 
     /**
-     * Set GitHubApi repository labels
+     * Set github API repository labels
      * @type {Array&lt;GithubIssuesLabelSync.Label&gt;}
      */
     set labels(labels) {
@@ -219,7 +261,7 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Push GitHubApi repository deleted label
+     * Push github API repository deleted label
      * @type {GithubIssuesLabelSync.Label}
      */
     set deletedLabel(label) {
@@ -227,7 +269,7 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Push GitHubApi repository created label
+     * Push github API repository created label
      * @type {GithubIssuesLabelSync.Label}
      */
     set createdLabel(label) {
@@ -246,39 +288,45 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Get GitHubApi repository labels from remote
+     * Get github API repository labels from remote
      * @example
      * githubIssuesLabelSync.getLabels().then((response) =&gt; {
-     *   // log labels
      *   console.log(response);
+     * }).catch((error) =&gt; {
+     *   console.log(error.toJSON());
      * });
      * @async
      * @param {Boolean} [meta=false] - Get extended response information
-     * @return {Promise&lt;GithubIssuesLabelSync.labels, error&gt;} Array of existing labels
+     * @return {Promise&lt;GithubIssuesLabelSync.labels, Error&gt;} Array of existing labels
      */
     getLabels(meta = false) {
-        return this.github.issues.getLabels({
-            &quot;user&quot;: this.user,
-            &quot;repo&quot;: this.repo
-        }).then((response) =&gt; {
-            if (true !== meta) {
-                Reflect.deleteProperty(response, &apos;meta&apos;);
-            }
+        return new Promise((resolve, reject) =&gt; {
+            return this.github.issues.getLabels({
+                &quot;user&quot;: this.user,
+                &quot;repo&quot;: this.repo
+            }, (error, response) =&gt; {
+                if (error) {
+                    reject(error);
+                } else {
+                    if (true !== meta) {
+                        Reflect.deleteProperty(response, &apos;meta&apos;);
+                    }
 
-            this.labels = response;
+                    this.labels = response;
 
-            return this.labels;
+                    resolve(this.labels);
+                }
+            });
         });
     }
 
     /**
-     * Delete GitHubApi repository label from remote
+     * Delete github API repository label from remote
      * @example
      * githubIssuesLabelSync.deleteLabel(label).then((response) =&gt; {
-     *   // log raw response body
      *   console.log(response);
-     *   // log deleted label
-     *   console.log(githubIssuesLabelSync.createdLabels);
+     * }).catch((error) =&gt; {
+     *   console.log(error.toJSON());
      * });
      * @async
      * @param {GithubIssuesLabelSync.Label} label - The label we want to delete
@@ -286,33 +334,41 @@ export default class GithubIssuesLabelSync {
      * @return {Promise&lt;GithubIssuesLabelSync.deletedLabels, Error&gt;} Deleted label
      */
     deleteLabel(label) {
-        return this.github.issues.deleteLabel({
-            &quot;user&quot;: this.user,
-            &quot;repo&quot;: this.repo,
-            &quot;name&quot;: label.name
-        }).then((response) =&gt; {
-            label.status = &apos;success&apos;;
+        return new Promise((resolve, reject) =&gt; {
+            return this.github.issues.deleteLabel({
+                &quot;user&quot;: this.user,
+                &quot;repo&quot;: this.repo,
+                &quot;name&quot;: label.name
+            }, (error) =&gt; {
+                let success = true;
 
-            return response;
-        }).catch((error) =&gt; {
-            label.status = &apos;error&apos;;
+                if (error) {
+                    if (error.toJSON().code === 404) {
+                        label.status = &apos;not found&apos;;
+                    } else {
+                        success = false;
+                        reject(error);
+                    }
+                } else {
+                    label.status = &apos;success&apos;;
+                }
 
-            return error.message;
-        }).lastly(() =&gt; {
-            this.deletedLabel = label;
+                if (success) {
+                    this.deletedLabel = label;
 
-            return label;
+                    resolve(this.deletedLabels);
+                }
+            });
         });
     }
 
     /**
-     * Delete GitHubApi repository labels from remote
+     * Delete github API repository labels from remote
      * @example
      * githubIssuesLabelSync.deleteLabels(labels).then((response) =&gt; {
-     *   // log raw response body
      *   console.log(response);
-     *   // log delete labels
-     *   console.log(githubIssuesLabelSync.deletedLabels);
+     * }).catch((error) =&gt; {
+     *   console.log(error.toJSON());
      * });
      * @async
      * @param {Array&lt;GithubIssuesLabelSync.Label&gt;} labels - The labels we want to delete
@@ -325,13 +381,12 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Create GitHubApi repository label on remote
+     * Create github API repository label on remote
      * @example
      * githubIssuesLabelSync.createLabel(label).then((response) =&gt; {
-     *   // log raw response body
      *   console.log(response);
-     *   // log created/updated label
-     *   console.log(githubIssuesLabelSync.createdLabels);
+     * }).catch((error) =&gt; {
+     *   console.log(error.toJSON());
      * });
      * @async
      * @param {GithubIssuesLabelSync.Label} label - The label we want to create
@@ -341,39 +396,43 @@ export default class GithubIssuesLabelSync {
      * @return {Promise&lt;GithubIssuesLabelSync.createdLabels, Error&gt;} Created label
      */
     createLabel(label) {
-        return this.github.issues.createLabel({
-            &quot;user&quot;: this.user,
-            &quot;repo&quot;: this.repo,
-            &quot;name&quot;: label.name,
-            &quot;color&quot;: label.color
-        }).then((response) =&gt; {
-            label.status = &apos;success&apos;;
+        return new Promise((resolve, reject) =&gt; {
+            return this.github.issues.createLabel({
+                &quot;user&quot;: this.user,
+                &quot;repo&quot;: this.repo,
+                &quot;name&quot;: label.name,
+                &quot;color&quot;: label.color
+            }, (error) =&gt; {
+                let success = true;
 
-            return response;
-        }).catch((response) =&gt; {
-            let error = JSON.parse(response);
-            let code = error.errors[0].code;
+                if (error) {
+                    if (JSON.parse(error.toJSON().message).errors[0].code === &apos;already_exists&apos;) {
+                        label.status = &apos;duplicate&apos;;
+                    } else {
+                        success = false;
+                        reject(error);
+                    }
+                } else {
+                    success = true;
+                    label.status = &apos;success&apos;;
+                }
 
-            if (code === &quot;already_exists&quot;) {
-                label.status = &apos;duplicate&apos;;
-            } else {
-                label.status = &apos;error&apos;;
-            }
+                if (success) {
+                    this.createdLabel = label;
 
-            return error;
-        }).lastly(() =&gt; {
-            this.createdLabel = label;
+                    resolve(this.createdLabels);
+                }
+            });
         });
     }
 
     /**
-     * Create GitHubApi repository labels on remote
+     * Create github API repository labels on remote
      * @example
-     * githubIssuesLabelSync.createLabels(labels).then((response) =&gt; {
-     *   // log raw response body
+     * githubIssuesLabelSync.importLabels(labels).then((response) =&gt; {
      *   console.log(response);
-     *   // log created/updated labels
-     *   console.log(githubIssuesLabelSync.createdLabels);
+     * }).catch((error) =&gt; {
+     *   console.log(error.toJSON());
      * });
      * @async
      * @param {Array&lt;GithubIssuesLabelSync.Label&gt;} labels - The labels we want to create
@@ -386,13 +445,12 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Delete all GitHubApi repository labels on remote
+     * Delete all github API repository labels on remote
      * @example
      * githubIssuesLabelSync.purgeLabels().then((response) =&gt; {
-     *   // log raw response body
      *   console.log(response);
-     *   // log deleted labels
-     *   console.log(githubIssuesLabelSync.deletedLabels);
+     * }).catch((error) =&gt; {
+     *   console.log(error.toJSON());
      * });
      * @async
      * @return {Promise&lt;GithubIssuesLabelSync.deletedLabels, Error&gt;} Array of deleted labels
@@ -406,13 +464,12 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
-     * Import all GitHubApi repository labels on remote while optionally removing all the others
+     * Import all github API repository labels on remote while optionally removing all the others
      * @example
-     * githubIssuesLabelSync.importLabels(labels).then((response) =&gt; {
-     *   // log raw response body
+     * githubIssuesLabelSync.importLabels(labels, false).then((response) =&gt; {
      *   console.log(response);
-     *   // log created/updated labels
-     *   console.log(githubIssuesLabelSync.createdLabels);
+     * }).catch((error) =&gt; {
+     *   console.log(error.toJSON());
      * });
      * @async
      * @param {Array&lt;GithubIssuesLabelSync.Label&gt;} labels - The labels we want to import

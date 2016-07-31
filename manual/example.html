@@ -79,7 +79,10 @@
     <h1 class="manual-toc-title"><a href="manual/changelog.html" data-ice="title">Changelog</a></h1>
     <ul class="manual-toc">
       
-    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-18-0-https-github-com-superleap-github-issues-label-sync-compare-v1-16-2-v1-18-0-2016-07-29-" data-ice="link">1.18.0 (2016-07-29)</a></li>
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-22-0-https-github-com-superleap-github-issues-label-sync-compare-v1-18-0-v1-22-0-2016-07-31-" data-ice="link">1.22.0 (2016-07-31)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#bug-fixes" data-ice="link">Bug Fixes</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-18-0-https-github-com-superleap-github-issues-label-sync-compare-v1-16-2-v1-18-0-2016-07-29-" data-ice="link">1.18.0 (2016-07-29)</a></li>
 <li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#bug-fixes" data-ice="link">Bug Fixes</a></li>
 <li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
 <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/changelog.html#-1-16-2-https-github-com-superleap-github-issues-label-sync-compare-v1-16-1-v1-16-2-2016-07-28-" data-ice="link">1.16.2 (2016-07-28)</a></li>
@@ -134,52 +137,48 @@
     <span>&#xBB;</span>
     <span data-ice="title">Example</span>
   </div>
-  <div data-ice="content"><h3 id="create-a-label">Create a label</h3>
-<pre><code><code class="source-code prettyprint">githubSync.createLabel(label).then((response) =&gt; {
-  // log raw response bodies
+  <div data-ice="content"><p>These are snippets of working demos found in <code>./examples</code> folder.</p>
+<h3 id="create-a-label">Create a label</h3>
+<pre><code><code class="source-code prettyprint">githubIssuesLabelSync.createLabel(labels[0]).then((response) =&gt; {
   console.log(response);
-  // log created label
-  console.log(githubSync.createdLabels);
+}).catch((error) =&gt; {
+  console.log(error.toJSON());
 });</code>
 </code></pre><h3 id="create-multiple-labels">Create multiple labels</h3>
-<pre><code><code class="source-code prettyprint">githubSync.createLabels(labels).then((response) =&gt; {
-  // log raw response bodies
+<pre><code><code class="source-code prettyprint">githubIssuesLabelSync.createLabels(labels).then((response) =&gt; {
   console.log(response);
-  // log created/updated labels
-  console.log(githubSync.createdLabels);
+}).catch((error) =&gt; {
+  console.log(error.toJSON());
 });</code>
 </code></pre><h3 id="delete-a-label">Delete a label</h3>
-<pre><code><code class="source-code prettyprint">githubSync.deleteLabel(labels).then((response) =&gt; {
-  // log raw response bodies
+<pre><code><code class="source-code prettyprint">githubIssuesLabelSync.deleteLabel(label).then((response) =&gt; {
   console.log(response);
-  // log deleted label
-  console.log(githubSync.createdLabels);
+}).catch((error) =&gt; {
+  console.log(error.toJSON());
 });</code>
 </code></pre><h3 id="delete-multiple-labels">Delete multiple labels</h3>
-<pre><code><code class="source-code prettyprint">githubSync.deleteLabels(labels).then((response) =&gt; {
-  // log raw response bodies
+<pre><code><code class="source-code prettyprint">githubIssuesLabelSync.deleteLabels(labels).then((response) =&gt; {
   console.log(response);
-  // log delete labels
-  console.log(githubSync.deletedLabels);
+}).catch((error) =&gt; {
+  console.log(error.toJSON());
 });</code>
 </code></pre><h3 id="fetch-all-labels">Fetch all labels</h3>
-<pre><code><code class="source-code prettyprint">githubSync.getLabels().then((response) =&gt; {
-  // log labels
+<pre><code><code class="source-code prettyprint">githubIssuesLabelSync.getLabels().then((response) =&gt; {
   console.log(response);
+}).catch((error) =&gt; {
+  console.log(error.toJSON());
 });</code>
 </code></pre><h3 id="purge-all-labels">Purge all labels</h3>
-<pre><code><code class="source-code prettyprint">githubSync.purgeLabels().then((response) =&gt; {
-  // log raw response bodies
+<pre><code><code class="source-code prettyprint">githubIssuesLabelSync.purgeLabels().then((response) =&gt; {
   console.log(response);
-  // log deleted labels
-  console.log(githubSync.deletedLabels);
+}).catch((error) =&gt; {
+  console.log(error.toJSON());
 });</code>
 </code></pre><h3 id="import-all-labels">Import all labels</h3>
-<pre><code><code class="source-code prettyprint">githubSync.importLabels(labels).then((response) =&gt; {
-  // log raw response bodies
+<pre><code><code class="source-code prettyprint">githubIssuesLabelSync.importLabels(labels, false).then((response) =&gt; {
   console.log(response);
-  // log created/updated labels
-  console.log(githubSync.createdLabels);
+}).catch((error) =&gt; {
+  console.log(error.toJSON());
 });</code>
 </code></pre></div>
 </div>

@@ -79,7 +79,10 @@
     <h1 class="manual-toc-title"><a href="manual/changelog.html" data-ice="title">Changelog</a></h1>
     <ul class="manual-toc">
       
-    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-18-0-https-github-com-superleap-github-issues-label-sync-compare-v1-16-2-v1-18-0-2016-07-29-" data-ice="link">1.18.0 (2016-07-29)</a></li>
+    <li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-22-0-https-github-com-superleap-github-issues-label-sync-compare-v1-18-0-v1-22-0-2016-07-31-" data-ice="link">1.22.0 (2016-07-31)</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#bug-fixes" data-ice="link">Bug Fixes</a></li>
+<li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
+<li data-ice="manualNav" class="indent-h1"><span class="manual-dot"></span><a href="manual/changelog.html#-1-18-0-https-github-com-superleap-github-issues-label-sync-compare-v1-16-2-v1-18-0-2016-07-29-" data-ice="link">1.18.0 (2016-07-29)</a></li>
 <li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#bug-fixes" data-ice="link">Bug Fixes</a></li>
 <li data-ice="manualNav" class="indent-h3"><span class="manual-dot"></span><a href="manual/changelog.html#features" data-ice="link">Features</a></li>
 <li data-ice="manualNav" class="indent-h2"><span class="manual-dot"></span><a href="manual/changelog.html#-1-16-2-https-github-com-superleap-github-issues-label-sync-compare-v1-16-1-v1-16-2-2016-07-28-" data-ice="link">1.16.2 (2016-07-28)</a></li>
@@ -142,15 +145,21 @@ then require the package inside your script:</p>
     &quot;repo&quot;: &quot;github-issues-label-sync&quot;,
     &quot;token&quot;: &quot;dab5ae868be49ec9179b34d2532d699a603f8be0&quot;,
     &quot;options&quot;: {
-      &quot;debug&quot;: true,
-      &quot;followRedirects&quot;: false
+      &quot;debug&quot;: true
     }
   }
 };
 let {user, repo, token, options} = config.github;
 let githubSync = new (require(&apos;github-issues-label-sync&apos;))
     (options, user, repo, token);</code>
-</code></pre></div>
+</code></pre><p>All methods have been <code>promisified</code> using bluebird. They will generically 
+return an array of affected results on success and a http error on failure.</p>
+<p>The class currently handles generic errors such as duplicate records as 
+warning messages and only raises exceptions when it is impossible to finish 
+the requested action. </p>
+<p>If you encounter such errors don&apos;t hesitate to open an issue as the class 
+was tested with most common scenarios in mind. </p>
+</div>
 </div>
 </div>
 
