@@ -101,7 +101,7 @@
     "lines-around-comment": [2, { "beforeBlockComment": true, "allowObjectStart": true }],
     "max-depth": 2,
     "max-len": [2, 120],
-    "max-lines": [2, 500],
+    "max-lines": [2, 1500],
     "max-nested-callbacks": 2,
     "max-params": [2, 5],
     "max-statements": [2, { "max": 15 }],

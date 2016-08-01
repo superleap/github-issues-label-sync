@@ -95,6 +95,7 @@ export default class GithubIssuesLabelSync {
         this._labels = [];
         this._deletedLabels = [];
         this._createdLabels = [];
+        this._updatedLabels = [];
 
         this.authenticate();
     }
@@ -164,6 +165,14 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
+     * Get github API repository updated labels
+     * @type {Array<GithubIssuesLabelSync.Label>}
+     */
+    get updatedLabels() {
+        return this._updatedLabels;
+    }
+
+    /**
      * Set github API Client options
      * @type {Object} Options we instantiate the github api package with
      * @property {Boolean} [options.debug=false] Get request information with each call
@@ -230,6 +239,14 @@ export default class GithubIssuesLabelSync {
      */
     set createdLabel(label) {
         this._createdLabels.push(label);
+    }
+
+    /**
+     * Push github API repository updated label
+     * @type {GithubIssuesLabelSync.Label}
+     */
+    set updatedLabel(label) {
+        this._updatedLabels.push(label);
     }
 
     /**
@@ -397,6 +414,58 @@ export default class GithubIssuesLabelSync {
     createLabels(labels) {
         return Promise.all(labels).map((label) => {
             return this.createLabel(label);
+        });
+    }
+
+    /**
+     * Update github API repository label on remote
+     * @example
+     * githubIssuesLabelSync.updateLabel(label).then((response) => {
+     *   console.log(response);
+     * }).catch((error) => {
+     *   console.log(error.toJSON());
+     * });
+     * @async
+     * @param {GithubIssuesLabelSync.Label} label - The label we want to update
+     * @param {String} label.name - The label's name
+     * @param {String} label.color - The label's colour
+     * @param {String} label.status - Promise status of operation
+     * @return {Promise<GithubIssuesLabelSync.createdLabels, Error>} Updated label
+     */
+    updateLabel(label) {
+        return new Promise((resolve, reject) => {
+            return this.github.issues.updateLabel({
+                "user": this.user,
+                "repo": this.repo,
+                "name": label.name,
+                "color": label.color
+            }, (error) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    label.status = 'success';
+                    this.updatedLabel = label;
+                    resolve(this.updatedLabels);
+                }
+            });
+        });
+    }
+
+    /**
+     * Update github API repository labels on remote
+     * @example
+     * githubIssuesLabelSync.updateLabels(labels).then((response) => {
+     *   console.log(response);
+     * }).catch((error) => {
+     *   console.log(error.toJSON());
+     * });
+     * @async
+     * @param {Array<GithubIssuesLabelSync.Label>} labels - The labels we want to update
+     * @return {Promise<GithubIssuesLabelSync.createdLabels, Error>} Array of updated labels
+     */
+    updateLabels(labels) {
+        return Promise.all(labels).map((label) => {
+            return this.updateLabel(label);
         });
     }
 
