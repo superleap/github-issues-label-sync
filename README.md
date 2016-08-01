@@ -251,6 +251,26 @@ githubIssuesLabelSync.createLabels(labels).then((response) => {
 });
 ```
 
+### Update a label
+
+```
+githubIssuesLabelSync.updateLabel(labels[0]).then((response) => {
+  console.log(response);
+}).catch((error) => {
+  console.log(error.toJSON());
+});
+```
+
+### Update multiple labels
+
+```
+githubIssuesLabelSync.updateLabels(labels).then((response) => {
+  console.log(response);
+}).catch((error) => {
+  console.log(error.toJSON());
+});
+```
+
 ### Delete a label
 
 ```
