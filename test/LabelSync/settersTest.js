@@ -1,29 +1,33 @@
-let chai = require('chai');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import sinon from 'sinon';
+import config from './../test-config';
+
 let expect = chai.expect;
-let sinon = require('sinon');
 let LabelSync = require('./../../src/LabelSync');
-let config = require('./../test-config');
+
+chai.use(chaiAsPromised);
 
 /**
  * @test {LabelSync}
  */
-describe('LabelSync setters', function () {
-    var LabelSyncTest;
-    var authenticate;
+describe('LabelSync#setters', () => {
+    let LabelSyncTest;
+    let authenticate;
 
-    beforeEach(function () {
+    beforeEach(() => {
         LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
         authenticate = sinon.stub(LabelSyncTest, 'authenticate');
     });
 
-    afterEach(function () {
+    afterEach(() => {
         authenticate.restore();
     });
 
     /**
      * @test {LabelSync#options}
      */
-    it('should be able to <set> _options', function () {
+    it('should be able to <set> _options', () => {
         LabelSyncTest.options = config.options;
 
         expect(LabelSyncTest.options).to.be.an('object');
@@ -33,7 +37,7 @@ describe('LabelSync setters', function () {
     /**
      * @test {LabelSync#labels}
      */
-    it('should be able to <set> _labels', function () {
+    it('should be able to <set> _labels', () => {
         LabelSyncTest.labels = [];
 
         expect(LabelSyncTest.labels).to.be.an('array');
@@ -43,7 +47,7 @@ describe('LabelSync setters', function () {
     /**
      * @test {LabelSync#deletedLabel}
      */
-    it('should be able to <set> _deletedLabel', function () {
+    it('should be able to <set> _deletedLabel', () => {
         LabelSyncTest.deletedLabel = config.labels.deletedLabel;
 
         expect(LabelSyncTest.deletedLabels).to.be.an('array');
@@ -53,7 +57,7 @@ describe('LabelSync setters', function () {
     /**
      * @test {LabelSync#createdLabel}
      */
-    it('should be able to <set> _createdLabel', function () {
+    it('should be able to <set> _createdLabel', () => {
         LabelSyncTest.createdLabel = config.labels.createdLabel;
 
         expect(LabelSyncTest.createdLabels).to.be.an('array');
@@ -63,7 +67,7 @@ describe('LabelSync setters', function () {
     /**
      * @test {LabelSync#updatedLabel}
      */
-    it('should be able to <set> _updatedLabel', function () {
+    it('should be able to <set> _updatedLabel', () => {
         LabelSyncTest.updatedLabel = config.labels.updatedLabel;
 
         expect(LabelSyncTest.updatedLabels).to.be.an('array');

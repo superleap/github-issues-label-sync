@@ -1,29 +1,33 @@
-let chai = require('chai');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import sinon from 'sinon';
+import config from './../test-config';
+
 let expect = chai.expect;
-let sinon = require('sinon');
 let LabelSync = require('./../../src/LabelSync');
-let config = require('./../test-config');
+
+chai.use(chaiAsPromised);
 
 /**
  * @test {LabelSync}
  */
-describe('LabelSync constructor', function () {
-    var LabelSyncTest;
-    var authenticate;
+describe('LabelSync#constructor', () => {
+    let LabelSyncTest;
+    let authenticate;
 
-    beforeEach(function () {
+    beforeEach(() => {
         LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
         authenticate = sinon.stub(LabelSyncTest, 'authenticate');
     });
 
-    afterEach(function () {
+    afterEach(() => {
         authenticate.restore();
     });
 
     /**
      * @test {LabelSync#constructor}
      */
-    it('should be able to setup the class', function () {
+    it('should be able to setup the class', () => {
         expect(LabelSyncTest).to.be.an('object');
     });
 });

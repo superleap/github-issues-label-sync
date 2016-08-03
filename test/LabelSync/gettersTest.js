@@ -1,29 +1,33 @@
-let chai = require('chai');
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import sinon from 'sinon';
+import config from './../test-config';
+
 let expect = chai.expect;
-let sinon = require('sinon');
 let LabelSync = require('./../../src/LabelSync');
-let config = require('./../test-config');
+
+chai.use(chaiAsPromised);
 
 /**
  * @test {LabelSync}
  */
-describe('LabelSync setters', function () {
-    var LabelSyncTest;
-    var authenticate;
+describe('LabelSync#getters', () => {
+    let LabelSyncTest;
+    let authenticate;
 
-    beforeEach(function () {
+    beforeEach(() => {
         LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
         authenticate = sinon.stub(LabelSyncTest, 'authenticate');
     });
 
-    afterEach(function () {
+    afterEach(() => {
         authenticate.restore();
     });
 
     /**
      * @test {LabelSync#options}
      */
-    it('should be able to <get> _options', function () {
+    it('should be able to <get> _options', () => {
         expect(LabelSyncTest.options).to.be.an('object');
         expect(LabelSyncTest.options).to.equal(config.options);
     });
@@ -31,7 +35,7 @@ describe('LabelSync setters', function () {
     /**
      * @test {LabelSync#user}
      */
-    it('should be able to <get> _user', function () {
+    it('should be able to <get> _user', () => {
         expect(LabelSyncTest.user).to.be.a('string');
         expect(LabelSyncTest.user).to.equal(config.user);
     });
@@ -39,7 +43,7 @@ describe('LabelSync setters', function () {
     /**
      * @test {LabelSync#repo}
      */
-    it('should be able to <get> _repo', function () {
+    it('should be able to <get> _repo', () => {
         expect(LabelSyncTest.repo).to.be.a('string');
         expect(LabelSyncTest.repo).to.equal(config.repo);
     });
@@ -47,7 +51,7 @@ describe('LabelSync setters', function () {
     /**
      * @test {LabelSync#token}
      */
-    it('should be able to <get> _token', function () {
+    it('should be able to <get> _token', () => {
         expect(LabelSyncTest.token).to.be.a('string');
         expect(LabelSyncTest.token).to.equal(config.token);
     });
@@ -55,7 +59,7 @@ describe('LabelSync setters', function () {
     /**
      * @test {LabelSync#labels}
      */
-    it('should be able to <get> _labels', function () {
+    it('should be able to <get> _labels', () => {
         expect(LabelSyncTest.labels).to.be.an('array');
         expect(LabelSyncTest.labels).to.have.length(0);
     });
@@ -63,7 +67,7 @@ describe('LabelSync setters', function () {
     /**
      * @test {LabelSync#deletedLabels}
      */
-    it('should be able to <get> _deletedLabels', function () {
+    it('should be able to <get> _deletedLabels', () => {
         expect(LabelSyncTest.deletedLabels).to.be.an('array');
         expect(LabelSyncTest.deletedLabels).to.have.length(0);
     });
@@ -71,7 +75,7 @@ describe('LabelSync setters', function () {
     /**
      * @test {LabelSync#createdLabels}
      */
-    it('should be able to <get> _createdLabels', function () {
+    it('should be able to <get> _createdLabels', () => {
         expect(LabelSyncTest.createdLabels).to.be.an('array');
         expect(LabelSyncTest.createdLabels).to.have.length(0);
     });
@@ -79,7 +83,7 @@ describe('LabelSync setters', function () {
     /**
      * @test {LabelSync#updatedLabels}
      */
-    it('should be able to <get> _updatedLabels', function () {
+    it('should be able to <get> _updatedLabels', () => {
         expect(LabelSyncTest.updatedLabels).to.be.an('array');
         expect(LabelSyncTest.updatedLabels).to.have.length(0);
     });
