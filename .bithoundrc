@@ -15,5 +15,10 @@
         "wc": {
             "limit": 1500
         }
+    },
+    "dependencies": {
+        "mute": [
+            "gulp-spawn-mocha"
+        ]
     }
 }
