@@ -6,7 +6,7 @@
     "node": ">=4"
   },
   "scripts": {
-    "test": "gulp",
+    "test": "nyc gulp",
     "prepublish": "gulp prepublish",
     "deploy": "gulp deploy",
     "release": "semantic-release pre && npm publish && semantic-release post"
@@ -39,10 +39,13 @@
     "@semantic-release/last-release-npm": "https://github.com/vrtxf/last-release-npm/tarball/da5a0f2411e2add6f5b0b990b4a12fad3245cfac",
     "babel-core": "^6.11.4",
     "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-istanbul": "^1.0.3",
     "babel-plugin-transform-es2015-block-scoping": "^6.10.1",
     "babel-preset-es2015": "^6.9.0",
     "babel-register": "^6.11.6",
     "bithound": "1.7.0",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
     "commitizen": "^2.8.2",
     "cz-conventional-changelog": "^1.1.6",
     "del": "^2.2.1",
@@ -57,16 +60,17 @@
     "gulp-eslint": "^3.0.1",
     "gulp-exclude-gitignore": "^1.0.0",
     "gulp-gh-pages": "^0.5.4",
-    "gulp-istanbul": "^1.0.0",
     "gulp-load-plugins": "^1.2.4",
-    "gulp-mocha": "^2.2.0",
     "gulp-nsp": "^2.4.2",
-    "gulp-plumber": "^1.1.0",
+    "gulp-spawn-mocha": "^3.0.0",
     "mkdirp": "^0.5.1",
     "mocha": "^3.0.0",
     "nsp": "^2.6.1",
+    "nyc": "^7.1.0",
     "read-package-json": "^2.0.4",
     "semantic-release": "^6.3.0",
+    "sinon": "^1.17.5",
+    "sinon-as-promised": "^4.0.2",
     "snyk": "^1.17.5",
     "standard-changelog": "0.0.1"
   },
@@ -87,6 +91,32 @@
     "plugins": [
       "add-module-exports",
       "transform-es2015-block-scoping"
-    ]
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
+  },
+  "nyc": {
+    "lines": 90,
+    "statements": 90,
+    "functions": 90,
+    "branches": 90,
+    "include": [
+      "src/**/*.js"
+    ],
+    "reporter": [
+      "lcov",
+      "text-summary"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "sourceMap": false,
+    "instrument": false,
+    "check-coverage": true
   }
 }
