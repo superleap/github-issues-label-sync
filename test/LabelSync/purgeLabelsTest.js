@@ -12,14 +12,18 @@ chai.use(chaiAsPromised);
 /**
  * @test {LabelSync}
  */
-describe('LabelSync#deleteLabels', () => {
+describe('LabelSync#purgeLabels', () => {
     let LabelSyncTest;
     let deleteLabelTest;
+    let getLabelsTest;
     let authenticate;
 
     beforeEach(() => {
         LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
         deleteLabelTest = sinon.stub(LabelSyncTest.github.issues, 'deleteLabel');
+        getLabelsTest = sinon.stub(LabelSyncTest, 'getLabels', function () {
+            return Promise.resolve(mocks.Label.getLabels);
+        });
         authenticate = sinon.stub(LabelSyncTest, 'authenticate');
     });
 
@@ -28,25 +32,25 @@ describe('LabelSync#deleteLabels', () => {
     });
 
     /**
-     * @test {LabelSync#deleteLabel}
+     * @test {LabelSync#purgeLabels}
      */
-    it('should return an array of successful operations when trying to delete existing labels', (done) => {
+    it('should return an array of purged labels when called', (done) => {
         deleteLabelTest.yieldsAsync(null);
 
-        let response = LabelSyncTest.deleteLabels(mocks.Label.deleteLabels);
+        let response = LabelSyncTest.purgeLabels();
         expect(response).to.be.fulfilled;
-        expect(response).to.eventually.have.lengthOf(mocks.Label.deleteLabels.length);
+        expect(response).to.eventually.have.lengthOf(2);
 
         done();
     });
 
     /**
-     * @test {LabelSync#deleteLabels}
+     * @test {LabelSync#purgeLabels}
      */
     it('should return a promise rejecting with error when unauthorized', (done) => {
         deleteLabelTest.yieldsAsync(mocks.Error.Unauthorized);
 
-        expect(LabelSyncTest.deleteLabels(mocks.Label.deleteLabels)).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);
+        expect(LabelSyncTest.purgeLabels()).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);
 
         done();
     });

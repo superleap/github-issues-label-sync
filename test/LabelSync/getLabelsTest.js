@@ -17,15 +17,12 @@ describe('LabelSync#getlabels', () => {
     let getLabelsTest;
     let authenticate;
     let labels;
-    let Error;
 
     beforeEach(() => {
         LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
         getLabelsTest = sinon.stub(LabelSyncTest.github.issues, 'getLabels');
-        labels = mocks.Label.getLabels;
-        Error = mocks.Error;
-
         authenticate = sinon.stub(LabelSyncTest, 'authenticate');
+        labels = mocks.Label.getLabels;
     });
 
     afterEach(() => {
@@ -35,7 +32,7 @@ describe('LabelSync#getlabels', () => {
     /**
      * @test {LabelSync#getLabels}
      */
-    it('[meta=true] should return a promise resolving to existing labels', (done) => {
+    it('should return a promise resolving to existing labels with meta information', (done) => {
         getLabelsTest.yieldsAsync(null, labels);
 
         let response = LabelSyncTest.getLabels(true);
@@ -48,7 +45,7 @@ describe('LabelSync#getlabels', () => {
     /**
      * @test {LabelSync#getLabels}
      */
-    it('[meta=false] should return a promise resolving to existing labels', (done) => {
+    it('should return a promise resolving to existing labels without meta information', (done) => {
         getLabelsTest.yieldsAsync(null, labels);
         Reflect.deleteProperty(labels, 'meta');
 
@@ -63,9 +60,9 @@ describe('LabelSync#getlabels', () => {
      * @test {LabelSync#getLabels}
      */
     it('should return a promise rejecting with error when unauthorized', (done) => {
-        getLabelsTest.yieldsAsync(Error, null);
+        getLabelsTest.yieldsAsync(mocks.Error.Unauthorized, null);
 
-        expect(LabelSyncTest.getLabels()).to.eventually.be.rejectedWith(Error.Unauthorized);
+        expect(LabelSyncTest.getLabels()).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);
 
         done();
     });

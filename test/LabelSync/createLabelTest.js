@@ -18,16 +18,13 @@ describe('LabelSync#createLabel', () => {
     let authenticate;
     let label;
     let createdLabel;
-    let Error;
 
     beforeEach(() => {
         LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
         createLabelTest = sinon.stub(LabelSyncTest.github.issues, 'createLabel');
+        authenticate = sinon.stub(LabelSyncTest, 'authenticate');
         label = mocks.Label.createLabel;
         createdLabel = mocks.Label.setters.createdLabel;
-        Error = mocks.Error;
-
-        authenticate = sinon.stub(LabelSyncTest, 'authenticate');
     });
 
     afterEach(() => {
@@ -37,7 +34,7 @@ describe('LabelSync#createLabel', () => {
     /**
      * @test {LabelSync#createLabel}
      */
-    it('should return { "status": "success" } when adding a new label', (done) => {
+    it('should return { "status": "success" } when trying to add a new label', (done) => {
         createLabelTest.yieldsAsync(null);
 
         let response = LabelSyncTest.createLabel(label);
@@ -51,8 +48,8 @@ describe('LabelSync#createLabel', () => {
     /**
      * @test {LabelSync#createLabel}
      */
-    it('should return { "status": "duplicate" } when adding an existing label', (done) => {
-        createLabelTest.yieldsAsync(Error.DuplicateLabel);
+    it('should return { "status": "duplicate" } when trying to add an existing label', (done) => {
+        createLabelTest.yieldsAsync(mocks.Error.DuplicateLabel);
         createdLabel.status = 'duplicate';
 
         let response = LabelSyncTest.createLabel(label);
@@ -67,9 +64,9 @@ describe('LabelSync#createLabel', () => {
      * @test {LabelSync#createLabel}
      */
     it('should return a promise rejecting with error when unauthorized', (done) => {
-        createLabelTest.yieldsAsync(Error.Unauthorized);
+        createLabelTest.yieldsAsync(mocks.Error.Unauthorized);
 
-        expect(LabelSyncTest.createLabel(label)).to.eventually.be.rejectedWith(Error.Unauthorized);
+        expect(LabelSyncTest.createLabel(label)).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);
 
         done();
     });

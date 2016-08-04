@@ -16,17 +16,10 @@ describe('LabelSync#updatelabel', () => {
     let LabelSyncTest;
     let updateLabelTest;
     let authenticate;
-    let label;
-    let updatedLabel;
-    let Error;
 
     beforeEach(() => {
         LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
         updateLabelTest = sinon.stub(LabelSyncTest.github.issues, 'updateLabel');
-        label = mocks.Label.updateLabel;
-        updatedLabel = mocks.Label.setters.updatedLabel;
-        Error = mocks.Error;
-
         authenticate = sinon.stub(LabelSyncTest, 'authenticate');
     });
 
@@ -37,10 +30,10 @@ describe('LabelSync#updatelabel', () => {
     /**
      * @test {LabelSync#updateLabel}
      */
-    it('should return { "status": "success" } when updating a new label', (done) => {
+    it('should return { "status": "success" } when updating an existing label', (done) => {
         updateLabelTest.yieldsAsync(null);
 
-        let response = LabelSyncTest.updateLabel(label);
+        let response = LabelSyncTest.updateLabel(mocks.Label.updateLabel);
         expect(response).to.be.fulfilled;
         expect(response).to.eventually.have.lengthOf(1);
         expect(response).to.eventually.have.deep.property('[0].status', 'success');
@@ -53,9 +46,9 @@ describe('LabelSync#updatelabel', () => {
      * @test {LabelSync#updateLabel}
      */
     it('should return a promise rejecting with error when unauthorized', (done) => {
-        updateLabelTest.yieldsAsync(Error.Unauthorized);
+        updateLabelTest.yieldsAsync(mocks.Error.Unauthorized);
 
-        expect(LabelSyncTest.updateLabel(label)).to.eventually.be.rejectedWith(Error.Unauthorized);
+        expect(LabelSyncTest.updateLabel(mocks.Label.updateLabel)).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);
 
         done();
     });

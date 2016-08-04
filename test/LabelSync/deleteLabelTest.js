@@ -18,16 +18,13 @@ describe('LabelSync#deleteLabel', () => {
     let authenticate;
     let label;
     let deletedLabel;
-    let Error;
 
     beforeEach(() => {
         LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
         deleteLabelTest = sinon.stub(LabelSyncTest.github.issues, 'deleteLabel');
+        authenticate = sinon.stub(LabelSyncTest, 'authenticate');
         label = mocks.Label.deleteLabel;
         deletedLabel = mocks.Label.setters.deletedLabel;
-        Error = mocks.Error;
-
-        authenticate = sinon.stub(LabelSyncTest, 'authenticate');
     });
 
     afterEach(() => {
@@ -37,7 +34,7 @@ describe('LabelSync#deleteLabel', () => {
     /**
      * @test {LabelSync#deleteLabel}
      */
-    it('should return { "status": "success" } when deleting an existing label', (done) => {
+    it('should return { "status": "success" } when trying to delete an existing label', (done) => {
         deleteLabelTest.yieldsAsync(null);
 
         let response = LabelSyncTest.deleteLabel(label);
@@ -52,7 +49,7 @@ describe('LabelSync#deleteLabel', () => {
      * @test {LabelSync#deleteLabel}
      */
     it('should return { "status": "not found" } when trying to delete a non existing label', (done) => {
-        deleteLabelTest.yieldsAsync(Error.Deletedlabel);
+        deleteLabelTest.yieldsAsync(mocks.Error.Deletedlabel);
         deletedLabel.status = 'not found';
 
         let response = LabelSyncTest.deleteLabel(label);
@@ -67,9 +64,9 @@ describe('LabelSync#deleteLabel', () => {
      * @test {LabelSync#deleteLabel}
      */
     it('should return a promise rejecting with error when unauthorized', (done) => {
-        deleteLabelTest.yieldsAsync(Error.Unauthorized);
+        deleteLabelTest.yieldsAsync(mocks.Error.Unauthorized);
 
-        expect(LabelSyncTest.deleteLabel(label)).to.eventually.be.rejectedWith(Error.Unauthorized);
+        expect(LabelSyncTest.deleteLabel(label)).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);
 
         done();
     });

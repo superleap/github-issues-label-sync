@@ -16,15 +16,10 @@ describe('LabelSync#createLabels', () => {
     let LabelSyncTest;
     let createLabelTest;
     let authenticate;
-    let labels;
-    let Error;
 
     beforeEach(() => {
         LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
         createLabelTest = sinon.stub(LabelSyncTest.github.issues, 'createLabel');
-        labels = mocks.Label.createLabels;
-        Error = mocks.Error;
-
         authenticate = sinon.stub(LabelSyncTest, 'authenticate');
     });
 
@@ -38,9 +33,9 @@ describe('LabelSync#createLabels', () => {
     it('should return an array of successful operations when adding new labels', (done) => {
         createLabelTest.yieldsAsync(null);
 
-        let response = LabelSyncTest.createLabels(labels);
+        let response = LabelSyncTest.createLabels(mocks.Label.createLabels);
         expect(response).to.be.fulfilled;
-        expect(response).to.eventually.have.lengthOf(labels.length);
+        expect(response).to.eventually.have.lengthOf(mocks.Label.createLabels.length);
 
         done();
     });
@@ -49,9 +44,9 @@ describe('LabelSync#createLabels', () => {
      * @test {LabelSync#createLabels}
      */
     it('should return a promise rejecting with error when unauthorized', (done) => {
-        createLabelTest.yieldsAsync(Error.Unauthorized);
+        createLabelTest.yieldsAsync(mocks.Error.Unauthorized);
 
-        expect(LabelSyncTest.createLabels(labels)).to.eventually.be.rejectedWith(Error.Unauthorized);
+        expect(LabelSyncTest.createLabels(mocks.Label.createLabels)).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);
 
         done();
     });
