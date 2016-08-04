@@ -29,6 +29,16 @@ let mocks = {
                 "color": 'c7def8'
             }
         ],
+        "createLabels": [
+            {
+                "name": 'TEST GH Review: accepted',
+                "color": '009800'
+            },
+            {
+                "name": 'TEST GH Review: breaking changes',
+                "color": '000'
+            }
+        ],
         "createLabel": {
             "name": "TEST GH Review: accepted",
             "color": "009800"

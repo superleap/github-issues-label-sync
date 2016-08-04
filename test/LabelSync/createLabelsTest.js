@@ -12,19 +12,17 @@ chai.use(chaiAsPromised);
 /**
  * @test {LabelSync}
  */
-describe('LabelSync#createLabel', () => {
+describe('LabelSync#createLabels', () => {
     let LabelSyncTest;
     let createLabelTest;
     let authenticate;
-    let label;
-    let createdLabel;
+    let labels;
     let Error;
 
     beforeEach(() => {
         LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
         createLabelTest = sinon.stub(LabelSyncTest.github.issues, 'createLabel');
-        label = mocks.Label.createLabel;
-        createdLabel = mocks.Label.setters.createdLabel;
+        labels = mocks.Label.createLabels;
         Error = mocks.Error;
 
         authenticate = sinon.stub(LabelSyncTest, 'authenticate');
@@ -37,39 +35,23 @@ describe('LabelSync#createLabel', () => {
     /**
      * @test {LabelSync#createLabel}
      */
-    it('should return { "status": "success" } when adding a new label', (done) => {
+    it('should return an array of successful operations when adding new labels', (done) => {
         createLabelTest.yieldsAsync(null);
 
-        let response = LabelSyncTest.createLabel(label);
+        let response = LabelSyncTest.createLabels(labels);
         expect(response).to.be.fulfilled;
-        expect(response).to.eventually.have.lengthOf(1);
-        expect(response).to.eventually.have.deep.property('[0].status', 'success');
+        expect(response).to.eventually.have.lengthOf(labels.length);
 
         done();
     });
 
     /**
-     * @test {LabelSync#createLabel}
-     */
-    it('should return { "status": "duplicate" } when adding an existing label', (done) => {
-        createLabelTest.yieldsAsync(Error.DuplicateLabel);
-        createdLabel.status = 'duplicate';
-
-        let response = LabelSyncTest.createLabel(label);
-        expect(response).to.be.fulfilled;
-        expect(response).to.eventually.have.lengthOf(1);
-        expect(response).to.eventually.have.deep.property('[0].status', 'duplicate');
-
-        done();
-    });
-
-    /**
-     * @test {LabelSync#createLabel}
+     * @test {LabelSync#createLabels}
      */
     it('should return a promise rejecting with error when unauthorized', (done) => {
         createLabelTest.yieldsAsync(Error.Unauthorized);
 
-        expect(LabelSyncTest.createLabel(label)).to.eventually.be.rejectedWith(Error.Unauthorized);
+        expect(LabelSyncTest.createLabels(labels)).to.eventually.be.rejectedWith(Error.Unauthorized);
 
         done();
     });
