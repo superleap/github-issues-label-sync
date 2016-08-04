@@ -451,20 +451,14 @@ window.esdocSearchIndex = [
   ],
   [
     "src/labelsync.js~githubissueslabelsync#repo",
-    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-repo",
-    "src/LabelSync.js~GithubIssuesLabelSync#repo",
-    "member"
-  ],
-  [
-    "src/labelsync.js~githubissueslabelsync#repo",
     "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-repo",
     "src/LabelSync.js~GithubIssuesLabelSync#repo",
     "member"
   ],
   [
-    "src/labelsync.js~githubissueslabelsync#token",
-    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-token",
-    "src/LabelSync.js~GithubIssuesLabelSync#token",
+    "src/labelsync.js~githubissueslabelsync#repo",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-repo",
+    "src/LabelSync.js~GithubIssuesLabelSync#repo",
     "member"
   ],
   [
@@ -474,14 +468,44 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "src/labelsync.js~githubissueslabelsync#user",
-    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-user",
-    "src/LabelSync.js~GithubIssuesLabelSync#user",
+    "src/labelsync.js~githubissueslabelsync#token",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-token",
+    "src/LabelSync.js~GithubIssuesLabelSync#token",
+    "member"
+  ],
+  [
+    "src/labelsync.js~githubissueslabelsync#updatelabel",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-method-updateLabel",
+    "src/LabelSync.js~GithubIssuesLabelSync#updateLabel",
+    "method"
+  ],
+  [
+    "src/labelsync.js~githubissueslabelsync#updatelabels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-method-updateLabels",
+    "src/LabelSync.js~GithubIssuesLabelSync#updateLabels",
+    "method"
+  ],
+  [
+    "src/labelsync.js~githubissueslabelsync#updatedlabel",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-updatedLabel",
+    "src/LabelSync.js~GithubIssuesLabelSync#updatedLabel",
+    "member"
+  ],
+  [
+    "src/labelsync.js~githubissueslabelsync#updatedlabels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-updatedLabels",
+    "src/LabelSync.js~GithubIssuesLabelSync#updatedLabels",
     "member"
   ],
   [
     "src/labelsync.js~githubissueslabelsync#user",
     "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-user",
+    "src/LabelSync.js~GithubIssuesLabelSync#user",
+    "member"
+  ],
+  [
+    "src/labelsync.js~githubissueslabelsync#user",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-user",
     "src/LabelSync.js~GithubIssuesLabelSync#user",
     "member"
   ],

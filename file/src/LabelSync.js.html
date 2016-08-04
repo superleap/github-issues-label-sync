@@ -139,6 +139,7 @@ export default class GithubIssuesLabelSync {
         this._labels = [];
         this._deletedLabels = [];
         this._createdLabels = [];
+        this._updatedLabels = [];
 
         this.authenticate();
     }
@@ -205,6 +206,14 @@ export default class GithubIssuesLabelSync {
      */
     get createdLabels() {
         return this._createdLabels;
+    }
+
+    /**
+     * Get github API repository updated labels
+     * @type {Array&lt;GithubIssuesLabelSync.Label&gt;}
+     */
+    get updatedLabels() {
+        return this._updatedLabels;
     }
 
     /**
@@ -277,6 +286,14 @@ export default class GithubIssuesLabelSync {
     }
 
     /**
+     * Push github API repository updated label
+     * @type {GithubIssuesLabelSync.Label}
+     */
+    set updatedLabel(label) {
+        this._updatedLabels.push(label);
+    }
+
+    /**
      * We only do this once
      * @access private
      */
@@ -343,7 +360,7 @@ export default class GithubIssuesLabelSync {
                 let success = true;
 
                 if (error) {
-                    if (error.toJSON().code === 404) {
+                    if (error.code === 404) {
                         label.status = &apos;not found&apos;;
                     } else {
                         success = false;
@@ -406,14 +423,13 @@ export default class GithubIssuesLabelSync {
                 let success = true;
 
                 if (error) {
-                    if (JSON.parse(error.toJSON().message).errors[0].code === &apos;already_exists&apos;) {
+                    if (error.code === 422 &amp;&amp; JSON.parse(error.message).errors[0].code === &apos;already_exists&apos;) {
                         label.status = &apos;duplicate&apos;;
                     } else {
                         success = false;
                         reject(error);
                     }
                 } else {
-                    success = true;
                     label.status = &apos;success&apos;;
                 }
 
@@ -441,6 +457,58 @@ export default class GithubIssuesLabelSync {
     createLabels(labels) {
         return Promise.all(labels).map((label) =&gt; {
             return this.createLabel(label);
+        });
+    }
+
+    /**
+     * Update github API repository label on remote
+     * @example
+     * githubIssuesLabelSync.updateLabel(label).then((response) =&gt; {
+     *   console.log(response);
+     * }).catch((error) =&gt; {
+     *   console.log(error.toJSON());
+     * });
+     * @async
+     * @param {GithubIssuesLabelSync.Label} label - The label we want to update
+     * @param {String} label.name - The label&apos;s name
+     * @param {String} label.color - The label&apos;s colour
+     * @param {String} label.status - Promise status of operation
+     * @return {Promise&lt;GithubIssuesLabelSync.createdLabels, Error&gt;} Updated label
+     */
+    updateLabel(label) {
+        return new Promise((resolve, reject) =&gt; {
+            return this.github.issues.updateLabel({
+                &quot;user&quot;: this.user,
+                &quot;repo&quot;: this.repo,
+                &quot;name&quot;: label.name,
+                &quot;color&quot;: label.color
+            }, (error) =&gt; {
+                if (error) {
+                    reject(error);
+                } else {
+                    label.status = &apos;success&apos;;
+                    this.updatedLabel = label;
+                    resolve(this.updatedLabels);
+                }
+            });
+        });
+    }
+
+    /**
+     * Update github API repository labels on remote
+     * @example
+     * githubIssuesLabelSync.updateLabels(labels).then((response) =&gt; {
+     *   console.log(response);
+     * }).catch((error) =&gt; {
+     *   console.log(error.toJSON());
+     * });
+     * @async
+     * @param {Array&lt;GithubIssuesLabelSync.Label&gt;} labels - The labels we want to update
+     * @return {Promise&lt;GithubIssuesLabelSync.createdLabels, Error&gt;} Array of updated labels
+     */
+    updateLabels(labels) {
+        return Promise.all(labels).map((label) =&gt; {
+            return this.updateLabel(label);
         });
     }
 
