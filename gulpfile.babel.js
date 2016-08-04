@@ -21,7 +21,7 @@ const paths = {
     "manual": "./build/manual",
     "src": "./src/*",
     "srcEsdoc": "./src",
-    "srcTest": "./test/**/*.js",
+    "srcTest": "./test",
     "compile": "./lib"
 };
 
@@ -115,7 +115,11 @@ gulp.task(`doc`, [`manual`], () => {
             "example": [`${paths.manual}/examples.md`],
             "changelog": [`${paths.manual}/changelog.md`]
         },
-        "lint": true
+        "lint": true,
+        "test": {
+            "type": "mocha",
+            "source": paths.srcTest
+        }
     };
 
     return gulp.src(paths.srcEsdoc)
@@ -189,7 +193,7 @@ gulp.task(`setup`, [`clean`], () => {
 });
 
 gulp.task(`test:code`, () => {
-    return gulp.src([paths.srcTest])
+    return gulp.src([`${paths.srcTest}/**/*.js`])
         .pipe(gp.spawnMocha({
             "env": {
                 "NODE_ENV": 'test'
