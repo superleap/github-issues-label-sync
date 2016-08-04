@@ -23,7 +23,7 @@ describe('LabelSync#getlabels', () => {
         LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
         getLabelsTest = sinon.stub(LabelSyncTest.github.issues, 'getLabels');
         labels = mocks.Label.getLabels;
-        Error = mocks.Error.Unauthorized;
+        Error = mocks.Error;
 
         authenticate = sinon.stub(LabelSyncTest, 'authenticate');
     });
@@ -62,10 +62,10 @@ describe('LabelSync#getlabels', () => {
     /**
      * @test {LabelSync#getLabels}
      */
-    it('should return a promise rejecting with error', (done) => {
+    it('should return a promise rejecting with error when unauthorized', (done) => {
         getLabelsTest.yieldsAsync(Error, null);
 
-        expect(LabelSyncTest.getLabels()).to.eventually.be.rejectedWith(Error);
+        expect(LabelSyncTest.getLabels()).to.eventually.be.rejectedWith(Error.Unauthorized);
 
         done();
     });

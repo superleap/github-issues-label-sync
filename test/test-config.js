@@ -1,4 +1,4 @@
-module.exports = {
+let config = {
     "options": {
         "Promise": Promise,
         "followRedirects": false,
@@ -8,3 +8,5 @@ module.exports = {
     "repo": "testRepo",
     "token": "testToken"
 };
+
+export default config;

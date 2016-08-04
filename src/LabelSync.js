@@ -379,14 +379,13 @@ export default class GithubIssuesLabelSync {
                 let success = true;
 
                 if (error) {
-                    if (JSON.parse(error.toJSON().message).errors[0].code === 'already_exists') {
+                    if (error.code === 422 && JSON.parse(error.message).errors[0].code === 'already_exists') {
                         label.status = 'duplicate';
                     } else {
                         success = false;
                         reject(error);
                     }
                 } else {
-                    success = true;
                     label.status = 'success';
                 }
 

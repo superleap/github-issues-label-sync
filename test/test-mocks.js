@@ -28,13 +28,22 @@ let mocks = {
                 "name": 'Type: feature-request',
                 "color": 'c7def8'
             }
-        ]
+        ],
+        "createLabel": {
+            "name": 'Semver: premajor',
+            "color": 'e99695'
+        }
     },
     "Error": {
         "Unauthorized": {
             "code": 401,
             "status": 'Unauthorized',
             "message": '{"message":"Bad credentials","documentation_url":"https://developer.github.com/v3"}'
+        },
+        "DuplicateLabel": {
+            "code": 422,
+            "status": 'Unprocessable Entity',
+            "message": '{"message":"Validation Failed","errors":[{"resource":"Label","code":"already_exists","field":"name"}],"documentation_url":"https://developer.github.com/v3/issues/labels/#create-a-label"}'
         }
     }
 };
