@@ -215,4 +215,5 @@ jsx/
 material-ui/
 svg/
 .publish/
+.nyc_output/
 lib/

@@ -13,7 +13,12 @@
             "engine": "eslint"
         },
         "wc": {
-            "limit": 1000
+            "limit": 1500
         }
+    },
+    "dependencies": {
+        "mute": [
+            "gulp-spawn-mocha"
+        ]
     }
 }

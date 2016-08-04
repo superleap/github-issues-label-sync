@@ -1,0 +1,19 @@
+comment:
+  layout: "header, diff, tree"
+  branches:
+  - master
+  - gils*
+
+coverage:
+  range: "80...100"
+  status:
+    project:
+      default:
+        target: "95%"
+        threshold: "2.5%"
+    patch: true
+    changes: false
+  notify:
+    gitter:
+      default:
+        only_pulls: true

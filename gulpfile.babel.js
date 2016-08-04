@@ -21,6 +21,7 @@ const paths = {
     "manual": "./build/manual",
     "src": "./src/*",
     "srcEsdoc": "./src",
+    "srcTest": "./test/**/*.js",
     "compile": "./lib"
 };
 
@@ -33,7 +34,7 @@ const paths = {
  * @param {String} [opts.stdio=`inherit`] - spawn environment inherits parent
  * @return {Promise<Error>}
  */
-function spawnp(proc, args = [], opts = { "stdio": `inherit` }) {
+function spawnp(proc, args = [], opts = {"stdio": `inherit`}) {
     return new Promise((resolve, reject) => {
         const child = spawn(proc, args, opts);
 
@@ -187,11 +188,22 @@ gulp.task(`setup`, [`clean`], () => {
     });
 });
 
+gulp.task(`test:code`, () => {
+    return gulp.src([paths.srcTest])
+        .pipe(gp.spawnMocha({
+            "env": {
+                "NODE_ENV": 'test'
+            },
+            "R": 'spec',
+            "r": 'babel-register',
+            "istanbul": false
+        }));
+});
+
 
 gulp.task(`test:install`, [`nsp`, `snyk`, `bithound`]);
 gulp.task(`test:publish`, [`package`]);
-gulp.task(`test`, [`lint`]);
 gulp.task(`clean`, [`clean:docs`, `clean:manual`]);
 gulp.task(`postinstall`, [`test:install`]);
 gulp.task(`prepublish`, [`test:publish`]);
-gulp.task(`default`, [`test`]);
+gulp.task(`default`, [`test:code`, `lint`]);

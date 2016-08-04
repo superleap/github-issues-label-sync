@@ -5,7 +5,7 @@
 [![current version](https://img.shields.io/npm/v/github-issues-label-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-asana-tag-sync) [![current version](https://img.shields.io/node/v/github-issues-label-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-asana-tag-sync) 
 [![Dependency Status](https://david-dm.org/superleap/github-issues-label-sync.svg)](https://david-dm.org/superleap/github-issues-label-sync) [![devDependency Status](https://david-dm.org/superleap/github-issues-label-sync/dev-status.svg)](https://david-dm.org/superleap/github-issues-label-sync#info=devDependencies) 
 
-[![bitHound Overall Score](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/score.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync) [![bitHound Dependencies](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/dependencies.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync/master/dependencies/npm) [![bitHound Dev Dependencies](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/devDependencies.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync/master/dependencies/npm) [![bitHound Code](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/code.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync)
+[![codecov](https://codecov.io/gh/superleap/github-issues-label-sync/branch/master/graph/badge.svg)](https://codecov.io/gh/superleap/github-issues-label-sync) [![bitHound Overall Score](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/score.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync) [![bitHound Dependencies](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/dependencies.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync/master/dependencies/npm) [![bitHound Dev Dependencies](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/devDependencies.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync/master/dependencies/npm) [![bitHound Code](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/code.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync)
 
 [![License](http://img.shields.io/:license-BSD2-blue.svg?style=flat-square)](https://opensource.org/licenses/BSD-2-Clause) [![GitHub issues](https://img.shields.io/github/issues/superleap/github-issues-label-sync.svg)](https://github.com/superleap/github-issues-label-sync/issues) [![Join the chat at https://gitter.im/superleap/github-issues-label-sync](https://badges.gitter.im/superleap/github-issues-label-sync.svg)](https://gitter.im/superleap/github-issues-label-sync?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
@@ -245,6 +245,26 @@ githubIssuesLabelSync.createLabel(labels[0]).then((response) => {
 
 ```
 githubIssuesLabelSync.createLabels(labels).then((response) => {
+  console.log(response);
+}).catch((error) => {
+  console.log(error.toJSON());
+});
+```
+
+### Update a label
+
+```
+githubIssuesLabelSync.updateLabel(labels[0]).then((response) => {
+  console.log(response);
+}).catch((error) => {
+  console.log(error.toJSON());
+});
+```
+
+### Update multiple labels
+
+```
+githubIssuesLabelSync.updateLabels(labels).then((response) => {
   console.log(response);
 }).catch((error) => {
   console.log(error.toJSON());
