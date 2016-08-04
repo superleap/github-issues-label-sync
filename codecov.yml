@@ -1,0 +1,13 @@
+comment:
+  branches:
+  - master
+  - gils*
+
+coverage:
+  status:
+    project:
+      default:
+        target: "95%"
+        threshold: "2.5%"
+    patch: true
+    changes: false
