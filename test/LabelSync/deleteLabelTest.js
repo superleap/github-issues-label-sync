@@ -52,8 +52,8 @@ describe('LabelSync#deleteLabel', () => {
      * @test {LabelSync#deleteLabel}
      */
     it('should return { "status": "not found" } when trying to delete a non existing label', (done) => {
-        deleteLabelTest.yieldsAsync(Error.DuplicateLabel);
-        deletedLabel.status = 'duplicate';
+        deleteLabelTest.yieldsAsync(Error.Deletedlabel);
+        deletedLabel.status = 'not found';
 
         let response = LabelSyncTest.deleteLabel(label);
         expect(response).to.be.fulfilled;

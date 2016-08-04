@@ -316,7 +316,7 @@ export default class GithubIssuesLabelSync {
                 let success = true;
 
                 if (error) {
-                    if (error.toJSON().code === 404) {
+                    if (error.code === 404) {
                         label.status = 'not found';
                     } else {
                         success = false;

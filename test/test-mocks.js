@@ -51,6 +51,11 @@ let mocks = {
             "code": 422,
             "status": 'Unprocessable Entity',
             "message": '{"message":"Validation Failed","errors":[{"resource":"Label","code":"already_exists","field":"name"}],"documentation_url":"https://developer.github.com/v3/issues/labels/#create-a-label"}'
+        },
+        "Deletedlabel": {
+            "code": 404,
+            "status": 'Not Found',
+            "message": '{"message":"Not Found","documentation_url":"https://developer.github.com/v3/issues/labels/#delete-a-label"}'
         }
     }
 };
