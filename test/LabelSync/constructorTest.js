@@ -16,7 +16,7 @@ describe('LabelSync#constructor', () => {
     let authenticate;
 
     beforeEach(() => {
-        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
+        LabelSyncTest = new LabelSync(undefined, config.user, config.repo, config.token);
         authenticate = sinon.stub(LabelSyncTest, 'authenticate');
     });
 
@@ -27,7 +27,7 @@ describe('LabelSync#constructor', () => {
     /**
      * @test {LabelSync#constructor}
      */
-    it('should be able to setup the class', () => {
+    it('should be able to setup the class with default parameters', () => {
         expect(LabelSyncTest).to.be.an('object');
     });
 });
