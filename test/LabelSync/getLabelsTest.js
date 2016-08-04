@@ -47,7 +47,7 @@ describe('LabelSync#getlabels', () => {
      */
     it('should return a promise resolving to existing labels without meta information', (done) => {
         getLabelsTest.yieldsAsync(null, labels);
-        Reflect.deleteProperty(labels, 'meta');
+        delete labels.meta;
 
         let response = LabelSyncTest.getLabels(false);
         expect(response).to.eventually.become(labels);
