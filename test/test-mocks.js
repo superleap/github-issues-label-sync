@@ -30,8 +30,12 @@ let mocks = {
             }
         ],
         "createLabel": {
-            "name": 'Semver: premajor',
-            "color": 'e99695'
+            "name": "TEST GH Review: accepted",
+            "color": "009800"
+        },
+        "updateLabel": {
+            "name": "TEST GH Review: accepted",
+            "color": "000"
         }
     },
     "Error": {
