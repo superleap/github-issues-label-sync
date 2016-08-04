@@ -39,6 +39,24 @@ let mocks = {
                 "color": '000'
             }
         ],
+        "updateLabels": [
+            {
+                "name": 'TEST GH Review: accepted',
+                "color": '000'
+            },
+            {
+                "name": 'TEST GH Review: breaking changes',
+                "color": '000'
+            }
+        ],
+        "deleteLabels": [
+            {
+                "name": 'TEST GH Review: accepted'
+            },
+            {
+                "name": 'TEST GH Review: breaking changes'
+            }
+        ],
         "createLabel": {
             "name": "TEST GH Review: accepted",
             "color": "009800"
