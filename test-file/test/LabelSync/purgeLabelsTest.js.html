@@ -2,8 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <base data-ice="baseUrl" href="">
-  <title data-ice="title">Source | GitHub Issues Label Sync Module API Document</title>
+  <base data-ice="baseUrl" href="../../../">
+  <title data-ice="title">test/LabelSync/purgeLabelsTest.js | GitHub Issues Label Sync Module API Document</title>
   <link type="text/css" rel="stylesheet" href="css/style.css">
   <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
   <script src="script/prettify/prettify.js"></script>
@@ -41,31 +41,66 @@
 </div>
 </nav>
 
-<div class="content" data-ice="content"><h1>Source <img data-ice="coverageBadge" src="./badge.svg"><span data-ice="totalCoverageCount" class="total-coverage-count">29/29</span></h1>
+<div class="content" data-ice="content"><h1 data-ice="title">test/LabelSync/purgeLabelsTest.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">import chai from &apos;chai&apos;;
+import chaiAsPromised from &apos;chai-as-promised&apos;;
+import sinon from &apos;sinon&apos;;
+import config from &apos;./../test-config&apos;;
+import mocks from &apos;./../test-mocks&apos;;
 
-<table class="files-summary" data-ice="files" data-use-coverage="true">
-  <thead>
-    <tr>
-      <td>File</td>
-      <td>Identifier</td>
-      <td class="coverage">Document</td>
-      <td style="display: none;">Size</td>
-      <td style="display: none;">Lines</td>
-      <td style="display: none;">Updated</td>
-    </tr>
-  </thead>
-  <tbody>
-    
-  <tr data-ice="file">
-      <td data-ice="filePath"><span><a href="file/src/LabelSync.js.html">src/LabelSync.js</a></span></td>
-      <td data-ice="identifier" class="identifiers"><span><a href="class/src/LabelSync.js~GithubIssuesLabelSync.html">GithubIssuesLabelSync</a></span></td>
-      <td class="coverage"><span data-ice="coverage">100 %</span><span data-ice="coverageCount" class="coverage-count">29/29</span></td>
-      <td style="display: none;" data-ice="size">14696 byte</td>
-      <td style="display: none;" data-ice="lines">508</td>
-      <td style="display: none;" data-ice="updated">2016-08-05 15:30:41 (UTC)</td>
-    </tr>
-</tbody>
-</table>
+let expect = chai.expect;
+let LabelSync = require(&apos;./../../src/LabelSync&apos;);
+
+chai.use(chaiAsPromised);
+
+/**
+ * @test {LabelSync}
+ */
+describe(&apos;LabelSync#purgeLabels&apos;, () =&gt; {
+    let LabelSyncTest;
+    let deleteLabelTest;
+    let getLabelsTest;
+    let authenticate;
+
+    beforeEach(() =&gt; {
+        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);
+        deleteLabelTest = sinon.stub(LabelSyncTest.github.issues, &apos;deleteLabel&apos;);
+        getLabelsTest = sinon.stub(LabelSyncTest, &apos;getLabels&apos;, function () {
+            return Promise.resolve(mocks.Label.getLabels);
+        });
+        authenticate = sinon.stub(LabelSyncTest, &apos;authenticate&apos;);
+    });
+
+    afterEach(() =&gt; {
+        authenticate.restore();
+    });
+
+    /**
+     * @test {LabelSync#purgeLabels}
+     */
+    it(&apos;should return an array of purged labels when called&apos;, (done) =&gt; {
+        deleteLabelTest.yieldsAsync(null);
+
+        let response = LabelSyncTest.purgeLabels();
+        expect(response).to.be.fulfilled;
+        expect(response).to.eventually.have.lengthOf(2);
+
+        done();
+    });
+
+    /**
+     * @test {LabelSync#purgeLabels}
+     */
+    it(&apos;should return a promise rejecting with error when unauthorized&apos;, (done) =&gt; {
+        deleteLabelTest.yieldsAsync(mocks.Error.Unauthorized);
+
+        expect(LabelSyncTest.purgeLabels()).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);
+
+        done();
+    });
+});
+</code></pre>
+
 </div>
 
 <footer class="footer">

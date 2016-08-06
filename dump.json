@@ -2115,5 +2115,1265 @@
     "access": null,
     "description": "",
     "builtinExternal": true
+  },
+  {
+    "__docId__": 110,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/constructorTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/constructorTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#constructor', () => {\n    let LabelSyncTest;\n    let authenticate;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(undefined, config.user, config.repo, config.token);\n    });\n\n    /**\n     * @test {LabelSync#constructor}\n     */\n    it('should be able to setup the class with default parameters', (done) => {\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n        expect(LabelSyncTest).to.be.an('object');\n        authenticate.restore();\n        done();\n    });\n});\n"
+  },
+  {
+    "__docId__": 111,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe0",
+    "testId": 0,
+    "memberof": "test/LabelSync/constructorTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/constructorTest.js~describe0",
+    "access": null,
+    "description": "LabelSync#constructor",
+    "lineNumber": 14,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 112,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it1",
+    "testId": 1,
+    "memberof": "test/LabelSync/constructorTest.js~describe0",
+    "testDepth": 1,
+    "longname": "test/LabelSync/constructorTest.js~describe0.it1",
+    "access": null,
+    "description": "should be able to setup the class with default parameters",
+    "lineNumber": 25,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#constructor}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#constructor"
+    ]
+  },
+  {
+    "__docId__": 113,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/createLabelTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/createLabelTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\nimport mocks from './../test-mocks';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#createLabel', () => {\n    let LabelSyncTest;\n    let createLabelTest;\n    let authenticate;\n    let label;\n    let createdLabel;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);\n        createLabelTest = sinon.stub(LabelSyncTest.github.issues, 'createLabel');\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n        label = mocks.Label.createLabel;\n        createdLabel = mocks.Label.setters.createdLabel;\n    });\n\n    afterEach(() => {\n        authenticate.restore();\n    });\n\n    /**\n     * @test {LabelSync#createLabel}\n     */\n    it('should return { \"status\": \"success\" } when trying to add a new label', (done) => {\n        createLabelTest.yieldsAsync(null);\n\n        let response = LabelSyncTest.createLabel(label);\n        expect(response).to.be.fulfilled;\n        expect(response).to.eventually.have.lengthOf(1);\n        expect(response).to.eventually.have.deep.property('[0].status', 'success');\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#createLabel}\n     */\n    it('should return { \"status\": \"duplicate\" } when trying to add an existing label', (done) => {\n        createLabelTest.yieldsAsync(mocks.Error.DuplicateLabel);\n        createdLabel.status = 'duplicate';\n\n        let response = LabelSyncTest.createLabel(label);\n        expect(response).to.be.fulfilled;\n        expect(response).to.eventually.have.lengthOf(1);\n        expect(response).to.eventually.have.deep.property('[0].status', 'duplicate');\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#createLabel}\n     */\n    it('should return a promise rejecting with error when unauthorized', (done) => {\n        createLabelTest.yieldsAsync(mocks.Error.Unauthorized);\n\n        expect(LabelSyncTest.createLabel(label)).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);\n\n        done();\n    });\n});\n"
+  },
+  {
+    "__docId__": 114,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe2",
+    "testId": 2,
+    "memberof": "test/LabelSync/createLabelTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/createLabelTest.js~describe2",
+    "access": null,
+    "description": "LabelSync#createLabel",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 115,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it3",
+    "testId": 3,
+    "memberof": "test/LabelSync/createLabelTest.js~describe2",
+    "testDepth": 1,
+    "longname": "test/LabelSync/createLabelTest.js~describe2.it3",
+    "access": null,
+    "description": "should return { \"status\": \"success\" } when trying to add a new label",
+    "lineNumber": 37,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#createLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#createLabel"
+    ]
+  },
+  {
+    "__docId__": 116,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it4",
+    "testId": 4,
+    "memberof": "test/LabelSync/createLabelTest.js~describe2",
+    "testDepth": 1,
+    "longname": "test/LabelSync/createLabelTest.js~describe2.it4",
+    "access": null,
+    "description": "should return { \"status\": \"duplicate\" } when trying to add an existing label",
+    "lineNumber": 51,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#createLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#createLabel"
+    ]
+  },
+  {
+    "__docId__": 117,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it5",
+    "testId": 5,
+    "memberof": "test/LabelSync/createLabelTest.js~describe2",
+    "testDepth": 1,
+    "longname": "test/LabelSync/createLabelTest.js~describe2.it5",
+    "access": null,
+    "description": "should return a promise rejecting with error when unauthorized",
+    "lineNumber": 66,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#createLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#createLabel"
+    ]
+  },
+  {
+    "__docId__": 118,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/createLabelsTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/createLabelsTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\nimport mocks from './../test-mocks';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#createLabels', () => {\n    let LabelSyncTest;\n    let createLabelTest;\n    let authenticate;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);\n        createLabelTest = sinon.stub(LabelSyncTest.github.issues, 'createLabel');\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n    });\n\n    afterEach(() => {\n        authenticate.restore();\n    });\n\n    /**\n     * @test {LabelSync#createLabel}\n     */\n    it('should return an array of successful operations when adding new labels', (done) => {\n        createLabelTest.yieldsAsync(null);\n\n        let response = LabelSyncTest.createLabels(mocks.Label.createLabels);\n        expect(response).to.be.fulfilled;\n        expect(response).to.eventually.have.lengthOf(mocks.Label.createLabels.length);\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#createLabels}\n     */\n    it('should return a promise rejecting with error when unauthorized', (done) => {\n        createLabelTest.yieldsAsync(mocks.Error.Unauthorized);\n\n        expect(LabelSyncTest.createLabels(mocks.Label.createLabels)).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);\n\n        done();\n    });\n});\n"
+  },
+  {
+    "__docId__": 119,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe6",
+    "testId": 6,
+    "memberof": "test/LabelSync/createLabelsTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/createLabelsTest.js~describe6",
+    "access": null,
+    "description": "LabelSync#createLabels",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 120,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it7",
+    "testId": 7,
+    "memberof": "test/LabelSync/createLabelsTest.js~describe6",
+    "testDepth": 1,
+    "longname": "test/LabelSync/createLabelsTest.js~describe6.it7",
+    "access": null,
+    "description": "should return an array of successful operations when adding new labels",
+    "lineNumber": 33,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#createLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#createLabel"
+    ]
+  },
+  {
+    "__docId__": 121,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it8",
+    "testId": 8,
+    "memberof": "test/LabelSync/createLabelsTest.js~describe6",
+    "testDepth": 1,
+    "longname": "test/LabelSync/createLabelsTest.js~describe6.it8",
+    "access": null,
+    "description": "should return a promise rejecting with error when unauthorized",
+    "lineNumber": 46,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#createLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#createLabels"
+    ]
+  },
+  {
+    "__docId__": 122,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/deleteLabelTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/deleteLabelTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\nimport mocks from './../test-mocks';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#deleteLabel', () => {\n    let LabelSyncTest;\n    let deleteLabelTest;\n    let authenticate;\n    let label;\n    let deletedLabel;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);\n        deleteLabelTest = sinon.stub(LabelSyncTest.github.issues, 'deleteLabel');\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n        label = mocks.Label.deleteLabel;\n        deletedLabel = mocks.Label.setters.deletedLabel;\n    });\n\n    afterEach(() => {\n        authenticate.restore();\n    });\n\n    /**\n     * @test {LabelSync#deleteLabel}\n     */\n    it('should return { \"status\": \"success\" } when trying to delete an existing label', (done) => {\n        deleteLabelTest.yieldsAsync(null);\n\n        let response = LabelSyncTest.deleteLabel(label);\n        expect(response).to.be.fulfilled;\n        expect(response).to.eventually.have.lengthOf(1);\n        expect(response).to.eventually.have.deep.property('[0].status', 'success');\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#deleteLabel}\n     */\n    it('should return { \"status\": \"not found\" } when trying to delete a non existing label', (done) => {\n        deleteLabelTest.yieldsAsync(mocks.Error.Deletedlabel);\n        deletedLabel.status = 'not found';\n\n        let response = LabelSyncTest.deleteLabel(label);\n        expect(response).to.be.fulfilled;\n        expect(response).to.eventually.have.lengthOf(1);\n        expect(response).to.eventually.have.deep.property('[0].status', 'not found');\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#deleteLabel}\n     */\n    it('should return a promise rejecting with error when unauthorized', (done) => {\n        deleteLabelTest.yieldsAsync(mocks.Error.Unauthorized);\n\n        expect(LabelSyncTest.deleteLabel(label)).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);\n\n        done();\n    });\n});\n"
+  },
+  {
+    "__docId__": 123,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe9",
+    "testId": 9,
+    "memberof": "test/LabelSync/deleteLabelTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/deleteLabelTest.js~describe9",
+    "access": null,
+    "description": "LabelSync#deleteLabel",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 124,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it10",
+    "testId": 10,
+    "memberof": "test/LabelSync/deleteLabelTest.js~describe9",
+    "testDepth": 1,
+    "longname": "test/LabelSync/deleteLabelTest.js~describe9.it10",
+    "access": null,
+    "description": "should return { \"status\": \"success\" } when trying to delete an existing label",
+    "lineNumber": 37,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#deleteLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#deleteLabel"
+    ]
+  },
+  {
+    "__docId__": 125,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it11",
+    "testId": 11,
+    "memberof": "test/LabelSync/deleteLabelTest.js~describe9",
+    "testDepth": 1,
+    "longname": "test/LabelSync/deleteLabelTest.js~describe9.it11",
+    "access": null,
+    "description": "should return { \"status\": \"not found\" } when trying to delete a non existing label",
+    "lineNumber": 51,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#deleteLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#deleteLabel"
+    ]
+  },
+  {
+    "__docId__": 126,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it12",
+    "testId": 12,
+    "memberof": "test/LabelSync/deleteLabelTest.js~describe9",
+    "testDepth": 1,
+    "longname": "test/LabelSync/deleteLabelTest.js~describe9.it12",
+    "access": null,
+    "description": "should return a promise rejecting with error when unauthorized",
+    "lineNumber": 66,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#deleteLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#deleteLabel"
+    ]
+  },
+  {
+    "__docId__": 127,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/deleteLabelsTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/deleteLabelsTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\nimport mocks from './../test-mocks';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#deleteLabels', () => {\n    let LabelSyncTest;\n    let deleteLabelTest;\n    let authenticate;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);\n        deleteLabelTest = sinon.stub(LabelSyncTest.github.issues, 'deleteLabel');\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n    });\n\n    afterEach(() => {\n        authenticate.restore();\n    });\n\n    /**\n     * @test {LabelSync#deleteLabel}\n     */\n    it('should return an array of successful operations when trying to delete existing labels', (done) => {\n        deleteLabelTest.yieldsAsync(null);\n\n        let response = LabelSyncTest.deleteLabels(mocks.Label.deleteLabels);\n        expect(response).to.be.fulfilled;\n        expect(response).to.eventually.have.lengthOf(mocks.Label.deleteLabels.length);\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#deleteLabels}\n     */\n    it('should return a promise rejecting with error when unauthorized', (done) => {\n        deleteLabelTest.yieldsAsync(mocks.Error.Unauthorized);\n\n        expect(LabelSyncTest.deleteLabels(mocks.Label.deleteLabels)).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);\n\n        done();\n    });\n});\n"
+  },
+  {
+    "__docId__": 128,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe13",
+    "testId": 13,
+    "memberof": "test/LabelSync/deleteLabelsTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/deleteLabelsTest.js~describe13",
+    "access": null,
+    "description": "LabelSync#deleteLabels",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 129,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it14",
+    "testId": 14,
+    "memberof": "test/LabelSync/deleteLabelsTest.js~describe13",
+    "testDepth": 1,
+    "longname": "test/LabelSync/deleteLabelsTest.js~describe13.it14",
+    "access": null,
+    "description": "should return an array of successful operations when trying to delete existing labels",
+    "lineNumber": 33,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#deleteLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#deleteLabel"
+    ]
+  },
+  {
+    "__docId__": 130,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it15",
+    "testId": 15,
+    "memberof": "test/LabelSync/deleteLabelsTest.js~describe13",
+    "testDepth": 1,
+    "longname": "test/LabelSync/deleteLabelsTest.js~describe13.it15",
+    "access": null,
+    "description": "should return a promise rejecting with error when unauthorized",
+    "lineNumber": 46,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#deleteLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#deleteLabels"
+    ]
+  },
+  {
+    "__docId__": 131,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/getLabelsTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/getLabelsTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\nimport mocks from './../test-mocks';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#getlabels', () => {\n    let LabelSyncTest;\n    let getLabelsTest;\n    let authenticate;\n    let labels;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);\n        getLabelsTest = sinon.stub(LabelSyncTest.github.issues, 'getLabels');\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n        labels = mocks.Label.getLabels;\n    });\n\n    afterEach(() => {\n        authenticate.restore();\n    });\n\n    /**\n     * @test {LabelSync#getLabels}\n     */\n    it('should return a promise resolving to existing labels with meta information', (done) => {\n        getLabelsTest.yieldsAsync(null, labels);\n\n        let response = LabelSyncTest.getLabels(true);\n        expect(response).to.eventually.become(labels);\n        expect(response).to.eventually.have.property('meta');\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#getLabels}\n     */\n    it('should return a promise resolving to existing labels without meta information', (done) => {\n        getLabelsTest.yieldsAsync(null, labels);\n        delete labels.meta;\n\n        let response = LabelSyncTest.getLabels(false);\n        expect(response).to.eventually.become(labels);\n        expect(response).to.eventually.not.have.property('meta');\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#getLabels}\n     */\n    it('should return a promise rejecting with error when unauthorized', (done) => {\n        getLabelsTest.yieldsAsync(mocks.Error.Unauthorized, null);\n\n        expect(LabelSyncTest.getLabels()).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);\n\n        done();\n    });\n});\n"
+  },
+  {
+    "__docId__": 132,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe16",
+    "testId": 16,
+    "memberof": "test/LabelSync/getLabelsTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/getLabelsTest.js~describe16",
+    "access": null,
+    "description": "LabelSync#getlabels",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 133,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it17",
+    "testId": 17,
+    "memberof": "test/LabelSync/getLabelsTest.js~describe16",
+    "testDepth": 1,
+    "longname": "test/LabelSync/getLabelsTest.js~describe16.it17",
+    "access": null,
+    "description": "should return a promise resolving to existing labels with meta information",
+    "lineNumber": 35,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#getLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#getLabels"
+    ]
+  },
+  {
+    "__docId__": 134,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it18",
+    "testId": 18,
+    "memberof": "test/LabelSync/getLabelsTest.js~describe16",
+    "testDepth": 1,
+    "longname": "test/LabelSync/getLabelsTest.js~describe16.it18",
+    "access": null,
+    "description": "should return a promise resolving to existing labels without meta information",
+    "lineNumber": 48,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#getLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#getLabels"
+    ]
+  },
+  {
+    "__docId__": 135,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it19",
+    "testId": 19,
+    "memberof": "test/LabelSync/getLabelsTest.js~describe16",
+    "testDepth": 1,
+    "longname": "test/LabelSync/getLabelsTest.js~describe16.it19",
+    "access": null,
+    "description": "should return a promise rejecting with error when unauthorized",
+    "lineNumber": 62,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#getLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#getLabels"
+    ]
+  },
+  {
+    "__docId__": 136,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/gettersTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/gettersTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#getters', () => {\n    let LabelSyncTest;\n    let authenticate;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n    });\n\n    afterEach(() => {\n        authenticate.restore();\n    });\n\n    /**\n     * @test {LabelSync#options}\n     */\n    it('should be able to <get> _options', () => {\n        expect(LabelSyncTest.options).to.be.an('object');\n        expect(LabelSyncTest.options).to.equal(config.options);\n    });\n\n    /**\n     * @test {LabelSync#user}\n     */\n    it('should be able to <get> _user', () => {\n        expect(LabelSyncTest.user).to.be.a('string');\n        expect(LabelSyncTest.user).to.equal(config.user);\n    });\n\n    /**\n     * @test {LabelSync#repo}\n     */\n    it('should be able to <get> _repo', () => {\n        expect(LabelSyncTest.repo).to.be.a('string');\n        expect(LabelSyncTest.repo).to.equal(config.repo);\n    });\n\n    /**\n     * @test {LabelSync#token}\n     */\n    it('should be able to <get> _token', () => {\n        expect(LabelSyncTest.token).to.be.a('string');\n        expect(LabelSyncTest.token).to.equal(config.token);\n    });\n\n    /**\n     * @test {LabelSync#labels}\n     */\n    it('should be able to <get> _labels', () => {\n        expect(LabelSyncTest.labels).to.be.an('array');\n        expect(LabelSyncTest.labels).to.have.length(0);\n    });\n\n    /**\n     * @test {LabelSync#deletedLabels}\n     */\n    it('should be able to <get> _deletedLabels', () => {\n        expect(LabelSyncTest.deletedLabels).to.be.an('array');\n        expect(LabelSyncTest.deletedLabels).to.have.length(0);\n    });\n\n    /**\n     * @test {LabelSync#createdLabels}\n     */\n    it('should be able to <get> _createdLabels', () => {\n        expect(LabelSyncTest.createdLabels).to.be.an('array');\n        expect(LabelSyncTest.createdLabels).to.have.length(0);\n    });\n\n    /**\n     * @test {LabelSync#updatedLabels}\n     */\n    it('should be able to <get> _updatedLabels', () => {\n        expect(LabelSyncTest.updatedLabels).to.be.an('array');\n        expect(LabelSyncTest.updatedLabels).to.have.length(0);\n    });\n});\n"
+  },
+  {
+    "__docId__": 137,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe20",
+    "testId": 20,
+    "memberof": "test/LabelSync/gettersTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/gettersTest.js~describe20",
+    "access": null,
+    "description": "LabelSync#getters",
+    "lineNumber": 14,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 138,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it21",
+    "testId": 21,
+    "memberof": "test/LabelSync/gettersTest.js~describe20",
+    "testDepth": 1,
+    "longname": "test/LabelSync/gettersTest.js~describe20.it21",
+    "access": null,
+    "description": "should be able to <get> _options",
+    "lineNumber": 30,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#options}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#options"
+    ]
+  },
+  {
+    "__docId__": 139,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it22",
+    "testId": 22,
+    "memberof": "test/LabelSync/gettersTest.js~describe20",
+    "testDepth": 1,
+    "longname": "test/LabelSync/gettersTest.js~describe20.it22",
+    "access": null,
+    "description": "should be able to <get> _user",
+    "lineNumber": 38,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#user}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#user"
+    ]
+  },
+  {
+    "__docId__": 140,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it23",
+    "testId": 23,
+    "memberof": "test/LabelSync/gettersTest.js~describe20",
+    "testDepth": 1,
+    "longname": "test/LabelSync/gettersTest.js~describe20.it23",
+    "access": null,
+    "description": "should be able to <get> _repo",
+    "lineNumber": 46,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#repo}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#repo"
+    ]
+  },
+  {
+    "__docId__": 141,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it24",
+    "testId": 24,
+    "memberof": "test/LabelSync/gettersTest.js~describe20",
+    "testDepth": 1,
+    "longname": "test/LabelSync/gettersTest.js~describe20.it24",
+    "access": null,
+    "description": "should be able to <get> _token",
+    "lineNumber": 54,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#token}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#token"
+    ]
+  },
+  {
+    "__docId__": 142,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it25",
+    "testId": 25,
+    "memberof": "test/LabelSync/gettersTest.js~describe20",
+    "testDepth": 1,
+    "longname": "test/LabelSync/gettersTest.js~describe20.it25",
+    "access": null,
+    "description": "should be able to <get> _labels",
+    "lineNumber": 62,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#labels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#labels"
+    ]
+  },
+  {
+    "__docId__": 143,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it26",
+    "testId": 26,
+    "memberof": "test/LabelSync/gettersTest.js~describe20",
+    "testDepth": 1,
+    "longname": "test/LabelSync/gettersTest.js~describe20.it26",
+    "access": null,
+    "description": "should be able to <get> _deletedLabels",
+    "lineNumber": 70,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#deletedLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#deletedLabels"
+    ]
+  },
+  {
+    "__docId__": 144,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it27",
+    "testId": 27,
+    "memberof": "test/LabelSync/gettersTest.js~describe20",
+    "testDepth": 1,
+    "longname": "test/LabelSync/gettersTest.js~describe20.it27",
+    "access": null,
+    "description": "should be able to <get> _createdLabels",
+    "lineNumber": 78,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#createdLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#createdLabels"
+    ]
+  },
+  {
+    "__docId__": 145,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it28",
+    "testId": 28,
+    "memberof": "test/LabelSync/gettersTest.js~describe20",
+    "testDepth": 1,
+    "longname": "test/LabelSync/gettersTest.js~describe20.it28",
+    "access": null,
+    "description": "should be able to <get> _updatedLabels",
+    "lineNumber": 86,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#updatedLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#updatedLabels"
+    ]
+  },
+  {
+    "__docId__": 146,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/importLabelsTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/importLabelsTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\nimport mocks from './../test-mocks';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#importLabels', () => {\n    let LabelSyncTest;\n    let createLabelTest;\n    let purgeLabelsTest;\n    let authenticate;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);\n        createLabelTest = sinon.stub(LabelSyncTest.github.issues, 'createLabel');\n        purgeLabelsTest = sinon.stub(LabelSyncTest, 'purgeLabels');\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n    });\n\n    afterEach(() => {\n        authenticate.restore();\n    });\n\n    /**\n     * @test {LabelSync#importLabels}\n     */\n    it('should return an array of imported labels when called with purge', (done) => {\n        purgeLabelsTest.returns(true);\n\n        let response = LabelSyncTest.importLabels(mocks.Label.createLabels);\n        expect(response).to.be.fulfilled;\n        expect(response).to.eventually.have.lengthOf(2);\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#importLabels}\n     */\n    it('should return an array of imported labels when called without purge', (done) => {\n        purgeLabelsTest.returns(true);\n\n        let response = LabelSyncTest.importLabels(mocks.Label.createLabels, false);\n        expect(response).to.be.fulfilled;\n        expect(response).to.eventually.have.lengthOf(2);\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#importLabels}\n     */\n    it('should return a promise rejecting with error when unauthorized', (done) => {\n        createLabelTest.yieldsAsync(mocks.Error.Unauthorized);\n\n        expect(LabelSyncTest.importLabels(mocks.Label.createLabels)).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);\n\n        done();\n    });\n});\n"
+  },
+  {
+    "__docId__": 147,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe29",
+    "testId": 29,
+    "memberof": "test/LabelSync/importLabelsTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/importLabelsTest.js~describe29",
+    "access": null,
+    "description": "LabelSync#importLabels",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 148,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it30",
+    "testId": 30,
+    "memberof": "test/LabelSync/importLabelsTest.js~describe29",
+    "testDepth": 1,
+    "longname": "test/LabelSync/importLabelsTest.js~describe29.it30",
+    "access": null,
+    "description": "should return an array of imported labels when called with purge",
+    "lineNumber": 35,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#importLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#importLabels"
+    ]
+  },
+  {
+    "__docId__": 149,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it31",
+    "testId": 31,
+    "memberof": "test/LabelSync/importLabelsTest.js~describe29",
+    "testDepth": 1,
+    "longname": "test/LabelSync/importLabelsTest.js~describe29.it31",
+    "access": null,
+    "description": "should return an array of imported labels when called without purge",
+    "lineNumber": 48,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#importLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#importLabels"
+    ]
+  },
+  {
+    "__docId__": 150,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it32",
+    "testId": 32,
+    "memberof": "test/LabelSync/importLabelsTest.js~describe29",
+    "testDepth": 1,
+    "longname": "test/LabelSync/importLabelsTest.js~describe29.it32",
+    "access": null,
+    "description": "should return a promise rejecting with error when unauthorized",
+    "lineNumber": 61,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#importLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#importLabels"
+    ]
+  },
+  {
+    "__docId__": 151,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/purgeLabelsTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/purgeLabelsTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\nimport mocks from './../test-mocks';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#purgeLabels', () => {\n    let LabelSyncTest;\n    let deleteLabelTest;\n    let getLabelsTest;\n    let authenticate;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);\n        deleteLabelTest = sinon.stub(LabelSyncTest.github.issues, 'deleteLabel');\n        getLabelsTest = sinon.stub(LabelSyncTest, 'getLabels', function () {\n            return Promise.resolve(mocks.Label.getLabels);\n        });\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n    });\n\n    afterEach(() => {\n        authenticate.restore();\n    });\n\n    /**\n     * @test {LabelSync#purgeLabels}\n     */\n    it('should return an array of purged labels when called', (done) => {\n        deleteLabelTest.yieldsAsync(null);\n\n        let response = LabelSyncTest.purgeLabels();\n        expect(response).to.be.fulfilled;\n        expect(response).to.eventually.have.lengthOf(2);\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#purgeLabels}\n     */\n    it('should return a promise rejecting with error when unauthorized', (done) => {\n        deleteLabelTest.yieldsAsync(mocks.Error.Unauthorized);\n\n        expect(LabelSyncTest.purgeLabels()).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);\n\n        done();\n    });\n});\n"
+  },
+  {
+    "__docId__": 152,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe33",
+    "testId": 33,
+    "memberof": "test/LabelSync/purgeLabelsTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/purgeLabelsTest.js~describe33",
+    "access": null,
+    "description": "LabelSync#purgeLabels",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 153,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it34",
+    "testId": 34,
+    "memberof": "test/LabelSync/purgeLabelsTest.js~describe33",
+    "testDepth": 1,
+    "longname": "test/LabelSync/purgeLabelsTest.js~describe33.it34",
+    "access": null,
+    "description": "should return an array of purged labels when called",
+    "lineNumber": 37,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#purgeLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#purgeLabels"
+    ]
+  },
+  {
+    "__docId__": 154,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it35",
+    "testId": 35,
+    "memberof": "test/LabelSync/purgeLabelsTest.js~describe33",
+    "testDepth": 1,
+    "longname": "test/LabelSync/purgeLabelsTest.js~describe33.it35",
+    "access": null,
+    "description": "should return a promise rejecting with error when unauthorized",
+    "lineNumber": 50,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#purgeLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#purgeLabels"
+    ]
+  },
+  {
+    "__docId__": 155,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/settersTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/settersTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\nimport mocks from './../test-mocks';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#setters', () => {\n    let LabelSyncTest;\n    let authenticate;\n    let labelsSetters;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n        labelsSetters = mocks.Label.setters;\n    });\n\n    afterEach(() => {\n        authenticate.restore();\n    });\n\n    /**\n     * @test {LabelSync#options}\n     */\n    it('should be able to <set> _options', () => {\n        LabelSyncTest.options = config.options;\n\n        expect(LabelSyncTest.options).to.be.an('object');\n        expect(LabelSyncTest.options).to.equal(config.options);\n    });\n\n    /**\n     * @test {LabelSync#labels}\n     */\n    it('should be able to <set> _labels', () => {\n        LabelSyncTest.labels = [];\n\n        expect(LabelSyncTest.labels).to.be.an('array');\n        expect(LabelSyncTest.labels).to.have.length(0);\n    });\n\n    /**\n     * @test {LabelSync#deletedLabel}\n     */\n    it('should be able to <set> _deletedLabel', () => {\n        LabelSyncTest.deletedLabel = labelsSetters.deletedLabel;\n\n        expect(LabelSyncTest.deletedLabels).to.be.an('array');\n        expect(LabelSyncTest.deletedLabels).to.contain(labelsSetters.deletedLabel);\n    });\n\n    /**\n     * @test {LabelSync#createdLabel}\n     */\n    it('should be able to <set> _createdLabel', () => {\n        LabelSyncTest.createdLabel = labelsSetters.createdLabel;\n\n        expect(LabelSyncTest.createdLabels).to.be.an('array');\n        expect(LabelSyncTest.createdLabels).to.contain(labelsSetters.createdLabel);\n    });\n\n    /**\n     * @test {LabelSync#updatedLabel}\n     */\n    it('should be able to <set> _updatedLabel', () => {\n        LabelSyncTest.updatedLabel = labelsSetters.updatedLabel;\n\n        expect(LabelSyncTest.updatedLabels).to.be.an('array');\n        expect(LabelSyncTest.updatedLabels).to.contain(labelsSetters.updatedLabel);\n    });\n});\n"
+  },
+  {
+    "__docId__": 156,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe36",
+    "testId": 36,
+    "memberof": "test/LabelSync/settersTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/settersTest.js~describe36",
+    "access": null,
+    "description": "LabelSync#setters",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 157,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it37",
+    "testId": 37,
+    "memberof": "test/LabelSync/settersTest.js~describe36",
+    "testDepth": 1,
+    "longname": "test/LabelSync/settersTest.js~describe36.it37",
+    "access": null,
+    "description": "should be able to <set> _options",
+    "lineNumber": 33,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#options}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#options"
+    ]
+  },
+  {
+    "__docId__": 158,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it38",
+    "testId": 38,
+    "memberof": "test/LabelSync/settersTest.js~describe36",
+    "testDepth": 1,
+    "longname": "test/LabelSync/settersTest.js~describe36.it38",
+    "access": null,
+    "description": "should be able to <set> _labels",
+    "lineNumber": 43,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#labels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#labels"
+    ]
+  },
+  {
+    "__docId__": 159,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it39",
+    "testId": 39,
+    "memberof": "test/LabelSync/settersTest.js~describe36",
+    "testDepth": 1,
+    "longname": "test/LabelSync/settersTest.js~describe36.it39",
+    "access": null,
+    "description": "should be able to <set> _deletedLabel",
+    "lineNumber": 53,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#deletedLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#deletedLabel"
+    ]
+  },
+  {
+    "__docId__": 160,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it40",
+    "testId": 40,
+    "memberof": "test/LabelSync/settersTest.js~describe36",
+    "testDepth": 1,
+    "longname": "test/LabelSync/settersTest.js~describe36.it40",
+    "access": null,
+    "description": "should be able to <set> _createdLabel",
+    "lineNumber": 63,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#createdLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#createdLabel"
+    ]
+  },
+  {
+    "__docId__": 161,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it41",
+    "testId": 41,
+    "memberof": "test/LabelSync/settersTest.js~describe36",
+    "testDepth": 1,
+    "longname": "test/LabelSync/settersTest.js~describe36.it41",
+    "access": null,
+    "description": "should be able to <set> _updatedLabel",
+    "lineNumber": 73,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#updatedLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#updatedLabel"
+    ]
+  },
+  {
+    "__docId__": 162,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/updateLabelTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/updateLabelTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\nimport mocks from './../test-mocks';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#updatelabel', () => {\n    let LabelSyncTest;\n    let updateLabelTest;\n    let authenticate;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);\n        updateLabelTest = sinon.stub(LabelSyncTest.github.issues, 'updateLabel');\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n    });\n\n    afterEach(() => {\n        authenticate.restore();\n    });\n\n    /**\n     * @test {LabelSync#updateLabel}\n     */\n    it('should return { \"status\": \"success\" } when updating an existing label', (done) => {\n        updateLabelTest.yieldsAsync(null);\n\n        let response = LabelSyncTest.updateLabel(mocks.Label.updateLabel);\n        expect(response).to.be.fulfilled;\n        expect(response).to.eventually.have.lengthOf(1);\n        expect(response).to.eventually.have.deep.property('[0].status', 'success');\n        expect(response).to.eventually.have.deep.property('[0].color', '000');\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#updateLabel}\n     */\n    it('should return a promise rejecting with error when unauthorized', (done) => {\n        updateLabelTest.yieldsAsync(mocks.Error.Unauthorized);\n\n        expect(LabelSyncTest.updateLabel(mocks.Label.updateLabel)).to.eventually.be.rejectedWith(mocks.Error.Unauthorized);\n\n        done();\n    });\n});\n"
+  },
+  {
+    "__docId__": 163,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe42",
+    "testId": 42,
+    "memberof": "test/LabelSync/updateLabelTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/updateLabelTest.js~describe42",
+    "access": null,
+    "description": "LabelSync#updatelabel",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 164,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it43",
+    "testId": 43,
+    "memberof": "test/LabelSync/updateLabelTest.js~describe42",
+    "testDepth": 1,
+    "longname": "test/LabelSync/updateLabelTest.js~describe42.it43",
+    "access": null,
+    "description": "should return { \"status\": \"success\" } when updating an existing label",
+    "lineNumber": 33,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#updateLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#updateLabel"
+    ]
+  },
+  {
+    "__docId__": 165,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it44",
+    "testId": 44,
+    "memberof": "test/LabelSync/updateLabelTest.js~describe42",
+    "testDepth": 1,
+    "longname": "test/LabelSync/updateLabelTest.js~describe42.it44",
+    "access": null,
+    "description": "should return a promise rejecting with error when unauthorized",
+    "lineNumber": 48,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#updateLabel}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#updateLabel"
+    ]
+  },
+  {
+    "__docId__": 166,
+    "kind": "testFile",
+    "static": true,
+    "variation": null,
+    "name": "test/LabelSync/updateLabelsTest.js",
+    "memberof": null,
+    "longname": "test/LabelSync/updateLabelsTest.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import chai from 'chai';\nimport chaiAsPromised from 'chai-as-promised';\nimport sinon from 'sinon';\nimport config from './../test-config';\nimport mocks from './../test-mocks';\n\nlet expect = chai.expect;\nlet LabelSync = require('./../../src/LabelSync');\n\nchai.use(chaiAsPromised);\n\n/**\n * @test {LabelSync}\n */\ndescribe('LabelSync#updateLabels', () => {\n    let LabelSyncTest;\n    let updateLabelTest;\n    let authenticate;\n\n    beforeEach(() => {\n        LabelSyncTest = new LabelSync(config.options, config.user, config.repo, config.token);\n        updateLabelTest = sinon.stub(LabelSyncTest.github.issues, 'updateLabel');\n        authenticate = sinon.stub(LabelSyncTest, 'authenticate');\n    });\n\n    afterEach(() => {\n        authenticate.restore();\n    });\n\n    /**\n     * @test {LabelSync#updateLabels}\n     */\n    it('should return an array of successful operations when updating existing labels', (done) => {\n        updateLabelTest.yieldsAsync(null);\n\n        let response = LabelSyncTest.updateLabels(mocks.Label.updateLabels);\n        expect(response).to.be.fulfilled;\n        expect(response).to.eventually.have.lengthOf(mocks.Label.updateLabels.length);\n\n        done();\n    });\n\n    /**\n     * @test {LabelSync#updateLabels}\n     */\n    it('should return a promise rejecting with error when unauthorized', (done) => {\n        updateLabelTest.yieldsAsync(mocks.Error.Unauthorized);\n\n        expect(LabelSyncTest.updateLabels(mocks.Label.updateLabels)).to.eventually.be.rejectedWith(Error.Unauthorized);\n\n        done();\n    });\n});\n"
+  },
+  {
+    "__docId__": 167,
+    "kind": "testDescribe",
+    "static": true,
+    "variation": null,
+    "name": "describe45",
+    "testId": 45,
+    "memberof": "test/LabelSync/updateLabelsTest.js",
+    "testDepth": 0,
+    "longname": "test/LabelSync/updateLabelsTest.js~describe45",
+    "access": null,
+    "description": "LabelSync#updateLabels",
+    "lineNumber": 15,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync"
+    ]
+  },
+  {
+    "__docId__": 168,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it46",
+    "testId": 46,
+    "memberof": "test/LabelSync/updateLabelsTest.js~describe45",
+    "testDepth": 1,
+    "longname": "test/LabelSync/updateLabelsTest.js~describe45.it46",
+    "access": null,
+    "description": "should return an array of successful operations when updating existing labels",
+    "lineNumber": 33,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#updateLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#updateLabels"
+    ]
+  },
+  {
+    "__docId__": 169,
+    "kind": "testIt",
+    "static": true,
+    "variation": null,
+    "name": "it47",
+    "testId": 47,
+    "memberof": "test/LabelSync/updateLabelsTest.js~describe45",
+    "testDepth": 1,
+    "longname": "test/LabelSync/updateLabelsTest.js~describe45.it47",
+    "access": null,
+    "description": "should return a promise rejecting with error when unauthorized",
+    "lineNumber": 46,
+    "unknown": [
+      {
+        "tagName": "@test",
+        "tagValue": "{LabelSync#updateLabels}"
+      }
+    ],
+    "testTargets": [
+      "LabelSync#updateLabels"
+    ]
   }
 ]

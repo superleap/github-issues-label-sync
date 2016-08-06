@@ -336,6 +336,294 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/constructorTest.js.html#lineNumber14",
+    "LabelSync#constructor",
+    "test"
+  ],
+  [
+    "labelsync#constructor labelsync#constructor,labelsync#constructor",
+    "test-file/test/LabelSync/constructorTest.js.html#lineNumber25",
+    "LabelSync#constructor should be able to setup the class with default parameters",
+    "test"
+  ],
+  [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/createLabelTest.js.html#lineNumber15",
+    "LabelSync#createLabel",
+    "test"
+  ],
+  [
+    "labelsync#createlabel labelsync#createlabel,labelsync#createlabel",
+    "test-file/test/LabelSync/createLabelTest.js.html#lineNumber66",
+    "LabelSync#createLabel should return a promise rejecting with error when unauthorized",
+    "test"
+  ],
+  [
+    "labelsync#createlabel labelsync#createlabel,labelsync#createlabel",
+    "test-file/test/LabelSync/createLabelTest.js.html#lineNumber51",
+    "LabelSync#createLabel should return { \"status\": \"duplicate\" } when trying to add an existing label",
+    "test"
+  ],
+  [
+    "labelsync#createlabel labelsync#createlabel,labelsync#createlabel",
+    "test-file/test/LabelSync/createLabelTest.js.html#lineNumber37",
+    "LabelSync#createLabel should return { \"status\": \"success\" } when trying to add a new label",
+    "test"
+  ],
+  [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/createLabelsTest.js.html#lineNumber15",
+    "LabelSync#createLabels",
+    "test"
+  ],
+  [
+    "labelsync#createlabels labelsync#createlabels,labelsync#createlabels",
+    "test-file/test/LabelSync/createLabelsTest.js.html#lineNumber46",
+    "LabelSync#createLabels should return a promise rejecting with error when unauthorized",
+    "test"
+  ],
+  [
+    "labelsync#createlabel labelsync#createlabel,labelsync#createlabel",
+    "test-file/test/LabelSync/createLabelsTest.js.html#lineNumber33",
+    "LabelSync#createLabels should return an array of successful operations when adding new labels",
+    "test"
+  ],
+  [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/deleteLabelTest.js.html#lineNumber15",
+    "LabelSync#deleteLabel",
+    "test"
+  ],
+  [
+    "labelsync#deletelabel labelsync#deletelabel,labelsync#deletelabel",
+    "test-file/test/LabelSync/deleteLabelTest.js.html#lineNumber66",
+    "LabelSync#deleteLabel should return a promise rejecting with error when unauthorized",
+    "test"
+  ],
+  [
+    "labelsync#deletelabel labelsync#deletelabel,labelsync#deletelabel",
+    "test-file/test/LabelSync/deleteLabelTest.js.html#lineNumber51",
+    "LabelSync#deleteLabel should return { \"status\": \"not found\" } when trying to delete a non existing label",
+    "test"
+  ],
+  [
+    "labelsync#deletelabel labelsync#deletelabel,labelsync#deletelabel",
+    "test-file/test/LabelSync/deleteLabelTest.js.html#lineNumber37",
+    "LabelSync#deleteLabel should return { \"status\": \"success\" } when trying to delete an existing label",
+    "test"
+  ],
+  [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/deleteLabelsTest.js.html#lineNumber15",
+    "LabelSync#deleteLabels",
+    "test"
+  ],
+  [
+    "labelsync#deletelabels labelsync#deletelabels,labelsync#deletelabels",
+    "test-file/test/LabelSync/deleteLabelsTest.js.html#lineNumber46",
+    "LabelSync#deleteLabels should return a promise rejecting with error when unauthorized",
+    "test"
+  ],
+  [
+    "labelsync#deletelabel labelsync#deletelabel,labelsync#deletelabel",
+    "test-file/test/LabelSync/deleteLabelsTest.js.html#lineNumber33",
+    "LabelSync#deleteLabels should return an array of successful operations when trying to delete existing labels",
+    "test"
+  ],
+  [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/getLabelsTest.js.html#lineNumber15",
+    "LabelSync#getlabels",
+    "test"
+  ],
+  [
+    "labelsync#getlabels labelsync#getlabels,labelsync#getlabels",
+    "test-file/test/LabelSync/getLabelsTest.js.html#lineNumber62",
+    "LabelSync#getlabels should return a promise rejecting with error when unauthorized",
+    "test"
+  ],
+  [
+    "labelsync#getlabels labelsync#getlabels,labelsync#getlabels",
+    "test-file/test/LabelSync/getLabelsTest.js.html#lineNumber35",
+    "LabelSync#getlabels should return a promise resolving to existing labels with meta information",
+    "test"
+  ],
+  [
+    "labelsync#getlabels labelsync#getlabels,labelsync#getlabels",
+    "test-file/test/LabelSync/getLabelsTest.js.html#lineNumber48",
+    "LabelSync#getlabels should return a promise resolving to existing labels without meta information",
+    "test"
+  ],
+  [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/gettersTest.js.html#lineNumber14",
+    "LabelSync#getters",
+    "test"
+  ],
+  [
+    "labelsync#createdlabels labelsync#createdlabels,labelsync#createdlabels",
+    "test-file/test/LabelSync/gettersTest.js.html#lineNumber78",
+    "LabelSync#getters should be able to <get> _createdLabels",
+    "test"
+  ],
+  [
+    "labelsync#deletedlabels labelsync#deletedlabels,labelsync#deletedlabels",
+    "test-file/test/LabelSync/gettersTest.js.html#lineNumber70",
+    "LabelSync#getters should be able to <get> _deletedLabels",
+    "test"
+  ],
+  [
+    "labelsync#labels labelsync#labels,labelsync#labels",
+    "test-file/test/LabelSync/gettersTest.js.html#lineNumber62",
+    "LabelSync#getters should be able to <get> _labels",
+    "test"
+  ],
+  [
+    "labelsync#options labelsync#options,labelsync#options",
+    "test-file/test/LabelSync/gettersTest.js.html#lineNumber30",
+    "LabelSync#getters should be able to <get> _options",
+    "test"
+  ],
+  [
+    "labelsync#repo labelsync#repo,labelsync#repo",
+    "test-file/test/LabelSync/gettersTest.js.html#lineNumber46",
+    "LabelSync#getters should be able to <get> _repo",
+    "test"
+  ],
+  [
+    "labelsync#token labelsync#token,labelsync#token",
+    "test-file/test/LabelSync/gettersTest.js.html#lineNumber54",
+    "LabelSync#getters should be able to <get> _token",
+    "test"
+  ],
+  [
+    "labelsync#updatedlabels labelsync#updatedlabels,labelsync#updatedlabels",
+    "test-file/test/LabelSync/gettersTest.js.html#lineNumber86",
+    "LabelSync#getters should be able to <get> _updatedLabels",
+    "test"
+  ],
+  [
+    "labelsync#user labelsync#user,labelsync#user",
+    "test-file/test/LabelSync/gettersTest.js.html#lineNumber38",
+    "LabelSync#getters should be able to <get> _user",
+    "test"
+  ],
+  [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/importLabelsTest.js.html#lineNumber15",
+    "LabelSync#importLabels",
+    "test"
+  ],
+  [
+    "labelsync#importlabels labelsync#importlabels,labelsync#importlabels",
+    "test-file/test/LabelSync/importLabelsTest.js.html#lineNumber61",
+    "LabelSync#importLabels should return a promise rejecting with error when unauthorized",
+    "test"
+  ],
+  [
+    "labelsync#importlabels labelsync#importlabels,labelsync#importlabels",
+    "test-file/test/LabelSync/importLabelsTest.js.html#lineNumber35",
+    "LabelSync#importLabels should return an array of imported labels when called with purge",
+    "test"
+  ],
+  [
+    "labelsync#importlabels labelsync#importlabels,labelsync#importlabels",
+    "test-file/test/LabelSync/importLabelsTest.js.html#lineNumber48",
+    "LabelSync#importLabels should return an array of imported labels when called without purge",
+    "test"
+  ],
+  [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/purgeLabelsTest.js.html#lineNumber15",
+    "LabelSync#purgeLabels",
+    "test"
+  ],
+  [
+    "labelsync#purgelabels labelsync#purgelabels,labelsync#purgelabels",
+    "test-file/test/LabelSync/purgeLabelsTest.js.html#lineNumber50",
+    "LabelSync#purgeLabels should return a promise rejecting with error when unauthorized",
+    "test"
+  ],
+  [
+    "labelsync#purgelabels labelsync#purgelabels,labelsync#purgelabels",
+    "test-file/test/LabelSync/purgeLabelsTest.js.html#lineNumber37",
+    "LabelSync#purgeLabels should return an array of purged labels when called",
+    "test"
+  ],
+  [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/settersTest.js.html#lineNumber15",
+    "LabelSync#setters",
+    "test"
+  ],
+  [
+    "labelsync#createdlabel labelsync#createdlabel,labelsync#createdlabel",
+    "test-file/test/LabelSync/settersTest.js.html#lineNumber63",
+    "LabelSync#setters should be able to <set> _createdLabel",
+    "test"
+  ],
+  [
+    "labelsync#deletedlabel labelsync#deletedlabel,labelsync#deletedlabel",
+    "test-file/test/LabelSync/settersTest.js.html#lineNumber53",
+    "LabelSync#setters should be able to <set> _deletedLabel",
+    "test"
+  ],
+  [
+    "labelsync#labels labelsync#labels,labelsync#labels",
+    "test-file/test/LabelSync/settersTest.js.html#lineNumber43",
+    "LabelSync#setters should be able to <set> _labels",
+    "test"
+  ],
+  [
+    "labelsync#options labelsync#options,labelsync#options",
+    "test-file/test/LabelSync/settersTest.js.html#lineNumber33",
+    "LabelSync#setters should be able to <set> _options",
+    "test"
+  ],
+  [
+    "labelsync#updatedlabel labelsync#updatedlabel,labelsync#updatedlabel",
+    "test-file/test/LabelSync/settersTest.js.html#lineNumber73",
+    "LabelSync#setters should be able to <set> _updatedLabel",
+    "test"
+  ],
+  [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/updateLabelsTest.js.html#lineNumber15",
+    "LabelSync#updateLabels",
+    "test"
+  ],
+  [
+    "labelsync#updatelabels labelsync#updatelabels,labelsync#updatelabels",
+    "test-file/test/LabelSync/updateLabelsTest.js.html#lineNumber46",
+    "LabelSync#updateLabels should return a promise rejecting with error when unauthorized",
+    "test"
+  ],
+  [
+    "labelsync#updatelabels labelsync#updatelabels,labelsync#updatelabels",
+    "test-file/test/LabelSync/updateLabelsTest.js.html#lineNumber33",
+    "LabelSync#updateLabels should return an array of successful operations when updating existing labels",
+    "test"
+  ],
+  [
+    "labelsync labelsync,labelsync",
+    "test-file/test/LabelSync/updateLabelTest.js.html#lineNumber15",
+    "LabelSync#updatelabel",
+    "test"
+  ],
+  [
+    "labelsync#updatelabel labelsync#updatelabel,labelsync#updatelabel",
+    "test-file/test/LabelSync/updateLabelTest.js.html#lineNumber48",
+    "LabelSync#updatelabel should return a promise rejecting with error when unauthorized",
+    "test"
+  ],
+  [
+    "labelsync#updatelabel labelsync#updatelabel,labelsync#updatelabel",
+    "test-file/test/LabelSync/updateLabelTest.js.html#lineNumber33",
+    "LabelSync#updatelabel should return { \"status\": \"success\" } when updating an existing label",
+    "test"
+  ],
+  [
     "src/labelsync.js",
     "file/src/LabelSync.js.html",
     "src/LabelSync.js",
@@ -403,13 +691,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/labelsync.js~githubissueslabelsync#github",
-    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-github",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-github",
     "src/LabelSync.js~GithubIssuesLabelSync#github",
     "member"
   ],
   [
     "src/labelsync.js~githubissueslabelsync#github",
-    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-github",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-github",
     "src/LabelSync.js~GithubIssuesLabelSync#github",
     "member"
   ],
@@ -421,13 +709,13 @@ window.esdocSearchIndex = [
   ],
   [
     "src/labelsync.js~githubissueslabelsync#labels",
-    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-labels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-labels",
     "src/LabelSync.js~GithubIssuesLabelSync#labels",
     "member"
   ],
   [
     "src/labelsync.js~githubissueslabelsync#labels",
-    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-set-labels",
+    "class/src/LabelSync.js~GithubIssuesLabelSync.html#instance-get-labels",
     "src/LabelSync.js~GithubIssuesLabelSync#labels",
     "member"
   ],
@@ -526,5 +814,77 @@ window.esdocSearchIndex = [
     "typedef/index.html#static-typedef-Promise",
     "src/LabelSync.js~GithubIssuesLabelSync.Promise",
     "typedef"
+  ],
+  [
+    "test/labelsync/constructortest.js",
+    "test-file/test/LabelSync/constructorTest.js.html",
+    "test/LabelSync/constructorTest.js",
+    "testFile"
+  ],
+  [
+    "test/labelsync/createlabeltest.js",
+    "test-file/test/LabelSync/createLabelTest.js.html",
+    "test/LabelSync/createLabelTest.js",
+    "testFile"
+  ],
+  [
+    "test/labelsync/createlabelstest.js",
+    "test-file/test/LabelSync/createLabelsTest.js.html",
+    "test/LabelSync/createLabelsTest.js",
+    "testFile"
+  ],
+  [
+    "test/labelsync/deletelabeltest.js",
+    "test-file/test/LabelSync/deleteLabelTest.js.html",
+    "test/LabelSync/deleteLabelTest.js",
+    "testFile"
+  ],
+  [
+    "test/labelsync/deletelabelstest.js",
+    "test-file/test/LabelSync/deleteLabelsTest.js.html",
+    "test/LabelSync/deleteLabelsTest.js",
+    "testFile"
+  ],
+  [
+    "test/labelsync/getlabelstest.js",
+    "test-file/test/LabelSync/getLabelsTest.js.html",
+    "test/LabelSync/getLabelsTest.js",
+    "testFile"
+  ],
+  [
+    "test/labelsync/getterstest.js",
+    "test-file/test/LabelSync/gettersTest.js.html",
+    "test/LabelSync/gettersTest.js",
+    "testFile"
+  ],
+  [
+    "test/labelsync/importlabelstest.js",
+    "test-file/test/LabelSync/importLabelsTest.js.html",
+    "test/LabelSync/importLabelsTest.js",
+    "testFile"
+  ],
+  [
+    "test/labelsync/purgelabelstest.js",
+    "test-file/test/LabelSync/purgeLabelsTest.js.html",
+    "test/LabelSync/purgeLabelsTest.js",
+    "testFile"
+  ],
+  [
+    "test/labelsync/setterstest.js",
+    "test-file/test/LabelSync/settersTest.js.html",
+    "test/LabelSync/settersTest.js",
+    "testFile"
+  ],
+  [
+    "test/labelsync/updatelabeltest.js",
+    "test-file/test/LabelSync/updateLabelTest.js.html",
+    "test/LabelSync/updateLabelTest.js",
+    "testFile"
+  ],
+  [
+    "test/labelsync/updatelabelstest.js",
+    "test-file/test/LabelSync/updateLabelsTest.js.html",
+    "test/LabelSync/updateLabelsTest.js",
+    "testFile"
   ]
 ]
