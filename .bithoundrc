@@ -18,8 +18,7 @@
     },
     "dependencies": {
         "mute": [
-            "gulp-spawn-mocha",
-            "gulp-esdoc"
+            "gulp-spawn-mocha"
         ]
     }
 }
