@@ -1,13 +1,11 @@
-# :electric_plug::package: github-issues-label-sync
+# :electric_plug::package: github-issues-label-sync [![License](http://img.shields.io/:license-BSD2-blue.svg?style=flat-square)](https://opensource.org/licenses/BSD-2-Clause) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release) 
 
-[![Build Status](http://img.shields.io/travis/superleap/github-issues-label-sync.svg?style=flat-square)](https://travis-ci.org/superleap/github-issues-label-sync) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/) [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square)](https://github.com/semantic-release/semantic-release)  
+[![current version](https://img.shields.io/npm/v/github-issues-label-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-issues-label-sync) [![current version](https://img.shields.io/node/v/github-issues-label-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-issues-label-sync) [![GitHub issues](https://img.shields.io/github/issues/superleap/github-issues-label-sync.svg)](https://github.com/superleap/github-issues-label-sync/issues) [![Join the chat at https://gitter.im/superleap/github-issues-label-sync](https://badges.gitter.im/superleap/github-issues-label-sync.svg)](https://gitter.im/superleap/github-issues-label-sync?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-[![current version](https://img.shields.io/npm/v/github-issues-label-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-asana-tag-sync) [![current version](https://img.shields.io/node/v/github-issues-label-sync.svg?style=flat-square)](https://www.npmjs.com/package/github-asana-tag-sync) 
-[![Dependency Status](https://david-dm.org/superleap/github-issues-label-sync.svg)](https://david-dm.org/superleap/github-issues-label-sync) [![devDependency Status](https://david-dm.org/superleap/github-issues-label-sync/dev-status.svg)](https://david-dm.org/superleap/github-issues-label-sync#info=devDependencies) 
+[![Build Status](http://img.shields.io/travis/superleap/github-issues-label-sync.svg?style=flat-square)](https://travis-ci.org/superleap/github-issues-label-sync) [![Dependency Status](https://dependencyci.com/github/superleap/github-issues-label-sync/badge)](https://dependencyci.com/github/superleap/github-issues-label-sync) [![Dependency Status](https://david-dm.org/superleap/github-issues-label-sync.svg)](https://david-dm.org/superleap/github-issues-label-sync) [![devDependency Status](https://david-dm.org/superleap/github-issues-label-sync/dev-status.svg)](https://david-dm.org/superleap/github-issues-label-sync#info=devDependencies) 
 
 [![codecov](https://codecov.io/gh/superleap/github-issues-label-sync/branch/master/graph/badge.svg)](https://codecov.io/gh/superleap/github-issues-label-sync) [![bitHound Overall Score](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/score.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync) [![bitHound Dependencies](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/dependencies.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync/master/dependencies/npm) [![bitHound Dev Dependencies](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/devDependencies.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync/master/dependencies/npm) [![bitHound Code](https://www.bithound.io/github/superleap/github-issues-label-sync/badges/code.svg)](https://www.bithound.io/github/superleap/github-issues-label-sync)
 
-[![License](http://img.shields.io/:license-BSD2-blue.svg?style=flat-square)](https://opensource.org/licenses/BSD-2-Clause) [![GitHub issues](https://img.shields.io/github/issues/superleap/github-issues-label-sync.svg)](https://github.com/superleap/github-issues-label-sync/issues) [![Join the chat at https://gitter.im/superleap/github-issues-label-sync](https://badges.gitter.im/superleap/github-issues-label-sync.svg)](https://gitter.im/superleap/github-issues-label-sync?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Overview
 
@@ -19,7 +17,17 @@
 
 > **CLI version in progress**
 
+## Requirements
+
+In order to run the `github-issues-label-sync` package you will need the following things:
+
+- a github OAuth token otherwise called personal access token. You can do this here: [github.com/settings/tokens](https://github.com/settings/tokens)
+- an environment running at least node v4
+- either `npm` or `git` installed
+
 ## Installation
+
+There are multiple ways to run this module:
 
 ### NPM
 
@@ -320,6 +328,14 @@ githubIssuesLabelSync.importLabels(labels, false).then((response) => {
   console.log(error.toJSON());
 });
 ```
+
+## Contribute
+
+We'd love to get contributions from you! Once you are up and running, take a look at the [contributing docs](https://github.com/superleap/github-issues-label-sync/blob/master/CONTRIBUTING.md) to see how to get your changes merged in.
+
+## Changelog
+
+See the [release page](https://github.com/superleap/github-issues-label-sync/releases).
 
 ## License
 

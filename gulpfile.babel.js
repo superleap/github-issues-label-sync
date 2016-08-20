@@ -72,12 +72,17 @@ gulp.task(`manual`, [`changelog`], () => {
 
             return versions.join(``);
         }).then((response) => {
+            let overview = `## Overview\n${blocks[1]}\n\n`;
+            let reqs = `## Requirements\n${blocks[2]}\n\n`;
+            let contrib = `## Contributing\n${blocks[7]}\n\n`;
+            let license = `## LICENSE\n${blocks[9]}`;
+
             let bindings = {
-                "index": `${blocks[0]}\n\n${blocks[1]}\n\n## LICENSE\n${blocks[6]}`,
-                "installation": blocks[2],
-                "usage": blocks[3],
-                "configuration": blocks[4],
-                "examples": blocks[5],
+                "index": `${blocks[0]}\n\n${overview}${reqs}${contrib}${license}`,
+                "installation": `${blocks[2]}\n\n${blocks[3]}`,
+                "usage": blocks[4],
+                "configuration": blocks[5],
+                "examples": blocks[6],
                 "changelog": response
             };
 
