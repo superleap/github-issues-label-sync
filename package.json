@@ -33,7 +33,7 @@
   "homepage": "https://github.com/superleap/github-issues-label-sync#readme",
   "dependencies": {
     "bluebird": "^3.4.1",
-    "github": "^2.4.0"
+    "github": "^2.5.1"
   },
   "devDependencies": {
     "@semantic-release/last-release-npm": "https://github.com/vrtxf/last-release-npm/tarball/da5a0f2411e2add6f5b0b990b4a12fad3245cfac",
@@ -49,10 +49,10 @@
     "commitizen": "^2.8.6",
     "cz-conventional-changelog": "^1.2.0",
     "del": "^2.2.2",
-    "esdoc": "^0.4.7",
+    "esdoc": "^0.4.8",
     "esdoc-hacker-vision": "^1.1.0",
     "esdoc-node": "^1.0.0",
-    "eslint": "^3.2.2",
+    "eslint": "^3.3.1",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-esdoc": "^0.3.0",
