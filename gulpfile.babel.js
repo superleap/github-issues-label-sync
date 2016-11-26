@@ -134,7 +134,7 @@ gulp.task(`doc`, [`manual`], () => {
 gulp.task(`predeploy`, [`doc`], () => {
     return pkg(paths.pkg, console.log, true).then((data) => {
         let pkgName = data.name;
-        let pkgUser = data.repository.url.match(/github\.com\/([^\/]+)\//i)[1];
+        let pkgUser = data.repository.url.match(/github\.com\/([^/]+)\//i)[1];
 
         return writeFile(`${paths.docs}/CNAME`, `${pkgName}-package.${pkgUser}.xyz`);
     });
@@ -164,7 +164,7 @@ gulp.task(`snyk`, () => {
 gulp.task(`bithound`, () => {
     return pkg(paths.pkg, console.log, true).then((data) => {
         let pkgName = data.name;
-        let pkgUser = data.repository.url.match(/github\.com\/([^\/]+)\//i)[1];
+        let pkgUser = data.repository.url.match(/github\.com\/([^/]+)\//i)[1];
 
         return spawnp(`node_modules/.bin/bithound`, [`check`, `git@github.com:${pkgUser}/${pkgName}.git`]);
     });
